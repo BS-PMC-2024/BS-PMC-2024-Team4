@@ -1,7 +1,7 @@
 # Dog Worry
 
 Dog Worry is a mobile application which helps dog owners plan dog walks based on temperatures, currently in development.
-The steps below are for development of the app. If you are working with visual code please open 2 seperate terminals, one for backend and one for frontend. If you are using 2 different IDE's for the backend and frontend just follow the steps.
+The steps below are for development of the app. If you are working with visual code please open 2 separate terminals, one for backend and one for frontend. If you are using 2 different IDE's for the backend and frontend just follow the steps.
 
 ## Getting Started with backend
 Install [Python 3.12](https://www.python.org/downloads/)
