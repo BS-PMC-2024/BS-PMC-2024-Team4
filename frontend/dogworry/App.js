@@ -12,7 +12,7 @@ export default function App() {
   {
     try {
       // Change the ip
-      const response = await fetch('http://10.0.0.13:5000/getmaps');
+      const response = await fetch('http://192.168.68.109:5000/getmaps');
       if(!response.ok){
         throw new Error('network error');
       }
