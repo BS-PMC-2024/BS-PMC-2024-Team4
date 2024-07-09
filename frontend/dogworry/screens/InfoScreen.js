@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
-import styles from './styles';
+import styles from '../styles';
 
 // info page
 const infoData = [
@@ -33,8 +33,9 @@ const InfoScreen = () => {
             </View>
           );
         };
+
     return (
-        <View style={styles.container}>
+        <View style={styles.screen}>
         <Text style={styles.screenTitle}>Doctor's Tips</Text>
         <FlatList data={infoData} 
             keyExtractor={item => item.id} renderItem={({ item }) => (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
-import styles from './styles';
+import styles from '../styles';
 
 
 // food page
@@ -13,7 +13,7 @@ const foodData = [
 
 const FoodScreen = () => {
     return (
-        <View style={styles.container}>
+        <View style={styles.screen}>
         <FlatList data={foodData} 
             keyExtractor={item => item.id} renderItem={({ item }) => (
                 <View style={styles.listItem}>

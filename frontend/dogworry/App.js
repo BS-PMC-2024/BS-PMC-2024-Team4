@@ -5,11 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import MapScreen from './MapScreen';
-import FoodScreen from './FoodScreen';
-import InfoScreen from './InfoScreen';
-import LostScreen from './LostScreen';
+import MapScreen from './screens/MapScreen';
+import FoodScreen from './screens/FoodScreen';
+import InfoScreen from './screens/InfoScreen';
+import LostScreen from './screens/LostScreen';
 import styles from './styles';
+import User from './components/User';
+import UserDetails from './screens/user/UserDetails';
+import Form from './components/Form';
 
 // landing screen
 const LandingScreen = ({ navigation }) => {
@@ -37,7 +40,8 @@ const Tab = createBottomTabNavigator();
 // header style
 const getHeaderOptions = (title) => ({
   headerTitle: title,
-  headerTitleAlign: 'left',
+  headerTitleAlign: 'center',
+  headerTransparent: true,
 });
 
 // bottom tabs navigation
@@ -67,15 +71,17 @@ const TabNavigator = () => (
     })}>  
     <Tab.Screen name= "Home" component={HomeScreen} options={getHeaderOptions('Dog Worry')}/>
     <Tab.Screen name= "Lost" component={LostScreen} options={getHeaderOptions('Dog Worry')}/>    
-    <Tab.Screen name= "Map" component={MapScreen} options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "Map"  component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>
     <Tab.Screen name= "Food" component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
-    <Tab.Screen name= "Info"component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "Info" component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
   </Tab.Navigator> 
 )
 
 // main screen
 const HomeScreen = ({ navigation }) => {
-  return;
+  return(
+    <UserDetails/>
+  )
 };
 
 
@@ -83,11 +89,14 @@ const HomeScreen = ({ navigation }) => {
 export default function App() {
   return (
     <NavigationContainer>
-      <StatusBar barStyle="light-content" backgroundColor="#6a51ae" hidden={false} />
-      <Stack.Navigator initialRouteName='Landing'>
-        <Stack.Screen name='Landing' component={LandingScreen} options={{headerShown: false}}/>
-        <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
-      </Stack.Navigator>
+      <View style={styles.appContainer}>
+        <StatusBar barStyle="light-content" backgroundColor="#6a51ae" hidden={true} />
+          <Stack.Navigator initialRouteName='Landing'>
+            <Stack.Screen name='Landing' component={LandingScreen} options={{headerShown: false}}/>
+            <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
+          </Stack.Navigator>
+          <User/>
+      </View>
     </NavigationContainer>
   );
 }

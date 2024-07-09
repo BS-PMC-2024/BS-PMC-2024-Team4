@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 import MapView from 'react-native-maps';
+import api_url from '../config';
 
 const MapScreen = () => {
   const [loading, setLoading] = useState(true);
@@ -9,7 +10,7 @@ const MapScreen = () => {
   const fetchData = async () => {
     try {
         // change to you ip
-      const response = await fetch('http://192.168.1.253:5000/getmaps');
+      const response = await fetch(api_url + 'getmaps');
       if (!response.ok) {
         throw new Error('Network error');
       }
