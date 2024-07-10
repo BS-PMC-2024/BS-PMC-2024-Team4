@@ -1,11 +1,26 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { View, Text, StyleSheet, Image, Button, TouchableOpacity, TextInput, Alert, BackHandler } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
 import ImagePicker from '../../components/ImagePicker'
 import styles from '../../styles';
 import api_url from '../../config';
 
 const UserDetails = () => {
+    const navigation = useNavigation();
+    useFocusEffect(
+        useCallback(() => {
+          const onBackPress = () => {
+            navigation.navigate("Main");
+            return true;
+          };
+    
+          BackHandler.addEventListener('hardwareBackPress', onBackPress);
+    
+          return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
+        }, [navigation])
+      );
+
     const { register, handleSubmit, setValue, watch } = useForm({ defaultValues: async () => (await fetch(api_url + 'user/')).json()});
     const values = watch();
   
@@ -80,7 +95,7 @@ const UserDetails = () => {
                         style={stylesIn.input}
                         value={values.email}
                         onChangeText={onChangeField('email')}
-                        onBlur={checkEmail}/>
+                        onBlur={() => checkEmail(values.email)}/>
                 </View>
                 
                 <View style={stylesIn.inputContainer}>

@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Button, ActivityIndicator, Image, FlatList  } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
 import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
@@ -12,30 +13,11 @@ import LostScreen from './screens/LostScreen';
 import styles from './styles';
 import User from './components/User';
 import UserDetails from './screens/user/UserDetails';
-import Form from './components/Form';
-
-// landing screen
-const LandingScreen = ({ navigation }) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.replace('Tabs'); // Navigate to Main Tab Navigator
-    }, 2500);
-    return () => clearTimeout(timer);
-  }, [navigation]);
-
-  return (
-    <View style={styles.container}>
-      <Text style={styles.text}>DW</Text>
-      <Image source={require('./Images/dogs.jpg')} style={styles.logo}/>
-      <Text style={styles.text}>Dog Worry</Text>
-    </View>
-  );
-};
-
 
 // navigation of the app
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const Drawer = createDrawerNavigator();
 
 // header style
 const getHeaderOptions = (title) => ({
@@ -77,6 +59,41 @@ const TabNavigator = () => (
   </Tab.Navigator> 
 )
 
+const StackNavigation = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
+    </Stack.Navigator>
+  )
+}
+
+const CustomProfileDrawer = (props) => {
+  const {routeNames, index} = props.state;
+  const focused = routeNames[index];
+  
+  return (
+    <DrawerContentScrollView {...props}>
+      <Text>Hello</Text>
+      <DrawerItem 
+        label="profile"
+        onPress={() => props.navigation.navigate("User Details")}
+        activeTintColor="blue"
+        backBehavior={() => props.navigation.navigate("Main")}/>
+    </DrawerContentScrollView>
+  )
+}
+
+
+const ProfileDrawer = () => {
+  return (
+    <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
+      drawerContent={props => <CustomProfileDrawer {...props} />} >
+      <Drawer.Screen name = "Main" component={TabNavigator} options={{headerShown: false}}/>
+      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}/>
+    </Drawer.Navigator>
+  )
+}
+
 // main screen
 const HomeScreen = ({ navigation }) => {
   return(
@@ -84,20 +101,18 @@ const HomeScreen = ({ navigation }) => {
   )
 };
 
+const MainNavigation = ({ navigation }) => {
+  return (
+    <NavigationContainer>
+      <ProfileDrawer/>
+      <User />
+    </NavigationContainer>
+  )
+}
 
 // app
 export default function App() {
   return (
-    <NavigationContainer>
-      <View style={styles.appContainer}>
-        <StatusBar barStyle="light-content" backgroundColor="#6a51ae" hidden={true} />
-          <Stack.Navigator initialRouteName='Landing'>
-            <Stack.Screen name='Landing' component={LandingScreen} options={{headerShown: false}}/>
-            <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
-          </Stack.Navigator>
-          <User/>
-      </View>
-    </NavigationContainer>
+      <MainNavigation />
   );
 }
-
