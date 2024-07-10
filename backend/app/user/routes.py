@@ -13,4 +13,4 @@ def index():
 @bp.route('/add')
 def add():
     user_db = mongo.client.get_database("Users").get_collection("user-details")
-    user_db.insert_one({'first_name': 'Yovel', 'last_name': 'Nir'})
+    user_db.insert_one({'name': 'Yovel', 'also name': 'Nir', "email": 'asdfasdfasdf@gmail.com'})
