@@ -5,21 +5,10 @@ from flask_cors import CORS
 import pymongo
 from pymongo import MongoClient
 from urllib.parse import quote_plus #for decoding the user+password
-'''
-from pymongo.server_api import ServerApi
-uri = "mongodb+srv://danieba:<password>@dogworry.iutobjz.mongodb.net/?appName=DogWorry"
-# Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
-# Send a ping to confirm a successful connection
-try:
-    client.admin.command('ping')
-    print("Pinged your deployment. You successfully connected to MongoDB!")
-except Exception as e:
-    print(e)
-'''
 
-username = quote_plus('daniebastartech')
-password = quote_plus('Da121298!')
+"""
+username = quote_plus('danieba')
+password = quote_plus('daniel121298')
 cluster = "dog-worry.kluw7m1.mongodb.net"
 authSource = "admin"
 authMechanism = "SCRAM-SHA-1"
@@ -29,13 +18,15 @@ try:
     client = MongoClient(uri) #"mongodb://localhost:27017/"
 except:
     print("Error in connecting")
-
-
+"""
+uri = "mongodb+srv://danieba:daniel121298@dogworry.iutobjz.mongodb.net/?retryWrites=true&w=majority&appName=DogWorry"
+client = MongoClient(uri)
 # Select the database
-db = client.my_database
+db = client["dogWorry"]
 
 # Select the collection
-collection = db.my_collection
+collection = db["Users"]
+
 
 #for firebase
 import firebase_admin
