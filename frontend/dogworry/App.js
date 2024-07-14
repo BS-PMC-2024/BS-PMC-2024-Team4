@@ -59,10 +59,18 @@ const TabNavigator = () => (
   </Tab.Navigator> 
 )
 
+// Adding only 1 instance of the User component to every screen in Tab Navigator
+const TabNavigatorWithUser = () => (
+  <View style={{ flex: 1 }}>
+    <User />
+    <TabNavigator />
+  </View>
+);
+
 const StackNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
+      <Stack.Screen name='Tabs' component={TabNavigatorWithUser} options={{headerShown: false }}/>
     </Stack.Navigator>
   )
 }
@@ -88,8 +96,9 @@ const ProfileDrawer = () => {
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
       drawerContent={props => <CustomProfileDrawer {...props} />} >
-      <Drawer.Screen name = "Main" component={TabNavigator} options={{headerShown: false}}/>
-      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}/>
+      <Drawer.Screen name = "Main" component={StackNavigation} options={{headerShown: false, unmountOnBlur: true}}/>
+      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}
+                     options={{unmountOnBlur: true}}/>
     </Drawer.Navigator>
   )
 }
@@ -97,15 +106,18 @@ const ProfileDrawer = () => {
 // main screen
 const HomeScreen = ({ navigation }) => {
   return(
-    <UserDetails/>
+    <View style={styles.container}>
+      <Text>Home</Text>
+    </View>
   )
 };
 
+// main navigation stack
 const MainNavigation = ({ navigation }) => {
   return (
     <NavigationContainer>
+      <StatusBar barStyle="light-content" hidden={false} />
       <ProfileDrawer/>
-      <User />
     </NavigationContainer>
   )
 }
