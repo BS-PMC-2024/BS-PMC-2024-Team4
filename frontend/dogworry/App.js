@@ -10,6 +10,7 @@ import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
 import LostScreen from './screens/LostScreen';
+import RegisterScreen from './screens/user/guestRegistration';
 import styles from './styles';
 import User from './components/User';
 import UserDetails from './screens/user/UserDetails';
@@ -42,6 +43,9 @@ const TabNavigator = () => (
       } else if (route.name === 'Info') {
         iconName = focused ? 'help' : 'help-outline';
       }
+      else if (route.name === 'guestRegistration'){ // from here
+        iconName = focused ? 'reg' : 'help-outline';
+      }
       
       return <Ionicons name={iconName} size={size} color={color} />;
       },
@@ -56,6 +60,8 @@ const TabNavigator = () => (
     <Tab.Screen name= "Map"  component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>
     <Tab.Screen name= "Food" component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
     <Tab.Screen name= "Info" component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "regi" component={RegisterScreen} options={getHeaderOptions('Dog Worry')}/> 
+    
   </Tab.Navigator> 
 )
 
