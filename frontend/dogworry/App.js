@@ -13,6 +13,8 @@ import LostScreen from './screens/LostScreen';
 import styles from './styles';
 import User from './components/User';
 import UserDetails from './screens/user/UserDetails';
+import LoginScreen from './screens/LoginScreen';
+
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -70,6 +72,7 @@ const StackNavigation = () => {
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
+  const isLoggedIn = false;
   
   return (
     <DrawerContentScrollView {...props}>
@@ -79,8 +82,16 @@ const CustomProfileDrawer = (props) => {
         onPress={() => props.navigation.navigate("User Details")}
         activeTintColor="blue"
         backBehavior={() => props.navigation.navigate("Main")}/>
+    
+    {!isLoggedIn && (
+      <DrawerItem
+      label="Login"
+      onPress={()=> props.navigation.navigate("Login")}
+      activeTintColor='#F44336'
+      />
+    )}
     </DrawerContentScrollView>
-  )
+  );
 }
 
 
@@ -90,6 +101,7 @@ const ProfileDrawer = () => {
       drawerContent={props => <CustomProfileDrawer {...props} />} >
       <Drawer.Screen name = "Main" component={TabNavigator} options={{headerShown: false}}/>
       <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}/>
+      <Drawer.Screen name="Login" component={LoginScreen}/>
     </Drawer.Navigator>
   )
 }
