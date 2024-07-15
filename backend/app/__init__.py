@@ -1,15 +1,23 @@
 from flask import Flask
-from config import Config
+from config import Config, TestingConfig
 from pymongo.mongo_client import MongoClient
 from pymongo.server_api import ServerApi
 from app.extensions import mongo
+import mongomock
 
 def create_app(config_class=Config):
     app = Flask(__name__)
-    app.config.from_object(config_class)
+
+    if config_class == 'testing':
+        app.config.from_object(TestingConfig)
+        app.config['MONGO_URI'] = 'mongodb://localhost:27017/testdb'  # Ensure this is set for consistency
+        mongo.db = mongomock.MongoClient().db
+    else:
+        app.config.from_object(config_class)
 
     # Initialize Flask extensions here
     mongo.init_app(app)
+    
     # Register blueprints here
     from app.main import bp as main_bp
     app.register_blueprint(main_bp)
