@@ -1,6 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState /*userCallback*/ } from 'react';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity /*Alert*/ } from 'react-native';
 import styles from '../styles';
+import styles_info from '../styles/info_styles';
+// import { useForm } from 'react-hook-form';
+import api_url from '../config';
+
 
 // info page
 const infoData = [
@@ -26,7 +30,7 @@ const InfoScreen = () => {
         
               {/* Description section (conditionally rendered based on 'expanded' state) */}
               {expanded && (
-                <View style={styles.descriptionContainer}>
+                <View style={styles_info.descriptionContainer}>
                   <Text>{description}</Text>
                 </View>
               )}
@@ -36,13 +40,13 @@ const InfoScreen = () => {
 
     return (
         <View style={styles.screen}>
-        <Text style={styles.screenTitle}>Doctor's Tips</Text>
+        <Text style={styles_info.screenTitle}>Doctor's Tips</Text>
         <FlatList data={infoData} 
             keyExtractor={item => item.id} renderItem={({ item }) => (
                 //<View style={styles.container}>
-                <View style={styles.listItem}>
+                <View style={styles_info.listItem}>
                 <ExpandableComponent
-                  style={styles.listItemText}
+                  style={styles_info.listItemText}
                   title= {item.title}
                   description={item.description}
                 />
