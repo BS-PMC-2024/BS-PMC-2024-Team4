@@ -1,44 +1,62 @@
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text ,ALert} from 'react-native';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-//import auth from '@react-native-firebase/auth';
-import axios from 'axios';
-import { initializeApp, firebase } from "firebase/app";
-import { getAuth , GoogleAuthProvider ,signInWithPopup } from "firebase/auth";
-import {auth} from '../../fbauth';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
+import auth from '../../fbauth'
+import api_url from '../../config'
 
-
+WebBrowser.maybeCompleteAuthSession();
 
 const RegisterScreen = () => {
    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+      clientId: '721153684567-lsnpf6236ju6tvain1omub6st8gpefcg.apps.googleusercontent.com',
+      redirectUri: makeRedirectUri({
+        native: 'dogworry://redirect',
+        useProxy: true,
+      }),
+      responseType: ResponseType.IdToken,
+    });
+
+    useEffect(() => {
+      if (response?.type === 'success') {
+        const { id_token } = response.params;
+  
+        const credential = GoogleAuthProvider.credential(id_token);
+        signInWithCredential(auth, credential)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            Alert.alert('Successfully signed in as:', user.displayName);
+          })
+          .catch((error) => {
+            console.error(error);
+            Alert.alert('Failed to sign in:', error.message);
+          });
+      }
+    }, [response]);
+    
     const googleSignIn = async () => {
        try {
-            /*
-            const provider = new GoogleAuthProvider();
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    const user = result.user;
-                    console.log(user);
-                    alert('Successfully signed in as: ' + user.displayName);
-                    window.googleSignIn = googleSignIn;
-                })
-                .catch((error) => {
-                    console.error(error);
-                    alert('Failed to sign in: ' + error.message);
-                });*/
-            
-            const provider = new GoogleAuthProvider(app);
-            console.log(provider)
-            const response = await signInWithPopup(auth, provider);
-            console.log(response)
-            const user = auth.currentUser;
-            console.log(user);
-            Alert.alert('Successfully signed in as:', user.displayName);
+        console.log(response)
+        if (response?.type === 'success') {
+          const { id_token } = response.params;
+    
+          const credential = GoogleAuthProvider.credential(id_token);
+          signInWithCredential(auth, credential)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              Alert.alert('Successfully signed in as:', user.displayName);
+            })
+            .catch((error) => {
+              console.error(error);
+              Alert.alert('Failed to sign in:', error.message);
+            });
+        }
         } catch (error) {
             console.error(error);
             Alert.alert('Failed to sign in:', error.message);
@@ -47,12 +65,13 @@ const RegisterScreen = () => {
     
     const handleLogin = async () => {
       try {
-        const userCredential = await auth().signInWithEmailAndPassword(email, password);
-        const idToken = await userCredential.user.getIdToken();
-        // Send ID token to the backend
-       //await axios.post('/app/user/routes', {'user_id'});
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = await userCredential.user.uid;
+
+        // Send UID to the backend
+        await axios.post(`${api_url}user/saveUserDetails`, {'user_id': uid, 'email': email});
       } catch (err) {
-        setError(err.message);
+        Alert.alert(err.message);
       }
     };
     
