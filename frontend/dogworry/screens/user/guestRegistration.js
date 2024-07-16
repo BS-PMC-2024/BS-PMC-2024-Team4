@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import * as Google from 'expo-auth-session/providers/google';
 import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
 import * as WebBrowser from 'expo-web-browser';
 import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../fbauth'
-import api_url from '../../config'
+import {api_url} from '../../config'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 WebBrowser.maybeCompleteAuthSession();
 
 const RegisterScreen = () => {
-   const [email, setEmail] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [confirmPassword, setConfirm] = useState('');
+    
 
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
       clientId: '721153684567-lsnpf6236ju6tvain1omub6st8gpefcg.apps.googleusercontent.com',
@@ -63,13 +68,22 @@ const RegisterScreen = () => {
         }
     };
     
-    const handleLogin = async () => {
+    const handleRegister = async () => {
       try {
-        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-        const uid = await userCredential.user.uid;
-
-        // Send UID to the backend
-        await axios.post(`${api_url}user/saveUserDetails`, {'user_id': uid, 'email': email});
+        if(confirmPassword === password)
+        {
+          const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+          uid = await userCredential.user.uid;
+          await AsyncStorage.setItem('userUid',uid);
+          // Send UID to the backend
+          await axios.post(`${api_url}user/saveUserDetails`, {'user_id': uid, 'email': email});
+          Alert.alert('Successfully signed in');
+        }
+        else
+        {
+          Alert.alert("password has not confirmed");
+        }
+        
       } catch (err) {
         Alert.alert(err.message);
       }
@@ -89,10 +103,19 @@ const RegisterScreen = () => {
                 style={styles.input}
                 placeholder="Password"
                 value={password}
+                autoCapitalize='none'
                 onChangeText={setPassword}
                 secureTextEntry
             />
-            <Button title ="Sign in with e-mail and password" onPress={handleLogin}/>
+            <TextInput
+                style={styles.input}
+                placeholder="Confirm Password"
+                value={confirmPassword}
+                autoCapitalize='none'
+                onChangeText={setConfirm}
+                secureTextEntry
+            />
+            <Button title ="Sign in with e-mail and password" onPress={handleRegister}/>
         </View>
     );
 };

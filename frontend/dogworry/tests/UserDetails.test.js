@@ -114,3 +114,86 @@ describe('UserDetails Component', () => {
         });
     });
 });
+
+//from here test for guest registration
+import React from 'react';
+import { render, fireEvent, waitFor } from '@testing-library/react-native';
+import RegisterScreen from './screens/user/guestRegistration'; // Update with your correct import path
+
+describe('RegisterScreen', () => {
+  it('renders correctly', () => {
+    const { getByPlaceholderText, getByText } = render(<RegisterScreen />);
+    
+    // Check if essential elements are rendered
+    expect(getByPlaceholderText('Email')).toBeTruthy();
+    expect(getByPlaceholderText('Password')).toBeTruthy();
+    expect(getByPlaceholderText('Confirm Password')).toBeTruthy();
+    //expect(getByText('Sign in with Google')).toBeTruthy();
+    expect(getByText('Sign in with e-mail and password')).toBeTruthy();
+  });
+
+  it('handles email input correctly', () => {
+    const { getByPlaceholderText } = render(<RegisterScreen />);
+    const emailInput = getByPlaceholderText('Email');
+
+    fireEvent.changeText(emailInput, 'test@example.com');
+    expect(emailInput.props.value).toBe('test@example.com');
+  });
+
+  it('handles password input correctly', () => {
+    const { getByPlaceholderText } = render(<RegisterScreen />);
+    const passwordInput = getByPlaceholderText('Password');
+
+    fireEvent.changeText(passwordInput, 'password123');
+    expect(passwordInput.props.value).toBe('password123');
+  });
+
+  it('handles confirm password input correctly', () => {
+    const { getByPlaceholderText } = render(<RegisterScreen />);
+    const confirmPasswordInput = getByPlaceholderText('Confirm Password');
+
+    fireEvent.changeText(confirmPasswordInput, 'password123');
+    expect(confirmPasswordInput.props.value).toBe('password123');
+  });
+
+  it('matches passwords correctly', async () => {
+    const { getByPlaceholderText, getByText } = render(<RegisterScreen />);
+    const emailInput = getByPlaceholderText('Email');
+    const passwordInput = getByPlaceholderText('Password');
+    const confirmPasswordInput = getByPlaceholderText('Confirm Password');
+    const signInButton = getByText('Sign in with e-mail and password');
+
+    fireEvent.changeText(emailInput, 'test@example.com');
+    fireEvent.changeText(passwordInput, 'password123');
+    fireEvent.changeText(confirmPasswordInput, 'password123');
+
+    fireEvent.press(signInButton);
+
+    await waitFor(() => {
+      expect(console.log).toHaveBeenCalledWith('identical!!');
+    });
+  });
+
+  it('handles Firebase registration correctly', async () => {
+    const { getByPlaceholderText, getByText } = render(<RegisterScreen />);
+    const emailInput = getByPlaceholderText('Email');
+    const passwordInput = getByPlaceholderText('Password');
+    const confirmPasswordInput = getByPlaceholderText('Confirm Password');
+    const signInButton = getByText('Sign in with e-mail and password');
+
+    fireEvent.changeText(emailInput, 'test@example.com');
+    fireEvent.changeText(passwordInput, 'password123');
+    fireEvent.changeText(confirmPasswordInput, 'password123');
+
+    fireEvent.press(signInButton);
+
+    await waitFor(() => {
+      expect(console.log).toHaveBeenCalledWith('identical!!');
+      expect(axios.post).toHaveBeenCalledWith(expect.stringContaining('user/saveUserDetails'), {
+        user_id: 'mockUid123',
+        email: 'test@example.com',
+      });
+    });
+  });
+});
+
