@@ -4,14 +4,13 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import auth from '../fbauth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 export default  function LoginForm({navigation}) {
 
     const [click,setClick] = useState(false);
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState(""); 
     const handleLogin = async() => {
-    const auth = getAuth();
+        const auth = getAuth();
         
         await signInWithEmailAndPassword(auth, email, password)
             .then(async (userCredential) => {

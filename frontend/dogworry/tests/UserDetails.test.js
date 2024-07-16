@@ -15,6 +15,8 @@ const mockData = {
     avatar: '',
 };
 
+
+
 // Mock ImagePicker component
 jest.mock('../components/ImagePicker', () => {
     return jest.fn(() => Promise.resolve({
