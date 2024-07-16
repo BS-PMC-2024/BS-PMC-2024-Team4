@@ -7,7 +7,6 @@ import mongomock
 
 def create_app(config_class=Config):
     app = Flask(__name__)
-
     if config_class == 'testing':
         app.config.from_object(TestingConfig)
         app.config['MONGO_URI'] = 'mongodb://localhost:27017/testdb'  # Ensure this is set for consistency
@@ -24,6 +23,10 @@ def create_app(config_class=Config):
 
     from app.user import bp as user_bp
     app.register_blueprint(user_bp, url_prefix='/user')
+
+    from app.info import bp as info_bp
+    app.register_blueprint(info_bp, url_prefix='/info')
+
 
     @app.route('/test/')
     def test_page():

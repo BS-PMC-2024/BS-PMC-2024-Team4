@@ -1,55 +1,79 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity } from 'react-native';
+import React, { useEffect, useState /*userCallback*/ } from 'react';
+import { View, Text, StyleSheet, Image, FlatList, TouchableOpacity, /*Alert*/ 
+ActivityIndicator} from 'react-native';
 import styles from '../styles';
+import styles_info from '../styles/info_styles';
+// import { useForm } from 'react-hook-form';
+import api_url from '../config';
+import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
+
 
 // info page
-const infoData = [
-    { id: '1', title: 'Burn on the paws', description: 'Burn on the paws' },
-    { id: '2', title: 'Jellyfish', description: 'Burn on the paws' },
-    { id: '3', title: 'Vomiting', description: 'Burn on the paws' },
-    { id: '4', title: 'Bite from another dog', description: 'Burn on the paws' }
-  ];
-
-
 const InfoScreen = () => {
+    const navigation = useNavigation();
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+ 
+    useEffect(() => {
+      axios.get(`${api_url}info/getHealthCases/`)
+        .then(response => {
+          setData(response.data);
+          setLoading(false);
+        })
+        .catch(error => {
+          console.error('error fetching data', error);
+          setLoading(false);
+        });
+    }, []);
+
     const ExpandableComponent = ({ title, description }) => {
-        const [expanded, setExpanded] = useState(false);
-        const toggleExpand = () => {
-          setExpanded(!expanded);
-        };
-        return (
-            <View style={styles.container}>
-              {/* Title section */}
-              <TouchableOpacity onPress={toggleExpand} style={styles.titleContainer}>
-                <Text style={styles.title}>{title}</Text>
-              </TouchableOpacity>
-        
-              {/* Description section (conditionally rendered based on 'expanded' state) */}
-              {expanded && (
-                <View style={styles.descriptionContainer}>
-                  <Text>{description}</Text>
-                </View>
-              )}
-            </View>
-          );
-        };
+      const [expanded, setExpanded] = useState(false);
+      const toggleExpand = () => {
+        setExpanded(!expanded);
+      };
+      return (
+        <View style={styles_info.container}>
+          <TouchableOpacity onPress={toggleExpand} style={styles_info.caseContainer}>
+            <Text style={styles_info.caseText}>{title}</Text>
+          </TouchableOpacity>      
+          {expanded && (
+          <View style={styles_info.descriptionContainer}>
+            <Text>{description}</Text>
+          </View>
+          )}
+        </View>
+      );
+    };
+      
+    if (loading) {
+      return (
+        <View style={styles.acreen}>
+          <ActivityIndicator size="large" color="#0000ff"/>
+        </View>
+      );
+    }
+
+    if (!data) {
+      return (
+        <View style={styles.screen}>
+          <Text style={styles_info.error}>Error fetching data</Text>
+        </View>
+      );
+    }
 
     return (
-        <View style={styles.screen}>
-        <Text style={styles.screenTitle}>Doctor's Tips</Text>
-        <FlatList data={infoData} 
-            keyExtractor={item => item.id} renderItem={({ item }) => (
-                //<View style={styles.container}>
-                <View style={styles.listItem}>
-                <ExpandableComponent
-                  style={styles.listItemText}
-                  title= {item.title}
-                  description={item.description}
-                />
-              </View>               
-            )}
-        />
+
+        <View style={styles_info.screen}>
+          <Text style={styles_info.screenTitle}>Doctor's Tips</Text>
+          <Text style={styles_info.subTitle}>find usefull information for first aid treatment</Text>
+          <FlatList data={data} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
+            <ExpandableComponent title={item.case} description={item.guidelines}/>
+          )}
+          contentContainerStyle={styles_info.list}
+          />
         </View>
+
     );
 }
 export default InfoScreen;
