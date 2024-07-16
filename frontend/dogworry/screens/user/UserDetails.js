@@ -20,7 +20,7 @@ const UserDetails = () => {
     if (Keyboard.isVisible() !== disableSave)
         setdisableSaveSave(Keyboard.isVisible());
 
-    const fetchData = async () => {
+    const fetchData = async () => {  
         const resp = await axios.post(`${api_url}user/getUserDetails/`, {'uid': uid});
         const data = resp.data;
         setData(data);
