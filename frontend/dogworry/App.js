@@ -14,6 +14,7 @@ import styles from './styles';
 import User from './components/User';
 import UserDetails from './screens/user/UserDetails';
 import LoginScreen from './screens/LoginScreen';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 // navigation of the app
@@ -61,18 +62,64 @@ const TabNavigator = () => (
   </Tab.Navigator> 
 )
 
+// Adding only 1 instance of the User component to every screen in Tab Navigator
+const TabNavigatorWithUser = () => (
+  <View style={{ flex: 1 }}>
+    <User />
+    <TabNavigator />
+  </View>
+);
+
 const StackNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Tabs' component={TabNavigator} options={{headerShown: false }}/>
+      <Stack.Screen name='Tabs' component={TabNavigatorWithUser} options={{headerShown: false }}/>
     </Stack.Navigator>
   )
 }
 
+
+//Logout func
+
+
+// Empty dependency array means this effect runs once on mount
+
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
-  const isLoggedIn = false;
+  const [isLoggedIn,setIsLoggedIn]=useState(false);
+  console.log("BEFORE");
+  const retrieveData = async () => {
+    console.log("BEFORE2");
+    try {
+      const value = await AsyncStorage.getItem('userUid');
+      if (value !== null) {
+        console.log(value);
+        console.log("INSIDE-IF");
+        setIsLoggedIn(true);
+      }
+    } catch (error) {
+      
+      console.error("Failed to retrieve data", error);
+    }
+  };
+
+  const logout = async () => {
+    try {
+        await AsyncStorage.removeItem('userUid');  
+        console.log(isLoggedIn);
+        setIsLoggedIn(false);  
+        props.navigation.navigate('Main');  
+    } catch (error) {
+        console.error("Failed to logout", error);
+    }
+  };
+  
+  useEffect(() => {
+    console.log("use effect");
+    retrieveData();
+    
+  });
   
   return (
     <DrawerContentScrollView {...props}>
@@ -83,10 +130,20 @@ const CustomProfileDrawer = (props) => {
         activeTintColor="blue"
         backBehavior={() => props.navigation.navigate("Main")}/>
     
+
+
     {!isLoggedIn && (
       <DrawerItem
       label="Login"
       onPress={()=> props.navigation.navigate("Login")}
+      activeTintColor='#F44336'
+      />
+    )}
+
+{isLoggedIn && (
+      <DrawerItem
+      label="Logout"
+      onPress={logout}
       activeTintColor='#F44336'
       />
     )}
@@ -96,11 +153,14 @@ const CustomProfileDrawer = (props) => {
 
 
 const ProfileDrawer = () => {
+  
+   
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
       drawerContent={props => <CustomProfileDrawer {...props} />} >
-      <Drawer.Screen name = "Main" component={TabNavigator} options={{headerShown: false}}/>
-      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}/>
+      <Drawer.Screen name = "Main" component={StackNavigation} options={{headerShown: false, unmountOnBlur: true}}/>
+      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}
+                     options={{unmountOnBlur: true}}/>
       <Drawer.Screen name="Login" component={LoginScreen}/>
     </Drawer.Navigator>
   )
@@ -109,15 +169,19 @@ const ProfileDrawer = () => {
 // main screen
 const HomeScreen = ({ navigation }) => {
   return(
-    <UserDetails/>
+    <View style={styles.container}>
+      <Text>Home</Text>
+      
+    </View>
   )
 };
 
+// main navigation stack
 const MainNavigation = ({ navigation }) => {
   return (
     <NavigationContainer>
+      <StatusBar barStyle="light-content" hidden={false} />
       <ProfileDrawer/>
-      <User />
     </NavigationContainer>
   )
 }
