@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ActivityIndicator, Image, FlatList  } from 'react-native';
+import { StyleSheet, Text, View, Button, ActivityIndicator, Image, FlatList,Alert  } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -103,14 +103,40 @@ const CustomProfileDrawer = (props) => {
   };
 
   const logout = async () => {
-    try {
-        await AsyncStorage.removeItem('userUid');  
-        setIsLoggedIn(false);  
-        props.navigation.navigate('Main');  
-    } catch (error) {
-        console.error("Failed to logout.", error);
-    }
+    Alert.alert(
+      "Logout Confirmation",
+      "Are you sure you want to logout?",
+      [
+        {
+          text: "No",
+          onPress: () => console.log("Logout cancelled"),
+          style: "cancel"
+        },
+        {
+          text: "Yes",
+          onPress: async () => {
+            try {
+              await AsyncStorage.removeItem('userUid');
+              setIsLoggedIn(false);
+              props.navigation.navigate('Main');
+            } catch (error) {
+              console.error("Failed to logout.", error);
+            }
+          }
+        }
+      ],
+      { cancelable: false }
+    );
   };
+  // const logout = async () => {
+  //   try {
+  //       await AsyncStorage.removeItem('userUid');  
+  //       setIsLoggedIn(false);  
+  //       props.navigation.navigate('Main');  
+  //   } catch (error) {
+  //       console.error("Failed to logout.", error);
+  //   }
+  // };
   
   useEffect(() => {
     retrieveData();
