@@ -50,8 +50,10 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#d4b0ff', // Light purple button color
         paddingVertical: 10,
-        borderRadius: 5,
+        borderRadius: 15,
         alignItems: 'center',
+        borderColor: '#000',
+        borderWidth: 1,
     },
     buttonText: {
         color: '#000',

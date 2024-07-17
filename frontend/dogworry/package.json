@@ -4,22 +4,44 @@
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest"
   },
   "jest": {
     "preset": "react-native",
     "setupFilesAfterEnv": [
-      "@testing-library/react-native/dont-cleanup-after-each",
       "./jest.setup.js"
     ],
     "transformIgnorePatterns": [
-      "node_modules/(?!(@react-native|react-native|react-clone-referenced-element|react-navigation|react-navigation-stack|react-navigation-drawer|react-navigation-tabs|@react-navigation|@unimodules))"
-    ]
+      "node_modules/(?!(jest-)?@?react-native|react-native|@react-native-community|react-navigation|react-navigation-stack|react-navigation-drawer|react-navigation-tabs|@react-navigation|react-clone-referenced-element|firebase|@firebase|@expo/vector-icons|expo-status-bar|expo|@unimodules|)"
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "globals": {
+      "__DEV__": true
+    },
+    "moduleNameMapper": {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/__mocks__/fileMock.js"
+    
+    }
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.24.0",
+    "@react-native-firebase/app": "^20.1.0",
+    "@react-native-google-signin/google-signin": "^12.2.1",
+    "@react-native-picker/picker": "^2.7.7",
     "@react-navigation/bottom-tabs": "^6.6.0",
     "@react-navigation/drawer": "^6.7.0",
     "@react-navigation/native": "^6.1.17",
@@ -28,8 +50,11 @@
     "@testing-library/jest-native": "^5.4.3",
     "axios": "^1.7.2",
     "expo": "~51.0.17",
+    "expo-auth-session": "^5.5.2",
     "expo-image-picker": "^15.0.7",
     "expo-status-bar": "~1.12.1",
+    "expo-web-browser": "^13.0.3",
+    "firebase": "^10.12.3",
     "react": "18.2.0",
     "react-hook-form": "^7.52.1",
     "react-native": "^0.74.3",
@@ -38,10 +63,26 @@
     "react-native-reanimated": "~3.10.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0",
+    "@babel/core": "^7.24.9",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/plugin-proposal-object-rest-spread": "^7.20.7",
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@babel/plugin-transform-class-properties": "^7.24.7",
+    "@babel/plugin-transform-flow-strip-types": "^7.24.7",
+    "@babel/plugin-transform-modules-commonjs": "^7.24.8",
+    "@babel/plugin-transform-private-methods": "^7.24.7",
+    "@babel/plugin-transform-private-property-in-object": "^7.24.7",
+    "@babel/plugin-transform-runtime": "^7.24.7",
+    "@babel/preset-env": "^7.24.8",
+    "@babel/preset-flow": "^7.24.7",
+    "@babel/preset-react": "^7.24.7",
+    "@babel/runtime": "^7.24.8",
     "@testing-library/react-native": "^12.5.1",
+    "babel-jest": "^29.7.0",
     "jest": "^29.7.0",
-    "react-test-renderer": "18.2.0"
+    "jest-react-native": "^18.0.0",
+    "metro-react-native-babel-preset": "^0.77.0",
+    "react-test-renderer": "^18.2.0"
   },
   "private": true
 }
