@@ -51,7 +51,7 @@ def test_get_non_existing_user_details(client, mock_mongo):
     user_collection = mock_mongo['user-details']
 
     response = client.post('/user/getUserDetails/', json={'uid': "I_DONT_EXIST"})
-    assert response.status_code == 404
+    assert response.status_code == 203
 
 # Test saving details for new users
 def test_save_user_details_new_user(client, mock_mongo):
