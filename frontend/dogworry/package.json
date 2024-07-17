@@ -32,7 +32,9 @@
       "__DEV__": true
     },
     "moduleNameMapper": {
-      ".+\\.(css|style|less|sass|scss|png|jpg|ttf|woff|woff2)$": "identity-obj-proxy"
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy",
+      "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/__mocks__/fileMock.js"
+    
     }
   },
   "dependencies": {

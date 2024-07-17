@@ -59,20 +59,20 @@ describe('UserDetails Component', () => {
     it('updates the first name', async () => {
         const { getByText, getByDisplayValue } = renderWithNavigation(<UserDetails />);
 
-        await waitFor(() => {
-            expect(getByDisplayValue('John')).toBeTruthy();
-        });
-
-        const firstNameInput = getByDisplayValue('John');
-        const editButton = getByText('Edit Details');
-
         await waitFor(async () => {
-            fireEvent.press(editButton);
-        });
-        fireEvent.changeText(firstNameInput, 'Jane');
+            await waitFor(() => {
+                expect(getByDisplayValue('John')).toBeTruthy();
+            });
 
-        await waitFor(() => {
-            expect(firstNameInput.props.value).toBe('Jane');
+            const firstNameInput = getByDisplayValue('John');
+            const editButton = getByText('Edit Details');
+
+            fireEvent.press(editButton);
+            fireEvent.changeText(firstNameInput, 'Jane');
+
+            await waitFor(() => {
+                expect(firstNameInput.props.value).toBe('Jane');
+            });
         });
     });
 
