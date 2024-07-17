@@ -34,7 +34,7 @@ const renderWithNavigation = (component) => {
 describe('UserDetails Component', () => {
     beforeEach(() => {
         jest.useFakeTimers(); // Use fake timers to control async operations
-        axios.post.mockResolvedValueOnce({ data: mockData });
+        axios.post.mockResolvedValueOnce({ data: mockData, status: 200 });
     });
 
     afterEach(() => {
@@ -116,9 +116,7 @@ describe('UserDetails Component', () => {
 });
 
 //from here test for guest registration
-import React from 'react';
-import { render, fireEvent, waitFor } from '@testing-library/react-native';
-import RegisterScreen from './screens/user/guestRegistration'; // Update with your correct import path
+import RegisterScreen from '../screens/user/guestRegistration'; // Update with your correct import path
 
 describe('RegisterScreen', () => {
   it('renders correctly', () => {

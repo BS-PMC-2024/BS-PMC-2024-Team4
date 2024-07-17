@@ -1,24 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, Alert,Image } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
-import * as Google from 'expo-auth-session/providers/google';
-import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
-import * as WebBrowser from 'expo-web-browser';
+//import * as Google from 'expo-auth-session/providers/google';
+//import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+//import * as WebBrowser from 'expo-web-browser';
 import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../fbauth'
 import {api_url} from '../../config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
-WebBrowser.maybeCompleteAuthSession();
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [confirmPassword, setConfirm] = useState('');
-    
-
+/*
     const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
       clientId: '721153684567-lsnpf6236ju6tvain1omub6st8gpefcg.apps.googleusercontent.com',
       redirectUri: makeRedirectUri({
@@ -27,7 +25,6 @@ const RegisterScreen = () => {
       }),
       responseType: ResponseType.IdToken,
     });
-
     useEffect(() => {
       if (response?.type === 'success') {
         const { id_token } = response.params;
@@ -66,7 +63,7 @@ const RegisterScreen = () => {
             console.error(error);
             Alert.alert('Failed to sign in:', error.message);
         }
-    };
+    };*/
     
     const handleRegister = async () => {
       try {
@@ -88,11 +85,16 @@ const RegisterScreen = () => {
         Alert.alert(err.message);
       }
     };
-    
+    //<Button title="Sign in with Google" onPress={googleSignIn} />
 
     return (
+      
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <Button title="Sign in with Google" onPress={googleSignIn} />
+             <Image
+              source= {require("../../Images/dogs.jpg")}
+              style={{ width: 100, height: 100, marginBottom: 20 }}
+            />
+            <Text style={styles.welcomeText}>welcome! register here</Text>
             <TextInput
                 style={styles.input}
                 placeholder="Email"
@@ -115,7 +117,7 @@ const RegisterScreen = () => {
                 onChangeText={setConfirm}
                 secureTextEntry
             />
-            <Button title ="Sign in with e-mail and password" onPress={handleRegister}/>
+            <Button title ="Sign in with e-mail and password" onPress={handleRegister} color={'blue'}/>
         </View>
     );
 };
@@ -131,6 +133,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 12,
     paddingHorizontal: 8,
+  },
+  welcomeText: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    color: 'blue',
+    fontSize: 20,
+    marginBottom: 20,
   },
   error: {
     color: 'red',

@@ -24,12 +24,19 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "6d2e787a-004d-453e-9e54-fa0220df0559"
-      }
-    },
-    "owner": "yovelnir"
-  }
+    }
+  },
+  "plugins": [
+      "@react-native-firebase/app",
+      "@react-native-firebase/auth",
+      "@react-native-firebase/crashlytics",
+      [
+        "expo-build-properties",
+        {
+          "ios": {
+            "useFrameworks": "static"
+          }
+        }
+      ]
+    ]
 }

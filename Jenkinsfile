@@ -19,7 +19,7 @@ pipeline {
                         pipenv install
 
                         # Run tests
-                        pipenv run pytest tests
+                        pipenv run pytest
                     '''
                 }
             }
