@@ -69,7 +69,7 @@ def getUserDogs():
     user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
 
     dogs = list(user_dogs_db.find({'user_id': user_id}, {"_id":0}))
-
+    
     for dog in dogs:
         if 'no_image' not in dog:
             dog['dog_image'] = base64.b64encode(dog['dog_image']).decode('utf-8')
@@ -77,7 +77,7 @@ def getUserDogs():
     if dogs:
         return json_util.dumps(dogs)
     else:
-        return {"error", "no dogs"}, 204
+        return {"error": "no dogs"}, 204
 
 @bp.route('/addDog', methods=['POST'])
 def addDog():
@@ -99,4 +99,24 @@ def addDog():
     except:
         return {'success': False}
 
+@bp.route('/updateDog', methods=['POST'])
+def updateDog():
+    json = request.get_json()
+    data = json['data']
+    old_data = json['old_data']
+
+    user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
+
+    if 'no_image' not in data:
+        dog_image = data.pop('dog_image')
+        data['dog_image'] = base64.b64decode(dog_image)
+
+    query = {"dog_name": old_data['dog_name'], "user_id": old_data['user_id']}
+    
+    try:
+        values = {"$set": data}
+        user_dogs_db.update_one(query, values)
+        return {'success': True}, 200
+    except:
+        return {'success': False}
     
