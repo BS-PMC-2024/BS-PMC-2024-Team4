@@ -8,9 +8,8 @@ import api_url from '../../config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UserDetails = ( props ) => {
+const UserDetails = ( ) => {
     const navigation = useNavigation();
-    const { userUid } = props;
     const [disableSave, setdisableSaveSave] = useState(false);
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -22,6 +21,7 @@ const UserDetails = ( props ) => {
         setdisableSaveSave(Keyboard.isVisible());
 
     const fetchData = async () => {
+        const userUid = await AsyncStorage.getItem('userUid');
         const resp = await axios.post(`${api_url}user/getUserDetails/`, {'uid': userUid});
         const data = resp.data;
         

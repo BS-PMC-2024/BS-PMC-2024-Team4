@@ -6,6 +6,7 @@ import { useNavigation, DrawerActions } from '@react-navigation/native';
 import api_url from '../config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { set } from 'react-hook-form';
 
 const Drawer = createDrawerNavigator();
 
@@ -20,12 +21,12 @@ export const User = () => {
             if (avatar === null) {
               try{
                 const value = await AsyncStorage.getItem("avatar");
-                
+                const uid = await AsyncStorage.getItem('userUid');
                 if(value !== null) {
                   setAvatar(value);
                   setShow(true);
-                }
               }
+            }
               catch(e){
                 console.log("Error loading avatars for users", e);
               }
@@ -34,7 +35,6 @@ export const User = () => {
         fetchData();
     }, [avatar]);
 
-    //<Ionicons name={"person-circle-outline"} size={30} color="#fff" />
 
     return (
         <TouchableOpacity style={styles.userContainer} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>

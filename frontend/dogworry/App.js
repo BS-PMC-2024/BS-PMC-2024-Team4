@@ -66,11 +66,11 @@ const TabNavigator = () => (
 
 // Adding only 1 instance of the User component to every screen in Tab Navigator
 const TabNavigatorWithUser = () => (
-  <View style={{ flex: 1 }}>
-    <User />
-    <TabNavigator />
-  </View>
-);
+    <View style={{ flex: 1 }}>
+      <User />
+      <TabNavigator />
+    </View>
+)
 
 const StackNavigation = () => {
   return (
@@ -140,15 +140,6 @@ const CustomProfileDrawer = (props) => {
         console.error("Failed to logout.", error);
     }
   };
-  // const logout = async () => {
-  //   try {
-  //       await AsyncStorage.removeItem('userUid');  
-  //       setIsLoggedIn(false);  
-  //       props.navigation.navigate('Main');  
-  //   } catch (error) {
-  //       console.error("Failed to logout.", error);
-  //   }
-  // };
   
   useEffect(() => {
     retrieveData();
@@ -214,10 +205,8 @@ const ProfileDrawer = () => {
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
       drawerContent={props => <CustomProfileDrawer {...props} />} >
       <Drawer.Screen name = "Main" component={StackNavigation} options={{headerShown: false, unmountOnBlur: true}}/>
-      <Drawer.Screen name ="User Details" backBehavior={() => props.navigation.navigate("Main")}
-                     options={{unmountOnBlur: true}} >
-                      {(props) => <UserDetails userUid={uid}/>}
-      </Drawer.Screen>
+      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}
+                     options={{unmountOnBlur: true}} />
       <Drawer.Screen name="Login" component={LoginScreen}/>
       <Drawer.Screen name ="My Dogs" component={MyDogs} backBehavior={() => props.navigation.navigate("Main")}
                      options={{unmountOnBlur: true}}/>
