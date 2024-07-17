@@ -28,7 +28,7 @@ def create_app(config_class=Config):
     app.register_blueprint(info_bp, url_prefix='/info')
 
 
-     from app.manager import bp as manager_bp
+    from app.manager import bp as manager_bp
     app.register_blueprint(manager_bp, url_prefix='/manager')
 
     @app.route('/test/')
