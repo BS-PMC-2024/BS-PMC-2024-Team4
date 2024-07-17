@@ -25,6 +25,9 @@ def create_app(config_class=Config):
     from app.user import bp as user_bp
     app.register_blueprint(user_bp, url_prefix='/user')
 
+    from app.lostdogs import ld as ld_bp
+    app.register_blueprint(ld_bp, url_prefix='/lostDog')
+
     @app.route('/test/')
     def test_page():
         return '<h1>Testing the Flask Application Factory Pattern</h1>'
