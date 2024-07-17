@@ -43,7 +43,7 @@ const renderWithNavigation = (component) => {
 
 describe('MyDogs Component', () => {
     beforeEach(() => {
-        jest.useFakeTimers(); // Use fake timers to control async operations
+        jest.useFakeTimers(); 
         AsyncStorage.getItem.mockResolvedValue('test-uid');
         axios.post.mockResolvedValue({ data: mockDogs, status: 200 });
     });
@@ -64,11 +64,10 @@ describe('MyDogs Component', () => {
             });
         });
 
-        debug(); // Print the rendered component to the console
     });
 
     it('opens the add dog modal and adds a new dog', async () => {
-        const { getByText, getByPlaceholderText, queryByText } = renderWithNavigation(<MyDogs />);
+        const { getByText, getByPlaceholderText, getByTestId, unmount, debug } = renderWithNavigation(<MyDogs />);
 
         await waitFor(async () => {
             await waitFor(() => {
@@ -77,33 +76,53 @@ describe('MyDogs Component', () => {
             });
         });
 
-        const addButton = getByText('Add Another Dog');
-        fireEvent.press(addButton);
+        const addButton = getByTestId('Modal Button');
+        await waitFor(() => {
+            fireEvent.press(addButton);
+        })
 
-        await waitFor(async () => {
-            await waitFor(async () => {
-                fireEvent.press(profilePictureButton);
-            });
-            await waitFor(() => {
-                expect(getByText('Doggy Picture')).toBeTruthy();
-            });
+        await waitFor(() => {
+            expect(getByText('Doggy Picture')).toBeTruthy();
         });
 
-        const dogNameInput = getByPlaceholderText('Doggy Name');
-        fireEvent.changeText(dogNameInput, 'Charlie');
-        const breedInput = getByPlaceholderText('Breed');
-        fireEvent.changeText(breedInput, 'Beagle');
-        const ageInput = getByPlaceholderText('Age');
-        fireEvent.changeText(ageInput, '3');
+        const mock_dog = {
+            dog_name: 'Charlie',
+            dog_breed: 'Beagle',
+            dog_age: '3',
+        }
 
-        const submitButton = getByText('Add Dog');
-        fireEvent.press(submitButton);
+        await waitFor(async () =>{
+            const dogNameInput = getByPlaceholderText('Doggy Name');
+            fireEvent.changeText(dogNameInput, 'Charlie');
+            expect(dogNameInput).toHaveProp('value', 'Charlie');
 
-        await waitFor(async () => {
+            const breedInput = getByPlaceholderText('Breed');
+            fireEvent.changeText(breedInput, 'Beagle');
+            expect(breedInput).toHaveProp('value', 'Beagle');
+
+            const ageInput = getByPlaceholderText('Age');
+            fireEvent.changeText(ageInput, '3');
+            expect(ageInput).toHaveProp('value', '3');
+
+            axios.post.mockResolvedValue({ data: {success: true} });
+            const submitButton = getByTestId('Add Dog');
+
             await waitFor(() => {
-                expect(queryByText('Charlie')).toBeTruthy();
-                expect(queryByText('Beagle')).toBeTruthy();
-            });
+                fireEvent.press(submitButton);
+            })
+        })
+        unmount();
+
+        axios.post.mockResolvedValueOnce({ data: [...mockDogs, { dog_name: 'Charlie', dog_breed: 'Beagle', dog_age: '3', dog_image: 'base64image', no_image: false }], status: 200 });
+        const { getByText: getByTextAfterReload } = renderWithNavigation(<MyDogs />);
+        
+        await waitFor(() => {
+            expect(getByTextAfterReload('Buddy')).toBeTruthy();
+            expect(getByTextAfterReload('Golden Retriever')).toBeTruthy();
+            expect(getByTextAfterReload('Max')).toBeTruthy();
+            expect(getByTextAfterReload('Bulldog')).toBeTruthy();
+            expect(getByTextAfterReload('Charlie')).toBeTruthy();
+            expect(getByTextAfterReload('Beagle')).toBeTruthy();
         });
     });
 });
