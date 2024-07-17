@@ -88,14 +88,12 @@ const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
   const [isLoggedIn,setIsLoggedIn]=useState(false);
-  console.log("BEFORE");
+ 
   const retrieveData = async () => {
-    console.log("BEFORE2");
+
     try {
       const value = await AsyncStorage.getItem('userUid');
       if (value !== null) {
-        console.log(value);
-        console.log("INSIDE-IF");
         setIsLoggedIn(true);
       }
     } catch (error) {
@@ -107,7 +105,6 @@ const CustomProfileDrawer = (props) => {
   const logout = async () => {
     try {
         await AsyncStorage.removeItem('userUid');  
-        console.log(isLoggedIn);
         setIsLoggedIn(false);  
         props.navigation.navigate('Main');  
     } catch (error) {
@@ -116,7 +113,6 @@ const CustomProfileDrawer = (props) => {
   };
   
   useEffect(() => {
-    console.log("use effect");
     retrieveData();
     
   });
