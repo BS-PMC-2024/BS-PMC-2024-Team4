@@ -1,28 +1,34 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-native';
+import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
 import api_url from '../config';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Drawer = createDrawerNavigator();
 
-const User = () => {
+export const User = () => {
     const [show, setShow] = useState(false);
     const [avatar, setAvatar] = useState(null);
-    const uid = "lmqhbH1slQUG4vEEMkGW9GYBUjI3";
 
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchData = async () => {
             if (avatar === null) {
-                const response = await axios.post(`${api_url}user/getUserDetails/`, {"uid": uid});
-                const data = response.data;
-
-                setAvatar(data.avatar);
-                setShow(true)
+              try{
+                const value = await AsyncStorage.getItem("avatar");
+                
+                if(value !== null) {
+                  setAvatar(value);
+                  setShow(true);
+                }
+              }
+              catch(e){
+                console.log("Error loading avatars for users", e);
+              }
             }
         };
         fetchData();
@@ -39,6 +45,27 @@ const User = () => {
 
 };
     
+export const ProfileLabel = () => {
+  return (
+      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <FontAwesome6 name="id-card" size={24} />
+          <Text style={{paddingLeft: 10, fontSize: 20}}>Profile</Text>
+      </View>
+  )
+}
+
+export const MyDogsLabel = () => {
+  return (
+      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <MaterialCommunityIcons name="dog" size={24} color="black" />
+          <Text style={{paddingLeft: 10, fontSize: 20}}>My Dogs</Text>
+      </View>
+  )
+}
+
+export const ColorPicker = () => {
+  [color, setColor]
+}
 
 const styles = StyleSheet.create({
     userContainer: {
@@ -59,5 +86,3 @@ const styles = StyleSheet.create({
       marginRight: 5,
     },
   });
-
-export default User;

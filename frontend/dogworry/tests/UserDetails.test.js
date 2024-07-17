@@ -15,8 +15,6 @@ const mockData = {
     avatar: '',
 };
 
-
-
 // Mock ImagePicker component
 jest.mock('../components/ImagePicker', () => {
     return jest.fn(() => Promise.resolve({
@@ -36,7 +34,7 @@ const renderWithNavigation = (component) => {
 describe('UserDetails Component', () => {
     beforeEach(() => {
         jest.useFakeTimers(); // Use fake timers to control async operations
-        axios.post.mockResolvedValueOnce({ data: mockData });
+        axios.post.mockResolvedValueOnce({ data: mockData, status: 200 });
     });
 
     afterEach(() => {
@@ -59,20 +57,20 @@ describe('UserDetails Component', () => {
     it('updates the first name', async () => {
         const { getByText, getByDisplayValue } = renderWithNavigation(<UserDetails />);
 
+        await waitFor(() => {
+            expect(getByDisplayValue('John')).toBeTruthy();
+        });
+
+        const firstNameInput = getByDisplayValue('John');
+        const editButton = getByText('Edit Details');
+
         await waitFor(async () => {
-            await waitFor(() => {
-                expect(getByDisplayValue('John')).toBeTruthy();
-            });
-
-            const firstNameInput = getByDisplayValue('John');
-            const editButton = getByText('Edit Details');
-
             fireEvent.press(editButton);
-            fireEvent.changeText(firstNameInput, 'Jane');
+        });
+        fireEvent.changeText(firstNameInput, 'Jane');
 
-            await waitFor(() => {
-                expect(firstNameInput.props.value).toBe('Jane');
-            });
+        await waitFor(() => {
+            expect(firstNameInput.props.value).toBe('Jane');
         });
     });
 

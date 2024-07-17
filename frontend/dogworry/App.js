@@ -11,11 +11,13 @@ import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
 import LostScreen from './screens/LostScreen';
 import styles from './styles';
-import User from './components/User';
+import {User, ProfileLabel, MyDogsLabel} from './components/User';
 import UserDetails from './screens/user/UserDetails';
 import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import MyDogs from './screens/user/MyDogs';
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -87,15 +89,13 @@ const StackNavigation = () => {
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
+  const [uid, setUid] = useState("");
   const [isLoggedIn,setIsLoggedIn]=useState(false);
-  console.log("BEFORE");
   const retrieveData = async () => {
-    console.log("BEFORE2");
     try {
       const value = await AsyncStorage.getItem('userUid');
       if (value !== null) {
-        console.log(value);
-        console.log("INSIDE-IF");
+        setUid(value);
         setIsLoggedIn(true);
       }
     } catch (error) {
@@ -106,62 +106,88 @@ const CustomProfileDrawer = (props) => {
 
   const logout = async () => {
     try {
-        await AsyncStorage.removeItem('userUid');  
-        console.log(isLoggedIn);
-        setIsLoggedIn(false);  
-        props.navigation.navigate('Main');  
+        await AsyncStorage.removeItem('userUid');
+        if(await AsyncStorage.getItem('avatar'))
+            await AsyncStorage.removeItem('avatar'); 
+
+        setIsLoggedIn(false);
+        props.navigation.navigate('Main');
     } catch (error) {
         console.error("Failed to logout.", error);
     }
   };
   
   useEffect(() => {
-    console.log("use effect");
     retrieveData();
     
   });
   
   return (
     <DrawerContentScrollView {...props}>
-      <Text>Hello</Text>
-      <DrawerItem 
-        label="profile"
-        onPress={() => props.navigation.navigate("User Details")}
-        activeTintColor="blue"
-        backBehavior={() => props.navigation.navigate("Main")}/>
-    
+      {isLoggedIn ? (
+        <>
+          <DrawerItem 
+            label={() => <ProfileLabel />}
+            onPress={() => props.navigation.navigate("User Details")}
+            activeTintColor="blue"
+            backBehavior={() => props.navigation.navigate("Main")}
+          />
 
+          <DrawerItem 
+            label={() => <MyDogsLabel />}
+            onPress={() => props.navigation.navigate("My Dogs")}
+            activeTintColor="blue"
+            backBehavior={() => props.navigation.navigate("Main")}
+          />
 
-    {!isLoggedIn && (
-      <DrawerItem
-      label="Login"
-      onPress={()=> props.navigation.navigate("Login")}
-      activeTintColor='#F44336'
-      />
-    )}
-
-{isLoggedIn && (
-      <DrawerItem
-      label="Logout"
-      onPress={logout}
-      activeTintColor='#F44336'
-      />
-    )}
+          <DrawerItem
+            label="Logout"
+            onPress={logout}
+            activeTintColor='#F44336'
+          />
+        </>
+      ) : (
+        <DrawerItem
+          label="Login"
+          onPress={() => props.navigation.navigate("Login")}
+          activeTintColor='#F44336'
+        />
+      )}
     </DrawerContentScrollView>
   );
 }
 
 
 const ProfileDrawer = () => {
-  
+
+  const [uid, setUid] = useState("");
+
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('userUid');
+      if (value !== null) {
+        setUid(value);
+      }
+    } catch (error) {
+      console.error("Failed to retrieve data", error);
+    }
+  };
+
+  useEffect(() => {
+    retrieveData();
+  }, []);
    
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
       drawerContent={props => <CustomProfileDrawer {...props} />} >
       <Drawer.Screen name = "Main" component={StackNavigation} options={{headerShown: false, unmountOnBlur: true}}/>
-      <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}
-                     options={{unmountOnBlur: true}}/>
+      <Drawer.Screen name ="User Details" backBehavior={() => props.navigation.navigate("Main")}
+                     options={{unmountOnBlur: true}} >
+                      {(props) => <UserDetails userUid={uid}/>}
+      </Drawer.Screen>
       <Drawer.Screen name="Login" component={LoginScreen}/>
+      <Drawer.Screen name ="My Dogs" component={MyDogs} backBehavior={() => props.navigation.navigate("Main")}
+                     options={{unmountOnBlur: true}}/>
     </Drawer.Navigator>
   )
 }
