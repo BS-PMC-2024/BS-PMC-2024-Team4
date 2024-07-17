@@ -111,7 +111,7 @@ const CustomProfileDrawer = (props) => {
         setIsLoggedIn(false);  
         props.navigation.navigate('Main');  
     } catch (error) {
-        console.error("Failed to logout", error);
+        console.error("Failed to logout.", error);
     }
   };
   
