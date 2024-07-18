@@ -5,6 +5,7 @@ from pymongo.server_api import ServerApi
 from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     if config_class == 'testing':
@@ -30,20 +31,6 @@ def create_app(config_class=Config):
     from app.auth import auth as auth_bp
     app.register_blueprint(auth_bp, url_prefix='/auth')
 
-
-    from app.manager import bp as manager_bp
-    app.register_blueprint(manager_bp, url_prefix='/manager')
-
-    from app.lostdogs import ld as ld_bp
-    app.register_blueprint(ld_bp, url_prefix='/lostDog')
-
-
-
-    from app.manager import bp as manager_bp
-    app.register_blueprint(manager_bp, url_prefix='/manager')
-
-    from app.lostdogs import ld as ld_bp
-    app.register_blueprint(ld_bp, url_prefix='/lostDog')
 
     from app.manager import bp as manager_bp
     app.register_blueprint(manager_bp, url_prefix='/manager')
