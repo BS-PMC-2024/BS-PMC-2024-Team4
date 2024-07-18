@@ -11,3 +11,4 @@ class TestingConfig(Config):
     TESTING = True
     DEBUG = True
     MONGO_URI = 'mongodb://localhost:27017/testdb'
+

@@ -1,10 +1,18 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        backgroundColor: '#f0f0f0', // Light grey background color
+        padding: 20,
+    },
+    dogsContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: "100%",
         backgroundColor: '#f0f0f0', // Light grey background color
         padding: 20,
     },
@@ -79,6 +87,50 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 5,
     },
+    pickerContainer: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        width: 200,
+        justifyContent: 'center',
+        backgroundColor: 'white',
+    },
+    picker: {
+        height: 40,
+    },
+    dogItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 10,
+        padding: 10,
+        backgroundColor: '#fff',
+        borderRadius: 20,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 2,
+    },
+    dogImage: {
+        width: 100,
+        height: 100,
+        borderRadius: 25,
+        marginRight: 10,
+    },
+    dogName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+    },
+    dogBreed: {
+        fontSize: 14,
+        color: '#666',
+    },
 });
 
-export default styles;
+export const dogImages = {
+    1: require('../Images/dogProfile/1.png'),
+    2: require('../Images/dogProfile/2.png'),
+    3: require('../Images/dogProfile/3.png'),
+    4: require('../Images/dogProfile/4.png'),
+    5: require('../Images/dogProfile/5.png'),
+};

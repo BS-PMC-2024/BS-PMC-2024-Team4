@@ -2,7 +2,9 @@ import React, { useState } from 'react'
 import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import auth from '../fbauth';
+import api_url from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 export default  function LoginForm({navigation}) {
 
@@ -18,6 +20,10 @@ export default  function LoginForm({navigation}) {
                 const user = userCredential.user;
                 try {
                   await AsyncStorage.setItem('userUid', user.uid);
+                  const response = await axios.post(`${api_url}user/getUserDetails`, {'uid': user.uid})
+                  if(response.status === 200){
+                    await AsyncStorage.setItem("avatar", response.data['avatar']);
+                  }
                   Alert.alert("Login Successful", `Welcome ${user.email}`);
                   navigation.navigate('Main'); 
                 } catch (error) {

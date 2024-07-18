@@ -1,13 +1,14 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react';
-import { View, Text, ActivityIndicator, Image, Button, TouchableOpacity, TextInput, Alert, BackHandler, Keyboard } from 'react-native';
+import React, { useEffect, useState, useCallback } from 'react';
+import { View, Text, ActivityIndicator, Image, TouchableOpacity, TextInput, Alert, BackHandler, Keyboard } from 'react-native';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { useForm } from 'react-hook-form';
 import ImagePicker from '../../components/ImagePicker';
 import styles from '../../styles/UserDetailsStyles';
 import api_url from '../../config';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const UserDetails = () => {
+const UserDetails = ( ) => {
     const navigation = useNavigation();
     const [disableSave, setdisableSaveSave] = useState(false);
     const [data, setData] = useState(null);
@@ -15,16 +16,21 @@ const UserDetails = () => {
     const { reset, handleSubmit, setValue, watch } = useForm({ defaultValues: data });
     const [isEditing, setIsEditing] = useState(false);
     const values = watch();
-    const uid = "lmqhbH1slQUG4vEEMkGW9GYBUjI3";
 
     if (Keyboard.isVisible() !== disableSave)
         setdisableSaveSave(Keyboard.isVisible());
 
-    const fetchData = async () => {  
-        const resp = await axios.post(`${api_url}user/getUserDetails/`, {'uid': uid});
+    const fetchData = async () => {
+        const userUid = await AsyncStorage.getItem('userUid');
+        const resp = await axios.post(`${api_url}user/getUserDetails/`, {'uid': userUid});
         const data = resp.data;
-        setData(data);
-        setLoading(false);
+        
+        if(resp.status === 200){
+            setData(data);
+            setLoading(false);
+        }
+        else
+            Alert.alert("User Details", data.error)
     };
 
     useFocusEffect(
@@ -51,12 +57,18 @@ const UserDetails = () => {
     }, [data, reset]);
 
     const onSubmit = async (data) => {
-        data.user_id = "lmqhbH1slQUG4vEEMkGW9GYBUjI3";
+        data.user_id = uid;
         const response = await axios.post(`${api_url}user/saveUserDetails`, data);
 
         if (response.data.success) {
+            try{
+            await AsyncStorage.setItem("avatar", data.avatar);
             Alert.alert("Personal Details", "Personal details saved successfully");
             setIsEditing(false);
+            }
+            catch{
+                Alert.alert("Personal Details", "There was a problem saving your details please try again.");
+            }
         }
         else
             Alert.alert("Personal Details", response.data.error);
@@ -97,7 +109,7 @@ const UserDetails = () => {
     if (loading)
         return (
             <View style={styles.container}>
-                <ActivityIndicator size="large" />
+                <ActivityIndicator size="large" testID="loading" />
             </View>
         );
 
