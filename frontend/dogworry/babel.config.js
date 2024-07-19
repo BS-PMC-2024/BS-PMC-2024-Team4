@@ -6,12 +6,12 @@ module.exports = function(api) {
       '@babel/preset-react'
     ],
     plugins: [
-      ['@babel/plugin-transform-flow-strip-types'],
+      '@babel/plugin-transform-flow-strip-types',
       ['@babel/plugin-proposal-class-properties', { "loose": true }],
       ['@babel/plugin-transform-private-methods', { "loose": true }],
-      //['@babel/plugin-proposal-private-methods', { "loose": true }],
       ['@babel/plugin-proposal-private-property-in-object', { "loose": true }],
-      ['@babel/plugin-transform-runtime']
+      '@babel/plugin-transform-runtime',
+      'react-native-reanimated/plugin'
     ]
   };
 };
