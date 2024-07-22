@@ -6,11 +6,14 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:backend'
-                    args '-u root:root -v $WORKSPACE/backend:/app/backend' // Mount workspace
+                    args '-u root:root' // Mount workspace
                 }
             }
             steps {
                 script {
+                    sh '''
+                        docker cp $WORKSPACE/backend $(docker ps -lq):/app/backend
+                    '''
                     // Verify that the workspace is correctly mounted
                     sh '''
                         echo "Listing contents of /app/backend"
@@ -39,11 +42,14 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:frontend'
-                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend/dogworry' // Mount workspace
+                    args '-u root:root' // Mount workspace
                 }
             }
             steps {
                 script {
+                    sh '''
+                        docker cp $WORKSPACE/frontend/dogworry $(docker ps -lq):/app/frontend/dogworry
+                    '''
                     // Verify that the workspace is correctly mounted
                     sh '''
                         echo "Listing contents of /app/frontend/dogworry"
