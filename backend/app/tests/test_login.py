@@ -51,15 +51,17 @@ def test_main_access(client):
 def test_successful_login_with_mock(mock_mongo, client):
     """Test successful login with mocked MongoDB."""
     
-    mock_db = mongomock.MongoClient().db
-    mockk=mock_db.getdatabase("Users")
-    mock_users = mock_db.get_collection("admins")
+    mock_db = mongomock.MongoClient()
+    mockk = mock_db.get_database("Users")
+    mock_users = mockk.get_collection("admins")
     mock_users.insert_one({"email": "correct@example.com", "password": "correctpassword"})
     mock_mongo.client.get_database.return_value = mock_db
 
+    print(mock_users.find_one({"email": "correct@example.com"}))
     response = client.post('/', data={
         'email': 'correct@example.com',
         'password': 'correctpassword'
     }, follow_redirects=True)
     assert response.status_code == 200
+    print(response.data)
     assert b"HomePage" in response.data
