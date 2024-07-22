@@ -6,14 +6,16 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:backend'
-                    args '-u root:root -v $WORKSPACE/backend:/app/backend -w /app/backend'
+                    args '-u root:root -v $WORKSPACE/backend:/app/backend -w /app/backend' // Mount workspace
+                    reuseNode true
                 }
             }
             steps {
                 script {
                     // Use pipenv to install dependencies and run backend tests
                     sh '''
-                        cd app/backend
+                        # Move to the mounted workspace directory
+                        cd backend
 
                         # Clean virtual environment if it exists
                         pipenv --rm || true
@@ -35,16 +37,17 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:frontend'
-                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend -w /app/frontend'
+                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend/dogworry -w /app/frontend/dogworry' // Mount workspace
+                    reuseNode true
                 }
             }
             steps {
                 script {
-                    // Use npm to install dependencies and run frontend tests
+                    // Run your frontend tests here
                     sh '''
-                        cd app/frontend/dogworry
-
-                        npm install
+                        # Move to the mounted workspace directory
+                        cd frontend/dogworry
+                        npm install --quiet
                         npm test
                     '''
                 }
