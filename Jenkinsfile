@@ -6,14 +6,16 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:backend'
-                    args '-u root:root' // Use this if you need root permissions inside the container
+                    args '-u root:root -v $WORKSPACE/backend:/app/backend' 
                 }
             }
             steps {
                 script {
-                    // Use pipenv to install dependencies and run backend tests
                     sh '''
-                        cd backend
+                        cd /app/backend
+
+                        # Clean virtual environment
+                        pipenv --rm || true
 
                         # Install dependencies from Pipfile
                         pipenv install
@@ -29,14 +31,13 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:frontend'
-                    args '-u root:root' // Use this if you need root permissions inside the container
+                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend/dogworry'
                 }
             }
             steps {
                 script {
-                    // Run your frontend tests here
                     sh '''
-                        cd frontend/dogworry
+                        cd /app/frontend/dogworry
                         npm install
                         npm test
                     '''
@@ -48,19 +49,16 @@ pipeline {
     post {
         always {
             script {
-                // Clean up workspace after the build
                 cleanWs()
             }
         }
         success {
             script {
-                // Actions to perform on successful build
                 echo 'Build succeeded!'
             }
         }
         failure {
             script {
-                // Actions to perform on failed build
                 echo 'Build failed!'
             }
         }
