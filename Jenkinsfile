@@ -17,6 +17,8 @@ pipeline {
                         # Clean virtual environment
                         pipenv --rm || true
 
+                        pipenv shell
+                        
                         # Install dependencies from Pipfile
                         pipenv install
 
