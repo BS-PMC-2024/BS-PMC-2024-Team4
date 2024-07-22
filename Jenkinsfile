@@ -11,8 +11,11 @@ pipeline {
             }
             steps {
                 script {
-                    // Use pipenv to install dependencies and run backend tests
+                    // Verify that the workspace is correctly mounted
                     sh '''
+                        echo "Listing contents of /app/backend"
+                        ls -la /app/backend
+
                         # Move to the mounted workspace directory
                         cd /app/backend
 
@@ -41,8 +44,11 @@ pipeline {
             }
             steps {
                 script {
-                    // Run your frontend tests here
+                    // Verify that the workspace is correctly mounted
                     sh '''
+                        echo "Listing contents of /app/frontend/dogworry"
+                        ls -la /app/frontend/dogworry
+
                         # Move to the mounted workspace directory
                         cd /app/frontend/dogworry
                         npm install
