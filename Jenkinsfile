@@ -13,8 +13,7 @@ pipeline {
                 script {
                     // Use pipenv to install dependencies and run backend tests
                     sh '''
-                        echo "Listing contents of /app/backend"
-                        ls -la /app/backend
+                        cd app/backend
 
                         # Clean virtual environment if it exists
                         pipenv --rm || true
@@ -43,8 +42,7 @@ pipeline {
                 script {
                     // Use npm to install dependencies and run frontend tests
                     sh '''
-                        echo "Listing contents of /app/frontend"
-                        ls -la /app/frontend
+                        cd app/frontend/dogworry
 
                         npm install
                         npm test
