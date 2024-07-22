@@ -6,21 +6,18 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:backend'
-                    args '-u root:root' // Mount workspace
+                    args '-u root:root -v $WORKSPACE/backend:/app/backend' // Mount workspace
                 }
             }
             steps {
                 script {
-                    sh '''
-                        docker cp $WORKSPACE/backend $(docker ps -lq):/app/backend
-                    '''
                     // Verify that the workspace is correctly mounted
                     sh '''
                         echo "Listing contents of /app/backend"
                         ls -la /app/backend
 
                         # Move to the mounted workspace directory
-                        cd /app/backend
+                        cd /backend
 
                         # Clean virtual environment if it exists
                         pipenv --rm || true
@@ -42,18 +39,15 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:frontend'
-                    args '-u root:root' // Mount workspace
+                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend/dogworry' // Mount workspace
                 }
             }
             steps {
                 script {
-                    sh '''
-                        docker cp $WORKSPACE/frontend/dogworry $(docker ps -lq):/app/frontend/dogworry
-                    '''
                     // Verify that the workspace is correctly mounted
                     sh '''
                         echo "Listing contents of /app/frontend/dogworry"
-                        ls -la /app/frontend/dogworry
+                        ls -la /frontend/dogworry
 
                         # Move to the mounted workspace directory
                         cd /app/frontend/dogworry
