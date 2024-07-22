@@ -6,18 +6,15 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:backend'
-                    args '-u root:root -v $WORKSPACE/backend:/app/backend' // Mount workspace
+                    args '-u root:root -v $WORKSPACE/backend:/app/backend -w /app/backend'
                 }
             }
             steps {
                 script {
-                    // Verify that the workspace is correctly mounted
+                    // Use pipenv to install dependencies and run backend tests
                     sh '''
                         echo "Listing contents of /app/backend"
                         ls -la /app/backend
-
-                        # Move to the mounted workspace directory
-                        cd /backend
 
                         # Clean virtual environment if it exists
                         pipenv --rm || true
@@ -39,18 +36,16 @@ pipeline {
             agent {
                 docker {
                     image 'yovelnir/dogworry:frontend'
-                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend/dogworry' // Mount workspace
+                    args '-u root:root -v $WORKSPACE/frontend/dogworry:/app/frontend -w /app/frontend'
                 }
             }
             steps {
                 script {
-                    // Verify that the workspace is correctly mounted
+                    // Use npm to install dependencies and run frontend tests
                     sh '''
-                        echo "Listing contents of /app/frontend/dogworry"
-                        ls -la /frontend/dogworry
+                        echo "Listing contents of /app/frontend"
+                        ls -la /app/frontend
 
-                        # Move to the mounted workspace directory
-                        cd /app/frontend/dogworry
                         npm install
                         npm test
                     '''
