@@ -11,6 +11,7 @@ pytest-flask = "*"
 mongomock = "*"
 pytest = "*"
 setuptools = "*"
+python-dotenv = "*"
 
 [dev-packages]
 

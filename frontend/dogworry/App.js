@@ -214,7 +214,8 @@ const ProfileDrawer = () => {
       <Drawer.Screen name = "Main" component={StackNavigation} options={{headerShown: false, unmountOnBlur: true}}/>
       <Drawer.Screen name ="User Details" component={UserDetails} backBehavior={() => props.navigation.navigate("Main")}
                      options={{unmountOnBlur: true}} />
-      <Drawer.Screen name="Login" component={LoginScreen}/>
+      <Drawer.Screen name="Login" component={LoginScreen}
+                     options={{unmountOnBlur: true}}/>
       <Drawer.Screen name ="My Dogs" component={MyDogs} backBehavior={() => props.navigation.navigate("Main")}
                      options={{unmountOnBlur: true}}/>
     </Drawer.Navigator>
