@@ -9,6 +9,7 @@ import { styles, dogImages } from '../../styles/MyDogsStyles';
 import api_url from '../../config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackButton from '../../components/BackButton';
 
 const MyDogs = () => {
     const navigation = useNavigation();
@@ -72,14 +73,17 @@ const MyDogs = () => {
     return (
         <View style={styles.dogsContainer}>
             <VirtualizedList
+                style={styles.dogList}
                 data={dogs}
                 initialNumToRender={3}
+                contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
                 renderItem={renderDogItem}
                 keyExtractor={(item, index) => index.toString()}
                 getItemCount={getItemCount}
                 getItem={getItem}
             />
             <AddDog hasDogs={hasDogs} onDogAdded={fetchData} userUid={uid} selectedDog={selectedDog} setSelectedDog={setSelectedDog} />
+            <BackButton />
         </View>
     );
 }

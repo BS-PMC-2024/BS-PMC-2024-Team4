@@ -73,7 +73,11 @@ export default  function LoginForm({navigation}) {
                 
         </View>
 
-        <Text style={styles.footerText}>Don't Have Account?<Text style={styles.signup} > Sign Up </Text></Text>
+        <Text style={styles.footerText}>Don't Have Account?
+          <Text style={styles.signup} onPress={() => {navigation.navigate("Register")}}>
+            Sign Up 
+          </Text>
+        </Text>
 
         
     </SafeAreaView>

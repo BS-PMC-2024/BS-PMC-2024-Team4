@@ -57,7 +57,6 @@ def test_successful_login_with_mock(mock_mongo, client):
     mock_users.insert_one({"email": "correct@example.com", "password": "correctpassword"})
     mock_mongo.client.get_database.return_value = mock_db
 
-    print(mock_users.find_one({"email": "correct@example.com"}))
     response = client.post('/', data={
         'email': 'correct@example.com',
         'password': 'correctpassword'
