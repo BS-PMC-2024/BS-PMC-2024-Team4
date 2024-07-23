@@ -7,6 +7,7 @@ import styles from '../../styles/UserDetailsStyles';
 import api_url from '../../config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import BackButton from '../../components/BackButton';
 
 const UserDetails = ( ) => {
     const navigation = useNavigation();
@@ -32,19 +33,6 @@ const UserDetails = ( ) => {
         else
             Alert.alert("User Details", data.error)
     };
-
-    useFocusEffect(
-        useCallback(() => {
-            const onBackPress = () => {
-                navigation.navigate("Main");
-                return true;
-            };
-
-            BackHandler.addEventListener('hardwareBackPress', onBackPress);
-
-            return () => BackHandler.removeEventListener('hardwareBackPress', onBackPress);
-        }, [navigation])
-    );
 
     useEffect(() => {
         fetchData();
@@ -177,6 +165,8 @@ const UserDetails = ( ) => {
             <View style={styles.homeIconContainer}>
 
             </View>
+
+            <BackButton />
         </View>
     );
 };

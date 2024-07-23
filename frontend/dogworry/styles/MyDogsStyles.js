@@ -15,22 +15,14 @@ export const styles = StyleSheet.create({
         width: "100%",
         backgroundColor: '#f0f0f0', // Light grey background color
         padding: 20,
+        marginTop: 70,
     },
-    detailsContainer: {
-        alignItems: 'center',
-        width: '100%',
+    dogList: {
+        width: "100%",
     },
     imageContainer: {
         alignItems: 'center',
         marginBottom: 30,
-    },
-    inputRow: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        width: '80%',
-    },
-    inputContainerName: {
-        width: '48%',
     },
     inputContainer: {
         width: '80%',
@@ -43,13 +35,6 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: '#fff',
         marginBottom: 15,
-    },
-    inputEnabled: {
-        backgroundColor: 'white', // Light green background when enabled
-    },
-    inputDisabled: {
-        backgroundColor: '#ffe6e6', // Light red background when disabled
-        color: '#3b3b3b',
     },
     buttonContainer: {
         width: '80%',
@@ -67,25 +52,12 @@ export const styles = StyleSheet.create({
         color: '#000',
         fontWeight: 'bold',
     },
-    homeIconContainer: {
-        position: 'absolute',
-        bottom: 20,
-        alignSelf: 'center',
-    },
-    homeIcon: {
-        width: 40,
-        height: 40,
-    },
     profileImage: {
         width: 150,
         height: 150,
         borderRadius: 75,
         borderWidth: 2,
         borderColor: '#000',
-    },
-    label: {
-        fontWeight: 'bold',
-        marginBottom: 5,
     },
     pickerContainer: {
         height: 40,
@@ -110,6 +82,7 @@ export const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 5,
         elevation: 2,
+        width: 300
     },
     dogImage: {
         width: 100,
