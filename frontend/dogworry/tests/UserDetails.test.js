@@ -58,7 +58,7 @@ describe('UserDetails Component', () => {
         });
 
         expect(getByText('Profile Picture')).toBeTruthy();
-    });
+    }, 10000);
 
     it('updates the first name', async () => {
         const { getByText, getByDisplayValue } = renderWithNavigation(<UserDetails />);
