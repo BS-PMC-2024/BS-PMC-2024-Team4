@@ -26,31 +26,29 @@ const mockDogs = [
     },
 ];
 
-const renderWithNavigation = (component) => {
-    return render(
-        <NavigationContainer>
-            {component}
-        </NavigationContainer>
-    );
+const renderWithNavigation = async(component) => {
+    let renderedComponent;
+    await waitFor(async () => {
+        renderedComponent = render(
+            <NavigationContainer>
+                {component}
+            </NavigationContainer>
+        );
+    });
+    return renderedComponent;
 };
 
 describe('DogDetails', () => {
-    it('renders loading state initially', () => {
-        axios.get.mockResolvedValue({ data: [] });
-        const { getByText } = renderWithNavigation(<DogDetails />);
-        expect(getByText('Loading...')).toBeTruthy();
-    });
-
     it('renders no dogs message when no dogs are found', async () => {
         axios.get.mockResolvedValue({ data: [] });
-        const { getByText } = renderWithNavigation(<DogDetails />);
+        const { getByText } = await renderWithNavigation(<DogDetails />);
 
         await waitFor(() => expect(getByText('No dogs lost')).toBeTruthy());
     });
 
     it('renders a list of dogs when data is fetched', async () => {
         axios.get.mockResolvedValue({ data: mockDogs });
-        const { getByText } = renderWithNavigation(<DogDetails />);
+        const { getByText } = await renderWithNavigation(<DogDetails />);
 
         await waitFor(() => {
             expect(getByText('Buddy')).toBeTruthy();

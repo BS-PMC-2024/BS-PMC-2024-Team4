@@ -10,6 +10,7 @@ import api_url from '../../config';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from '../../components/BackButton';
+import RNPickerSelect from 'react-native-picker-select';
 
 const MyDogs = () => {
     const navigation = useNavigation();
@@ -154,7 +155,7 @@ const AddDog = (props) => {
         if (values.dog_image === undefined) {
             data['no_image'] = true;
             // If dog is not being edited and no image was uploaded
-            if(selectedDog === undefined) 
+            if(selectedDog === null) 
                 data['dog_image'] = imageNum;
         }
         data['user_id'] = userUid;
@@ -243,34 +244,40 @@ const AddDog = (props) => {
                     <View style={[styles.inputContainer, { alignItems: 'center' }]}>
                         <Text> Size </Text>
                         <View style={styles.pickerContainer}>
-                            <Picker
-                                selectedValue={values.dog_size}
-                                onValueChange={onChangeField('dog_size')}
-                                styles={styles.picker}
-                                dropdownIconColor="blue">
-                                <Picker.Item label="Select Size" color="gray" />
-                                <Picker.Item label="Small" value="Small" />
-                                <Picker.Item label="Medium" value="Medium" />
-                                <Picker.Item label="Large" value="Large" />
-                            </Picker>
+                        <RNPickerSelect
+                            value={values.dog_size}
+                            onValueChange={onChangeField('dog_size')}
+                            placeholder={{ label: 'Select Size', value: null, color: 'gray' }}
+                            items={[
+                                { label: 'Small', value: 'Small' },
+                                { label: 'Medium', value: 'Medium' },
+                                { label: 'Large', value: 'Large' },
+                            ]}
+                            style={{
+                                inputIOS: styles.inputIOS,
+                                inputAndroid: styles.inputAndroid,
+                            }}/>
                         </View>
                     </View>
 
                     <View style={[styles.inputContainer, { alignItems: 'center' }]}>
                         <Text> Color </Text>
                         <View style={styles.pickerContainer}>
-                            <Picker
-                                selectedValue={values.dog_color}
-                                onValueChange={(itemValue) => setValue('dog_color', itemValue)}
-                                style={styles.picker}
-                                dropdownIconColor="blue">
-                                <Picker.Item label="Select Color" color="gray" />
-                                <Picker.Item label="Black" value="Black" />
-                                <Picker.Item label="Brown" value="Brown" />
-                                <Picker.Item label="White" value="White" />
-                                <Picker.Item label="Golden" value="Golden" />
-                                <Picker.Item label="Mixed" value="Mixed" />
-                            </Picker>
+                        <RNPickerSelect
+                            value={values.dog_color}
+                            onValueChange={(itemValue) => setValue('dog_color', itemValue)}
+                            placeholder={{ label: 'Select Color', value: null, color: 'gray' }}
+                            items={[
+                                { label: 'Black', value: 'Black' },
+                                { label: 'Brown', value: 'Brown' },
+                                { label: 'White', value: 'White' },
+                                { label: 'Golden', value: 'Golden' },
+                                { label: 'Mixed', value: 'Mixed' },
+                            ]}
+                            style={{
+                                inputIOS: styles.inputIOS,
+                                inputAndroid: styles.inputAndroid,
+                            }}/>
                         </View>
                     </View>
 

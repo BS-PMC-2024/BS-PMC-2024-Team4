@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, Alert,Image } from 'react-native';
-import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../fbauth'
-import {api_url} from '../../config'
+import api_url from '../../config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
@@ -19,11 +18,15 @@ const RegisterScreen = () => {
         if(confirmPassword === password)
         {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-          uid = await userCredential.user.uid;
+          uid = userCredential.user.uid;
           await AsyncStorage.setItem('userUid',uid);
           // Send UID to the backend
-          await axios.post(`${api_url}user/saveUserDetails`, {'user_id': uid, 'email': email});
-          Alert.alert('Successfully signed in');
+          await axios.post(`${api_url}/user/saveUserDetails`, {'user_id': uid, 'email': email});
+          Alert.alert('Registered successfully!');
+          navigation.reset(({
+            index: 0,
+            routes: [{name: "Main"}]
+          }));
         }
         else
         {
