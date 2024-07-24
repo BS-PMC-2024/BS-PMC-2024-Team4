@@ -13,6 +13,7 @@ const UserDetails = ( ) => {
     const navigation = useNavigation();
     const [disableSave, setdisableSaveSave] = useState(false);
     const [data, setData] = useState(null);
+    const [uid, setUID] = useState(null);
     const [loading, setLoading] = useState(true);
     const { reset, handleSubmit, setValue, watch } = useForm({ defaultValues: data });
     const [isEditing, setIsEditing] = useState(false);
@@ -23,10 +24,11 @@ const UserDetails = ( ) => {
 
     const fetchData = async () => {
         const userUid = await AsyncStorage.getItem('userUid');
-        const resp = await axios.post(`${api_url}user/getUserDetails/`, {'uid': userUid});
+        const resp = await axios.post(`${api_url}user/getUserDetails`, {'uid': userUid});
         const data = resp.data;
         
         if(resp.status === 200){
+            setUID(userUid);
             setData(data);
             setLoading(false);
         }

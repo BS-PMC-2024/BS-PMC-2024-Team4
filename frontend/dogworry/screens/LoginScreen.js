@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 export default  function LoginForm({navigation}) {
-
     const [click,setClick] = useState(false);
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState(""); 

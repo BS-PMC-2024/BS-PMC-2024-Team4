@@ -4,6 +4,7 @@ import LoginForm from '../screens/LoginScreen';
 import { Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 // Mock the dependencies
 jest.mock('@firebase/auth', () => ({
@@ -12,6 +13,7 @@ jest.mock('@firebase/auth', () => ({
   }));
 jest.mock('@react-native-async-storage/async-storage');
 jest.mock('../fbauth', () => ({}));
+jest.mock('axios')
 
 describe('LoginForm', () => {
   const mockNavigation = { navigate: jest.fn() };
@@ -52,6 +54,8 @@ describe('LoginForm', () => {
     fireEvent.changeText(getByPlaceholderText('EMAIL'), 'test@example.com');
     fireEvent.changeText(getByPlaceholderText('PASSWORD'), 'password123');
     fireEvent.press(getByText('LOGIN'));
+
+    axios.post.mockResolvedValueOnce({ data: {'avatar': 'avatar'}, status: 200 });
 
     await waitFor(() => {
       expect(signInWithEmailAndPassword).toHaveBeenCalledWith({}, 'test@example.com', 'password123');
