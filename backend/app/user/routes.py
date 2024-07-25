@@ -8,8 +8,8 @@ import base64
 email_regex = re.compile("[\\w\\-\\.]+@([\\w\\-]+\\.)[\\w]+")
 phone_regex = re.compile("^[0-9]+$")
 
-@bp.route('getUserDetails/', methods=['POST', 'GET'])
-def getDetails():
+@bp.route('/getUserDetails', methods=['POST', 'GET'])
+def getUserDetails():
     user_id = request.get_json()['uid']
     user_db = mongo.client.get_database("Users").get_collection("user-details")
     query = {'user_id': user_id}
@@ -23,7 +23,7 @@ def getDetails():
         return {"error": "User not found"}, 203
 
 @bp.route('/saveUserDetails', methods=['POST'])
-def saveDetails():
+def saveUserDetails():
     data = request.get_json()
     user_id = data['user_id']
 

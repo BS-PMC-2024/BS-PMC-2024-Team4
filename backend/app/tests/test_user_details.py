@@ -38,7 +38,7 @@ def test_get_user_details(client, mock_mongo):
     user_collection = mock_mongo['user-details']
     user_collection.insert_one(user_data)
 
-    response = client.post('/user/getUserDetails/', json={'uid': user_data['user_id']})
+    response = client.post('/user/getUserDetails', json={'uid': user_data['user_id']})
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data['first_name'] == 'Foo', f"Expected first_name to be 'Foo' but got {data['first_name']}"
@@ -50,7 +50,7 @@ def test_get_user_details(client, mock_mongo):
 def test_get_non_existing_user_details(client, mock_mongo):
     user_collection = mock_mongo['user-details']
 
-    response = client.post('/user/getUserDetails/', json={'uid': "I_DONT_EXIST"})
+    response = client.post('/user/getUserDetails', json={'uid': "I_DONT_EXIST"})
     assert response.status_code == 203
 
 # Test saving details for new users
@@ -71,7 +71,7 @@ def test_save_user_details_new_user(client, mock_mongo):
     data = json.loads(response.data)
     assert data['success'] is True, "Expected success to be True but got False"
 
-    response = client.post('/user/getUserDetails/', json={'uid': new_user_data['user_id']})
+    response = client.post('/user/getUserDetails', json={'uid': new_user_data['user_id']})
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data['first_name'] == 'John', f"Expected first_name to be 'John' but got {data['first_name']}"
@@ -98,7 +98,7 @@ def test_save_user_details_existing_user(client, mock_mongo):
     data = json.loads(response.data)
     assert data['success'] is True, "Expected success to be True but got False"
 
-    response = client.post('/user/getUserDetails/', json={'uid': existing_user_data['user_id']})
+    response = client.post('/user/getUserDetails', json={'uid': existing_user_data['user_id']})
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data['first_name'] == 'Bar', f"Expected first_name to be 'Bar' but got {data['first_name']}"
