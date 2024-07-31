@@ -5,7 +5,16 @@ from pymongo.server_api import ServerApi
 from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+
+##for deleting users
+#import firebase_admin
+#from firebase_admin import credentials, auth
+
 def create_app(config_class=Config):
+    ####needs to check
+    #cred = credentials.Certificate('../../frontend/dogworry/fbauth/serviceAccountKey.json')
+    #firebase_admin.initialize_app(cred)
+
     app = Flask(__name__)
     if config_class == 'testing':
         app.config.from_object(TestingConfig)

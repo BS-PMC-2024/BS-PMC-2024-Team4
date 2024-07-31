@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .delete-button {
+            color: red;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Users</h1>
+    <table>
+        <thead>
+            <tr>
+                <!--maybe add name after fixing mongodb-->
+                <th>ID</th>
+                <th>Email</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            <!-- user rows will be added dynamically -->
+        </tbody>
+    </table>
+
+    <script>
+        function deleteUser(userId) {
+            //change the confirm into a popup window designed
+            const confirmDelete = confirm('Are you sure you want to delete this user?');
+            if(confirmDelete)
+            {
+                fetch(`/manager/deleteUser/${userId}`, {
+                method: 'DELETE'
+                })
+                .then(response => {
+                    if (response.ok) {
+                        document.getElementById(`user-row-${userId}`).remove();
+                    } else {
+                        alert('Failed to delete user');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+            
+        }
+
+        // adding users to table
+        function populateUsers(users) {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = ''; // Clear existing rows
+            users.forEach(user => {
+                const row = document.createElement('tr');
+                row.id = `user-row-${user._id}`;
+                row.innerHTML = `
+                    <td>${user._id}</td>
+                    <td>${user.email}</td>
+                    <td><span class="delete-button" onclick="deleteUser('${user._id}')">Delete</span></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Fetch users and put them in the table when the page loads
+        function fetchUsers() {
+            fetch('/manager/getUsers')
+            .then(response => response.json())
+            .then(Allusers => {
+                populateUsers(Allusers);
+            })
+            .catch(error => {
+                console.error('Error fetching users:', error);
+            });
+        }
+
+        // Fetch users when the page loads
+        window.onload = fetchUsers;
+    </script>
+</body>
+</html>

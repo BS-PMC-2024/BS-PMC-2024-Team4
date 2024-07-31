@@ -12,6 +12,8 @@ import InfoScreen from './screens/InfoScreen';
 import LostScreen from './screens/LostScreen';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
+import ReportLostDog from './screens/lostDogs/ReportLostDog';
+import Reports from './screens/reports/Reports';
 import styles from './styles';
 import {User, ProfileLabel, MyDogsLabel} from './components/User';
 import UserDetails from './screens/user/UserDetails';
@@ -172,7 +174,14 @@ const CustomProfileDrawer = (props) => {
           label="Register"
           onPress={() => props.navigation.navigate("Register")}
           activeTintColor='#F44336' />
+          <DrawerItem 
+            label="Main"
+            onPress={() => props.navigation.navigate("Main")}
+            activeTintColor="blue"
+            backBehavior={() => props.navigation.navigate("Main")} />
         </>
+        
+        
       )}
     </DrawerContentScrollView>
   );
@@ -206,6 +215,14 @@ const ProfileDrawer = () => {
                       component={MyDogs} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("My Dogs"), unmountOnBlur: true}}/>
+      <Drawer.Screen  name ="ReportLostDog" 
+                      component={ReportLostDog} 
+                      backBehavior={() => props.navigation.navigate("Main")}
+                      options={{...getHeaderOptions("ReportLostDog"), unmountOnBlur: true}}/>
+      <Drawer.Screen  name ="Reports" 
+                      component={Reports} 
+                      backBehavior={() => props.navigation.navigate("Main")}
+                      options={{...getHeaderOptions("Reports"), unmountOnBlur: true}}/>
 
     </Drawer.Navigator>
   )
@@ -216,6 +233,7 @@ const HomeScreen = ({ navigation }) => {
   return(
     <View style={styles.container}>
       <Text>Home</Text>
+      <Button title="reports" onPress={() => {navigation.navigate("Reports")}}/>
     </View>
   )
 };

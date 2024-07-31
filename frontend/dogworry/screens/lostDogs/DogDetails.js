@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Alert, Button } from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import api_url from "../../config"
@@ -70,6 +70,7 @@ const DogDetails = () => {
 
     return (
         <View style={styles.container}>
+            <Button title='report a lost dog' onPress={() => {navigation.navigate("ReportLostDog")}}/>
             <FlatList
                 data={dogs}
                 renderItem={renderItem}
