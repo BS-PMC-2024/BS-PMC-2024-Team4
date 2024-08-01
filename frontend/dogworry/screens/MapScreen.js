@@ -1,51 +1,69 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView from 'react-native-maps';
-import api_url from '../config';
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, Text, Alert } from 'react-native';
+import MapView, { Callout, Marker, Geojson } from 'react-native-maps';
+import {FontAwesome5} from '@expo/vector-icons';
+import * as Location from 'expo-location';
 
 const MapScreen = () => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState(null);
-
-  const fetchData = async () => {
-    try {
-        // change to you ip
-      const response = await fetch(api_url + 'getmaps');
-      if (!response.ok) {
-        throw new Error('Network error');
-      }
-      const json = await response.json();
-      setData(json);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
-    fetchData();
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+
+      // Monitor location change
+      Location.watchPositionAsync(
+        {
+          accuracy: Location.Accuracy.High,
+          timeInterval: 1000, // Update every second
+          distanceInterval: 1, // Update every meter
+        },
+        (newLocation) => {
+          setLocation(newLocation);
+        }
+      );
+    })();
   }, []);
 
-  if (loading) {
-    return (
-      <View style={styles.container}>
-        <ActivityIndicator size="large" color="#0000ff" />
-      </View>
-    );
+  const Hello = () =>
+  {
+    Alert.alert('Hello', 'Hello')
   }
 
   return (
     <View style={styles.container}>
-      <MapView
-        initialRegion={{
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.0922,
-          longitudeDelta: 0.0421,
-        }}
-        style={styles.map}
-      />
+      {location ? (
+        <MapView
+          region={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.005,
+            longitudeDelta: 0.005,
+          }}
+          style={styles.map}
+        >
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+            
+          >
+          </Marker>
+          <Geojson geojson={myPlace} strokeColor="red" fillColor='green'/>
+        </MapView>
+      ) : (
+        <Text>{errorMsg ? errorMsg : 'Loading...'}</Text>
+      )}
     </View>
   );
 };
