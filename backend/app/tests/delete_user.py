@@ -31,7 +31,7 @@ def test_delete_user_success(mock_mongo, client):
     mock_users = mock_mongo['user-details']
     mock_users.insert_one({'user_id': 'user123', 'email': 'test@example.com'}) 
     # Call delete user API
-    response = client.delete('/manager/deleteUser', query_string={'user_id': 'user123'})
+    response = client.delete('/manager/deleteUser/user123' ) #query_string={'user_id': 'user123'}
     print("helloooooooooo", list(mock_users.find()))
     print("Response data:", response.data.decode('utf-8'))
     # Assertions
