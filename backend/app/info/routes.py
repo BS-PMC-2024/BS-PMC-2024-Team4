@@ -2,6 +2,21 @@ from flask import jsonify, logging, request
 from app.info import bp
 from app.extensions import mongo
 from bson import json_util
+import base64
+
+@bp.route('getFood/', methods=['GET', 'POST'])
+def getFood():
+
+    food_collection = mongo.client.get_database("Info").get_collection("Food")
+    data = list(food_collection.find())
+    
+    for item in data:
+        item['_id'] = str(item['_id'])
+    
+    if data:
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404
 
 
 @bp.route('getHealthCases/', methods=['GET'])
