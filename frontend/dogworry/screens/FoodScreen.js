@@ -1,26 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, FlatList, TextInput, ActivityIndicator } from 'react-native';
 import styles from '../styles';
+import api_url from '../config';
+import axios from 'axios';
+import FoodGridItem from '../components/FoodGridItem';
+import styles_info from '../styles/info_styles';
+import filter from "lodash";
 
 
 // food page
-const foodData = [
-    { id: '1', title: 'Apple' },
-    { id: '2', title: 'Avocado' },
-    { id: '3', title: 'Cucamber' },
-    { id: '4', title: 'Carrot' }
-  ];
 
 const FoodScreen = () => {
+    const [data, setData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState("");
+    const [fullData, setFullData] = useState(null);
+
+    useEffect(() => {
+        setLoading(true);
+        axios.get(`${api_url}info/getFood/`)
+        .then(response => {
+            setData(response.data);
+            setFullData(response.data)
+            setLoading(false);
+        })
+        .catch(error => {
+            console.error('error fetching data', error);
+            setLoading(false);
+        });
+    }, []);
+
+
+
+    const handleSearch = (query) => {
+        setSearchQuery(query);
+        const formattedQuery = query.toLowerCase();
+        const filteredData = filter(fullData, (item) => { 
+            return contains(item, formattedQuery);
+        });
+        setData(filteredData);
+    };
+
+    const contains = (name, query) => {
+        if (name.includes(query)) {
+            return true;
+        }
+        return false;
+    };
+
+    if (loading) {
+        return (
+          <View style={styles.container}>
+            <ActivityIndicator size="large" color="#0000ff" />
+          </View>
+        );
+    }
+
     return (
-        <View style={styles.screen}>
-        <FlatList data={foodData} 
-            keyExtractor={item => item.id} renderItem={({ item }) => (
-                <View style={styles.listItem}>
-                <Text style={styles.listItemText}>{item.title}</Text>
-                </View>
-            )}
-        />
+        <View style={styles_info.screenContainer}>
+            <View style={styles_info.searchBox}>
+                <TextInput style={styles_info.searchInput} placeholder='Search' clearButtonMode='always'
+                    value={searchQuery}
+                    onChangeText={(query) => handleSearch(query)}
+                />
+            </View>
+            <FlatList data={data}
+                keyExtractor={item => item.name} renderItem={({ item }) => ( <FoodGridItem food={item}></FoodGridItem> )}
+                numColumns={3}
+                contentContainerStyle={styles_info.flatListContent}
+            />
         </View>
     );
 }
