@@ -67,6 +67,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+<<<<<<< HEAD
 import MapView, { Marker, Callout } from 'react-native-maps';
 import api_url from '../config';
 
@@ -90,10 +91,36 @@ const MapScreen = () => {
       setLoading(false);
     }
   };
+=======
+import MapView, { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
+import ParksMarkers from '../components/ParksMarkers';
+import api_url from '../config';
+
+const MapScreen = () => {
+  const [loading, setLoading] = useState(false);
+  //const [data, setData] = useState(null);
+  const [location, setLocation] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
+>>>>>>> 31ca41973e3e5e1b76058cbb523bacfefb6b0b7f
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setLoading(true);
+    (async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      console.log('here');
+      if (status !== 'granted') {
+        console.log('here 2');
+        setLoading(false);
+        setErrorMsg('Permission to access location was denied');
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({});
+      setLocation(location);
+      setLoading(false);
+    })();
+  },[]);
 
   if (loading) {
     return (
@@ -107,6 +134,7 @@ const MapScreen = () => {
     <View style={styles.container}>
       <MapView
         initialRegion={{
+<<<<<<< HEAD
           latitude: 31.2518,  // Be'er Sheva latitude
           longitude: 34.7913, // Be'er Sheva longitude
           latitudeDelta: 0.0922, // Adjust the latitudeDelta to zoom in or out
@@ -132,6 +160,30 @@ const MapScreen = () => {
           </Marker>
         ))}
       </MapView>
+=======
+        latitude: 31.2518,  
+        longitude: 34.7913, 
+        latitudeDelta: 0.0922, 
+        longitudeDelta: 0.0421, 
+      }}
+        style={styles.map}
+        showsUserLocation={true}
+      >
+        <ParksMarkers/>
+        {location && (
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+          />
+        )} 
+      </MapView>
+      {!location && !errorMsg && (
+        <ActivityIndicator size="large" color="#0000ff" />
+      )}
+>>>>>>> 31ca41973e3e5e1b76058cbb523bacfefb6b0b7f
     </View>
   );
 };
