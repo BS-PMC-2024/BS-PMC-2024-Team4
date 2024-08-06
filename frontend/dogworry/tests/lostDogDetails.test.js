@@ -55,7 +55,7 @@ describe('DogDetails', () => {
             expect(getByText('Max')).toBeTruthy();
             expect(getByText('identifier: Friendly and tamed')).toBeTruthy();
             expect(getByText('identifier: Not friendly')).toBeTruthy();
-            expect(getByText('Last area:ccd Park')).toBeTruthy();
+            expect(getByText('Last area: Park')).toBeTruthy();
             expect(getByText('Last area: Downtown')).toBeTruthy();
         });
     });
