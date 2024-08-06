@@ -5,10 +5,15 @@ export const routesStyles = StyleSheet.create({
         position: 'absolute',
         bottom: 30,
         zIndex: 1,
-        backgroundColor: 'rgba(255, 255, 255, 0.6)',
+        backgroundColor: 'rgba(255, 255, 255, 1)',
         padding: 10,
         borderRadius: 20,
         alignItems: 'center',
+        elevation: 3,
+        shadowColor: '#000', 
+        shadowOffset: { width: 0, height: 4 }, 
+        shadowOpacity: 0.4, 
+        shadowRadius: 6, 
     },
     selector: {
         position: 'absolute',
@@ -20,6 +25,11 @@ export const routesStyles = StyleSheet.create({
         borderTopRightRadius: 10,
         height: Dimensions.get('window').height * 0.7,
         width: Dimensions.get('window').width * 0.6,
+        elevation: 3,
+        shadowColor: '#000', 
+        shadowOffset: { width: 0, height: 3 }, 
+        shadowOpacity: 0.3, 
+        shadowRadius: 3, 
     },
     selectorContent: {
         flex: 1,
@@ -35,6 +45,7 @@ export const routesStyles = StyleSheet.create({
         justifyContent: 'center',
         padding: 5,
         borderRadius: 5,
+        backgroundColor: 'transparent'
     },
     closeButton: {
         marginTop: 10,
@@ -64,6 +75,11 @@ export const routesStyles = StyleSheet.create({
         backgroundColor: '#d4b0ff',
         borderRadius: 15,
         width: Dimensions.get('window').width * 0.4,
+        elevation: 2,
+        shadowColor: '#000', 
+        shadowOffset: { width: 0, height: 3 }, 
+        shadowOpacity: 0.3, 
+        shadowRadius: 3, 
     },
     walkText: {
         fontSize: 16
@@ -109,6 +125,10 @@ export const stopWalkStyle = StyleSheet.create({
       elevation: 2,
       marginHorizontal: 10,
       width: 50,
+      shadowColor: '#000', 
+      shadowOffset: { width: 0, height: 3 }, 
+      shadowOpacity: 0.3, 
+      shadowRadius: 3, 
     },
     buttonCancel: {
       backgroundColor: '#f44336',
