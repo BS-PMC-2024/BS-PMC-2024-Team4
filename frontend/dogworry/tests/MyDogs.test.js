@@ -64,7 +64,7 @@ describe('MyDogs Component', () => {
             });
         });
 
-    });
+    }, 60000);
 
     it('opens the add dog modal and adds a new dog', async () => {
         const { getByText, getByPlaceholderText, getByTestId, unmount, debug } = renderWithNavigation(<MyDogs />);

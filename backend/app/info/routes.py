@@ -2,6 +2,24 @@ from flask import jsonify, logging, request
 from app.info import bp
 from app.extensions import mongo
 from bson import json_util
+import base64
+import json
+from pymongo import MongoClient
+
+
+@bp.route('getFood/', methods=['GET', 'POST'])
+def getFood():
+
+    food_collection = mongo.client.get_database("Info").get_collection("Food")
+    data = list(food_collection.find())
+    
+    for item in data:
+        item['_id'] = str(item['_id'])
+    
+    if data:
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404
 
 
 @bp.route('getHealthCases/', methods=['GET'])
@@ -27,3 +45,30 @@ def getCases():
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
+
+
+@bp.route('getParks/', methods=['GET'])
+def getParks():
+
+    parks = mongo.client.get_database("Map").get_collection("parks")   
+    data = list(parks.find())
+    for item in data:
+        item['_id'] = str(item['_id'])
+
+    if data:
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404
+    
+@bp.route('getVets/', methods=['GET'])
+def getVets():
+    try:
+        vets = mongo.client.get_database("Map").get_collection("vets")   
+        data = list(vets.find())
+        for item in data:
+            item['_id'] = str(item['_id'])
+        return jsonify(data)
+    except Exception as e:
+        logging.error(f"Error fetching vets: {e}")
+        return jsonify({"error": str(e)}), 500
+        

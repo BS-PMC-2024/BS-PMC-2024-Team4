@@ -6,10 +6,13 @@ from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
+<<<<<<< HEAD
 ##for deleting users
 #import firebase_admin
 #from firebase_admin import credentials, auth
 
+=======
+>>>>>>> main
 def create_app(config_class=Config):
     ####needs to check
     #cred = credentials.Certificate('../../frontend/dogworry/fbauth/serviceAccountKey.json')
@@ -45,6 +48,9 @@ def create_app(config_class=Config):
 
     from app.lostdogs import ld as ld_bp
     app.register_blueprint(ld_bp, url_prefix='/lostDog')
+
+    from app.map import bp as map_bp
+    app.register_blueprint(map_bp, url_prefix='/map')
 
     @app.route('/test/')
     def test_page():
