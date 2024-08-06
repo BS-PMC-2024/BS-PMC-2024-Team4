@@ -5,6 +5,7 @@ from pymongo.server_api import ServerApi
 from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     if config_class == 'testing':
@@ -40,6 +41,9 @@ def create_app(config_class=Config):
     from app.atomation import ld as temperature
     app.register_blueprint(temperature, url_prefix='/temperature')
 
+
+    from app.map import bp as map_bp
+    app.register_blueprint(map_bp, url_prefix='/map')
 
     @app.route('/test/')
     def test_page():

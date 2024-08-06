@@ -1,12 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, ActivityIndicator, Button, Touchable } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import React, { useEffect, useState, useRef } from 'react';
+import { View, Text, StyleSheet, ActivityIndicator, Button, Touchable, Dimensions, Platform, TouchableOpacity } from 'react-native';
+import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
 import * as Location from 'expo-location';
 import ParkMarker from '../components/ParkMarker';
 import MapStyles from '../styles/MapStyles';
 import api_url from '../config';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
+import { WalkRoute, GetRoutes } from '../components/Routes';
+
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height;
+const LATITUDE_DELTA = 0.005;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const MapScreen = () => {
   const [loading, setLoading] = useState(false);
@@ -14,7 +19,10 @@ const MapScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [showParks, setShowParks] = useState(false);
-
+  const [routeCoordinate, setRouteCoordinate] = useState(null);
+  const [isTracking, setIsTracking] = useState(true); // State to manage location updates
+  const mapRef = useRef(null);
+  
   const fetchData = async() => {
     setLoading(true);
     try {
@@ -49,9 +57,7 @@ const MapScreen = () => {
     (async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
-        console.log('here');
         if (status !== 'granted') {
-          console.log('here 2');
           setLoading(false);
           setErrorMsg('Permission to access location was denied');
           return;
@@ -60,24 +66,62 @@ const MapScreen = () => {
         let location = await Location.getCurrentPositionAsync({});
         setLocation(location);
 
+        const subscription = await Location.watchPositionAsync(
+          {
+            accuracy: Location.Accuracy.High,
+            timeInterval: 1000, // Update every second
+            distanceInterval: 1, // Update every meter
+          },
+          (newLocation) => {
+            setLocation(newLocation);
+            if (isTracking) {
+              setLocation(newLocation);
+            }
+          }
+        );
+
+        setLoading(false);
+        return () => {
+          subscription.remove();
+        };
+
       } catch (error) {
         setErrorMsg('Error fetching location');
       }
-      setLoading(false);
+
       })();
-  },[]);
+    },[isTracking]);
 
-  const toggleParks = () => {
-    setShowParks(prevState => !prevState);
-  };
+    const handleTouch = () => {
+      setIsTracking(false);
+      setTimeout(() => {
+          setIsTracking(true);
+      }, 10000); // Re-enable tracking after 10 seconds
+    };
 
-  if (loading) {
+    const toggleParks = () => {
+      setShowParks(prevState => !prevState);
+    };
+
+    useEffect(() => {
+      if (routeCoordinate && mapRef.current) {
+        const middle = Math.floor(routeCoordinate.length/2)
+        const region = {
+          latitude: routeCoordinate[middle].latitude,
+          longitude: routeCoordinate[middle].longitude,
+          latitudeDelta: LATITUDE_DELTA,
+          longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
+        };
+        mapRef.current.animateToRegion(region, 500);
+      }
+    }, [routeCoordinate]);
+
+  if (!location)
     return (
       <View style={MapStyles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
-  }
 
 
   return (
@@ -91,30 +135,30 @@ const MapScreen = () => {
 
       <MapView
         initialRegion={{
-        latitude: 31.2518,  
-        longitude: 34.7913, 
-        latitudeDelta: 0.0922, 
-        longitudeDelta: 0.0421, 
-      }}
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude, 
+          latitudeDelta: LATITUDE_DELTA, 
+          longitudeDelta: LONGITUDE_DELTA,
+        }}
         style={MapStyles.map}
         showsUserLocation={true}
+        showsMyLocationButton={false}
+        ref={mapRef}
+        onTouchStart={handleTouch}
       >
+        <UrlTile
+          urlTemplate="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=mmwdR1ETX0fPK2yovC5E"
+          maximumZ={30}
+          minimumZ={13}
+        />
+
         {showParks && parks.map((park, index) => (
           <ParkMarker park={park} key={index}/>
         ))}
-        {location && (
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="Your Location"
-          />
-        )} 
+
+        {routeCoordinate && <WalkRoute coordinates={routeCoordinate}/> }
       </MapView>
-      {!location && !errorMsg && (
-        <ActivityIndicator size="large" color="#0000ff" />
-      )}
+      <GetRoutes currentCoordinates={[location.coords.latitude, location.coords.longitude]} setRoute={setRouteCoordinate}/>
     </View>
   );
 };

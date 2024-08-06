@@ -45,10 +45,22 @@ const InfoScreen = () => {
         </View>
       );
     };
-      
+    
+    const renderFooter = () => {
+      return (
+        
+        <TouchableOpacity
+          style={styles_info.findVetButton}
+          onPress={() => navigation.navigate('VetNearby')}
+        >
+          <Text style={styles_info.findVetButtonText}>Looking for a vet immediately? Click here!</Text>
+        </TouchableOpacity>
+      );
+    };
+
     if (loading) {
       return (
-        <View style={styles.acreen}>
+        <View style={styles.screen}>
           <ActivityIndicator size="large" color="#0000ff"/>
         </View>
       );
@@ -70,10 +82,21 @@ const InfoScreen = () => {
           <FlatList data={data} keyExtractor={(item, index) => index.toString()} renderItem={({ item }) => (
             <ExpandableComponent title={item.case} description={item.guidelines}/>
           )}
+          
           contentContainerStyle={styles_info.list}
+          
+          ListFooterComponent={renderFooter} 
           />
+          {/* <TouchableOpacity style={styles_info.findVetButton} onPress={()=>navigation.navigate('VetNearby')}>
+
+            
+          <Text style={styles_info.findVetButtonText}>Find Vet Nearby</Text>
+        </TouchableOpacity> */}
         </View>
 
     );
+
 }
+
+
 export default InfoScreen;

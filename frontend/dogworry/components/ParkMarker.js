@@ -12,6 +12,7 @@ const ParkMarker = ({ park }) => {
     };
 
     return (
+<<<<<<< HEAD
      
         <Marker coordinate={{
             latitude: park.latitude,
@@ -32,8 +33,24 @@ const ParkMarker = ({ park }) => {
             )}
           </Marker>
 
+=======
+        <Marker 
+          coordinate={{
+              latitude: parseFloat(park.latitude),
+              longitude: parseFloat(park.longitude),
+          }} 
+          onPress={handlePress} 
+          pinColor='green'
+        >
+          <Callout tooltip>
+                  <View style={MapStyles.callout}>
+                      <Text style={MapStyles.calloutName}>{park.name}</Text>
+                      <Text style={MapStyles.calloutText}>{park.address}</Text>
+                  </View>
+          </Callout>
+        </Marker>
+>>>>>>> 52ab636007f42589cf4ac85b48be6118f188a126
     );
 };
 
 export default ParkMarker;
-    
