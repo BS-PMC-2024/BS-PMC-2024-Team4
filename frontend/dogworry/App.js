@@ -9,6 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
+import VetNearby from './screens/VetNearbyScreen';
 import LostScreen from './screens/LostScreen';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
@@ -82,6 +83,7 @@ const StackNavigation = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen name='Tabs' component={TabNavigatorWithUser} options={{headerShown: false }}/>
+      <Stack.Screen name='VetNearby' component={VetNearby} options={{ ...getHeaderOptions('Vet Nearby') }} />
     </Stack.Navigator>
   )
 }

@@ -7,7 +7,7 @@ const styles_info = StyleSheet.create({
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    paddingTop: 10,
+    paddingTop: 40,
     width: '100%',
   },
 
@@ -19,8 +19,8 @@ const styles_info = StyleSheet.create({
     
   },
 
-  caseText: {
-    fontSize: 16,
+  name: {
+    fontSize: 22,
     fontWeight: 'bold',
   },
 
@@ -29,7 +29,7 @@ const styles_info = StyleSheet.create({
     padding: 10,
     backgroundColor: '#f0f0f0',
     borderRadius: 5,
-    fontSize: 16,
+    fontSize: 26,
   },
 
   screen: {
@@ -37,16 +37,29 @@ const styles_info = StyleSheet.create({
 
     backgroundColor: '#ffffff',
   },
+  
+  
+
+  details:{
+    fontSize:18,
+  },
+
+  detailsT:{
+    fontSize:20,
+    fontWeight:'bold',
+    textDecorationLine: 'underline'
+    
+  },
 
   screenTitle: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     marginTop: 100, 
     textAlign:'center',
   },
 
   subTitle: {
-    fontSize: 16,
+    fontSize: 20,
     margin: 5,
     textAlign:'center',
   },
@@ -55,18 +68,6 @@ const styles_info = StyleSheet.create({
     flexGrow: 1,
   },
 
-  findVetButton: {
-    marginTop: 40,
-    elevation: 8,
-    backgroundColor: "red",
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    alignItems:'center'
-},
-findVetButtonText: {
-    color: 'black',
-    fontWeight: 'bold',
-},
+
 });
 export default styles_info;
