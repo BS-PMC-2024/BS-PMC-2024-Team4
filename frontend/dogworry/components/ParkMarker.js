@@ -16,11 +16,11 @@ const ParkMarker = ({ park }) => {
             longitude: park.longitude,
           }}
           onPress={handlePress}
+          pinColor='green'
           >
             {labelVisible && (
               <Callout tooltip>
                 <View style={MapStyles.callout}>
-                  <Text style={MapStyles.calloutName}>dogs park</Text>
                   <Text style={MapStyles.calloutName}>{park.name}</Text>
                   <Text style={MapStyles.calloutText}>{park.address}</Text>
                 </View>

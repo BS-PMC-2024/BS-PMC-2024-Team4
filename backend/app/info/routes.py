@@ -3,6 +3,9 @@ from app.info import bp
 from app.extensions import mongo
 from bson import json_util
 import base64
+import json
+from pymongo import MongoClient
+
 
 @bp.route('getFood/', methods=['GET', 'POST'])
 def getFood():
@@ -46,7 +49,7 @@ def getCases():
 
 @bp.route('getParks/', methods=['GET'])
 def getParks():
-    
+
     parks = mongo.client.get_database("Map").get_collection("parks")   
     data = list(parks.find())
     for item in data:
