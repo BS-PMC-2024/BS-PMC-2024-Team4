@@ -50,7 +50,7 @@ def getAuthToken():
     response_data = response.json()
     token = response_data.get("data", {}).get("token")
     refreshToken = response_data.get("data", {}).get("refresh_token") 
-    print(response.text)
+
     if response.status_code == 200:
         now = datetime.now()
         token_data = {'token': token, 'refresh_Token': refreshToken, 'time': str(now)}
@@ -75,6 +75,7 @@ def tokenFile():
             json_object = json.load(json_file)
         readings_data = json_object.get('data', {}).get('readings_data', [])
         temperatures = [round(reading.get('Temperature'), 2)  for reading in readings_data if 'Temperature' in reading]
+        
     except Exception as e:
         print(e)
     
@@ -83,7 +84,7 @@ def tokenFile():
 def dataTime():
     xTime = dataFile().get('time')
     if(xTime !=None):
-        print("not none")
+
         time_format = "%Y-%m-%d %H:%M:%S"
         parsed_time = datetime.strptime(xTime, time_format)
         current_time = datetime.now()
@@ -92,8 +93,10 @@ def dataTime():
         is_more_than_1_hour_ago = time_difference > timedelta(hours=1)
         if is_more_than_24_hours_ago == True:
             login()
+
         elif is_more_than_1_hour_ago == True:
             getAuthToken()
+
     else:
         login()
 
@@ -121,7 +124,7 @@ def fetch_data():
     headers = {"Authorization": f"Bearer {dataFile()['token']}", "app_version": "1.4.5.dev.4", "access_type": "5"}
 
     response = requests.post(data_url, json=request_body, headers=headers)
-    print(response.text)
+
     if response.status_code == 200:
         response_data = response.json()
         with open('token.json', 'w') as token_file:
