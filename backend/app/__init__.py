@@ -5,6 +5,7 @@ from pymongo.server_api import ServerApi
 from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
+
 def create_app(config_class=Config):
     app = Flask(__name__)
     if config_class == 'testing':

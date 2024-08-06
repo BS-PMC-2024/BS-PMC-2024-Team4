@@ -59,4 +59,16 @@ def getParks():
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
+    
+@bp.route('getVets/', methods=['GET'])
+def getVets():
+    try:
+        vets = mongo.client.get_database("Map").get_collection("vets")   
+        data = list(vets.find())
+        for item in data:
+            item['_id'] = str(item['_id'])
+        return jsonify(data)
+    except Exception as e:
+        logging.error(f"Error fetching vets: {e}")
+        return jsonify({"error": str(e)}), 500
         
