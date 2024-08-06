@@ -6,13 +6,6 @@ from app.extensions import mongo
 import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
-<<<<<<< HEAD
-##for deleting users
-#import firebase_admin
-#from firebase_admin import credentials, auth
-
-=======
->>>>>>> main
 def create_app(config_class=Config):
     ####needs to check
     #cred = credentials.Certificate('../../frontend/dogworry/fbauth/serviceAccountKey.json')
