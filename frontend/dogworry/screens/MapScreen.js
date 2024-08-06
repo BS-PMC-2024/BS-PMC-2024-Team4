@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ActivityIndicator, Button, Touchable } from 're
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 import ParkMarker from '../components/ParkMarker';
+import WaterMarker from '../components/WaterMarker';
 import MapStyles from '../styles/MapStyles';
 import api_url from '../config';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -11,9 +12,11 @@ import axios from 'axios';
 const MapScreen = () => {
   const [loading, setLoading] = useState(false);
   const [parks, setParks] = useState(null);
+  const [waterSpots, setWaterSpots] = useState(null);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [showParks, setShowParks] = useState(false);
+  const [showWater, setShowWater] = useState(false);
 
   const fetchData = async() => {
     setLoading(true);
@@ -24,6 +27,16 @@ const MapScreen = () => {
     })
     .catch(error => {
       console.error('error fetching locations data', error);
+      setLoading(false);
+    });
+
+    axios.get(`${api_url}info/getWaterSpots/`)
+    .then(response => {
+      setWaterSpots(response.data);
+      setLoading(false);
+    })
+    .catch(error => {
+      console.error('error fetching water data', error);
       setLoading(false);
     });
   };
@@ -56,6 +69,10 @@ const MapScreen = () => {
     setShowParks(prevState => !prevState);
   };
 
+  const toggleWaterSpots = () => {
+    setShowWater(prevState => !prevState);
+  };
+
   if (loading) {
     return (
       <View style={MapStyles.container}>
@@ -69,6 +86,9 @@ const MapScreen = () => {
       <View style={MapStyles.buttonContainer}>
         <TouchableOpacity style={MapStyles.button} onPress={toggleParks}>
           <Text style={MapStyles.buttonText}>Parks</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={MapStyles.button} onPress={toggleWaterSpots}>
+          <Text style={MapStyles.buttonText}>Water</Text>
         </TouchableOpacity>
       </View>
       
@@ -85,6 +105,9 @@ const MapScreen = () => {
       >
         {showParks && parks.map((park, index) => (
           <ParkMarker park={park} key={index}/>
+        ))}
+        {showWater && waterSpots.map((item, index) => (
+          <WaterMarker item={item} key={index}/>
         ))}
         {location && (
           <Marker
