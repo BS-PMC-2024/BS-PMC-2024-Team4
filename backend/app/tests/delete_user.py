@@ -25,7 +25,7 @@ def mock_mongo():
     db = mock_client['Users']
     mongo.set_client(mock_client)  # Ensure the mock client is set globally for use in the app
     return db
-   
+ 
 def test_delete_user_success(mock_mongo, client):
     # Setup mock for users collection
     mock_users = mock_mongo['user-details']
@@ -38,6 +38,7 @@ def test_delete_user_success(mock_mongo, client):
     assert response.status_code == 200
     assert response.json == {'message': 'User deleted successfully'}
     assert mock_users.find_one({'user_id': 'user123'}) is None
+
 
 def test_delete_user_not_found(mock_mongo, client):
     # Setup mock for users collection
