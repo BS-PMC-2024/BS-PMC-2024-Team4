@@ -25,15 +25,30 @@ const MapScreen = () => {
   
   const fetchData = async() => {
     setLoading(true);
-    axios.get(`${api_url}info/getParks/`)
-    .then(response => {
-      setParks(response.data);
+    try {
+      // Fetch parks data
+      const parksResponse = await axios.get(`${api_url}info/getParks/`);
+      const parksData = parksResponse.data;
+
+      // Fetch temperatures data
+      const temperaturesResponse = await axios.get(`${api_url}temperature/token`);
+      const temperaturesData = temperaturesResponse.data;
+      console.log("temperaturesData:", temperaturesData);
+      // Associate temperatures with parks
+      const parksWithTemperatures = parksData.map((park, index) => ({
+        ...park,
+        temperature: temperaturesData[index] || 'N/A' // Handle case if there are fewer temperatures than parks
+      }));
+  
+      setParks(parksWithTemperatures);
       setLoading(false);
-    })
-    .catch(error => {
-      console.error('error fetching locations data', error);
+      console.log("parks:", parksWithTemperatures);
+    } catch (error) {
+      console.error('Error fetching data:', error);
       setLoading(false);
-    });
+    }
+      setLoading(false);
+   
   };
 
   useEffect(() => {
@@ -107,6 +122,7 @@ const MapScreen = () => {
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
+
 
   return (
     <View style={MapStyles.container}>
