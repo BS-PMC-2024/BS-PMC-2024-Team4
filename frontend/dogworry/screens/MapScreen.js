@@ -47,7 +47,7 @@ const MapScreen = () => {
     })();
   }, [isTracking]);
 
-  
+
   const handleTouch = () => {
       setIsTracking(false);
       setTimeout(() => {
