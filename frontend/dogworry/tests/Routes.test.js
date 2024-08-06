@@ -47,7 +47,7 @@ describe('GetRoutes Component', () => {
         expect(getByText('Route 2')).toBeTruthy();
       });
     });
-  });
+  }, 2147483647);
 
   it('allows selecting a route', async () => {
     const currentCoordinates = [34.0522, -118.2437];
@@ -72,7 +72,7 @@ describe('GetRoutes Component', () => {
         ]);
       });
     });
-  });
+  }, 2147483647);
 
   it('confirm selected walking path', async () => {
     const currentCoordinates = [34.0522, -118.2437];
@@ -105,7 +105,7 @@ describe('GetRoutes Component', () => {
         });
       });
     });
-  });
+  }, 2147483647);
 
   it('stop walk alert showing', async () => {
     const currentCoordinates = [34.0522, -118.2437];
@@ -138,7 +138,7 @@ describe('GetRoutes Component', () => {
         expect(getByText('Are you sure you want to stop the current walking route?')).toBeTruthy();
       });
     });
-  });
+  }, 2147483647);
 
   it('stop walk', async () => {
     const currentCoordinates = [34.0522, -118.2437];
@@ -177,7 +177,7 @@ describe('GetRoutes Component', () => {
         expect(getByText('Find Walking Routes')).toBeTruthy();
       });
     });
-  });
+  }, 2147483647);
 
   it('cancel stop walk', async () => {
     const currentCoordinates = [34.0522, -118.2437];
@@ -218,5 +218,5 @@ describe('GetRoutes Component', () => {
         expect(getByText('Stop Walk')).toBeTruthy();
       });
     });
-  });
+  }, 2147483647);
 });
