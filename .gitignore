@@ -1,4 +1,11 @@
 node_modules
 Dockerfile
-*.pyc
-*.pyo
+
+#Byte compiled python files
+__pycache__/
+.pytest_cache/
+*.py[cod]
+
+.vscode/
+
+.env

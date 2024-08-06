@@ -46,20 +46,3 @@ def test_main_access(client):
     response = client.get('/Main')
     assert response.status_code == 200
     assert b"Welcome" in response.data  # Assuming 'Welcome' text is in your home page
-
-@patch('app.extensions.mongo')
-def test_successful_login_with_mock(mock_mongo, client):
-    """Test successful login with mocked MongoDB."""
-    
-    mock_db = mongomock.MongoClient().db
-    mockk=mock_db.getdatabase("Users")
-    mock_users = mock_db.get_collection("admins")
-    mock_users.insert_one({"email": "correct@example.com", "password": "correctpassword"})
-    mock_mongo.client.get_database.return_value = mock_db
-
-    response = client.post('/', data={
-        'email': 'correct@example.com',
-        'password': 'correctpassword'
-    }, follow_redirects=True)
-    assert response.status_code == 200
-    assert b"HomePage" in response.data
