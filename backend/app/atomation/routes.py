@@ -75,9 +75,6 @@ def tokenFile():
             json_object = json.load(json_file)
         readings_data = json_object.get('data', {}).get('readings_data', [])
         temperatures = [round(reading.get('Temperature'), 2)  for reading in readings_data if 'Temperature' in reading]
-        
-        # Print temperatures (you can also return them as JSON if needed)
-        print("Temperatures:", temperatures)
     except Exception as e:
         print(e)
     
@@ -95,10 +92,8 @@ def dataTime():
         is_more_than_1_hour_ago = time_difference > timedelta(hours=1)
         if is_more_than_24_hours_ago == True:
             login()
-            print("\nlogin time---------------\n")
         elif is_more_than_1_hour_ago == True:
             getAuthToken()
-            print("\nh time-----------\n")
     else:
         login()
 

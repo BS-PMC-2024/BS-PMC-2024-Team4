@@ -81,29 +81,3 @@ def test_getAuthToken(client, mocker):
     assert token_data['refresh_Token'] == 'new_dummy_refresh_token'
 
 
-# def test_fetch_data(client, mocker):
-#     # Mock the dataFile function to return a predefined token
-#     mocker.patch('app.atomation.routes.dataFile', return_value={
-#         'token': 'mock_token'
-#     })
-
-#     # Mock the requests.post method
-#     mock_post = mocker.patch('requests.post')
-#     mock_response = mocker.Mock()
-#     mock_response.status_code = 200
-#     mock_response.json.return_value = {
-#         'data': 'mock_data'
-#     }
-#     mock_post.return_value = mock_response
-
-#     # Updated URL to match route registration
-#     response = client.get('/temperature/fetchData')
-#     assert response.status_code == 200
-#     assert b"Hello" in response.data
-
-#     # Verify the response data is written to token.json
-#     with open('token.json', 'r') as token_file:
-#         response_data = json.load(token_file)
-    
-#     assert response_data == {'data': 'mock_data'}
-

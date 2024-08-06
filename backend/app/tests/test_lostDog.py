@@ -62,33 +62,3 @@ def test_get_all_dogs(client, mock_mongo):
     assert response_data[0]['owner_phone'] == '1234567890'
     assert response_data[0]['dog_name'] == 'BRUNO'
     assert response_data[0]['avatar'] == base64.b64encode(user_data['avatar']).decode('utf-8')
-
-
-# user_data = {
-#     'user_id': 'true',
-#     'friendly': 'Friendly and tamed',
-#     'identifier': 'a good one',
-#     'type': 'lavrador',
-#     'lost_area': '1234567890',
-#     'avatar': b'avatar_data',
-#     'dog_name': 'BRUNO'
-# }
-
-# @pytest.fixture
-# def app():
-#     app = create_app()
-#     app.config.from_object('config.TestingConfig')
-#     mongo.set_client(MockMongoClient())
-#     with app.app_context():
-#         yield app
-
-# @pytest.fixture
-# def client(app):
-#     return app.test_client()
-
-# @pytest.fixture
-# def mock_mongo():
-#     mock_client = MockMongoClient()
-#     db = mock_client['lostDogs']
-#     mongo.set_client(mock_client)  # Ensure the mock client is set globally for use in the app
-#     return db

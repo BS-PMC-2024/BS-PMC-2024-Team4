@@ -33,7 +33,7 @@ const MapScreen = () => {
       // Fetch temperatures data
       const temperaturesResponse = await axios.get(`${api_url}temperature/token`);
       const temperaturesData = temperaturesResponse.data;
-      console.log("temperaturesData:", temperaturesData);
+
       // Associate temperatures with parks
       const parksWithTemperatures = parksData.map((park, index) => ({
         ...park,
@@ -42,7 +42,7 @@ const MapScreen = () => {
   
       setParks(parksWithTemperatures);
       setLoading(false);
-      console.log("parks:", parksWithTemperatures);
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
@@ -52,8 +52,11 @@ const MapScreen = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
     (async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
