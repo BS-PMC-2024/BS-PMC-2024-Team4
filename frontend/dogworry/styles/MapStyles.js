@@ -16,7 +16,6 @@ const MapStyles = StyleSheet.create({
         position: 'absolute',
         top: 80, 
         width: '100%',
-        //alignItems: 'center',
         zIndex: 1,
         flexDirection: 'row',
         justifyContent: 'center',

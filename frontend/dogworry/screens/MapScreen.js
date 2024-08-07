@@ -3,11 +3,11 @@ import { View, Text, StyleSheet, ActivityIndicator, Button, Touchable, Dimension
 import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
 import * as Location from 'expo-location';
 import ParkMarker from '../components/ParkMarker';
-import WaterMarker from '../components/WaterMarker';
 import MapStyles from '../styles/MapStyles';
 import api_url from '../config';
 import axios from 'axios';
 import { WalkRoute, GetRoutes } from '../components/Routes';
+import WaterMarker from '../components/WaterMarker';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -21,6 +21,9 @@ const MapScreen = () => {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [showParks, setShowParks] = useState(false);
+  const [routeCoordinate, setRouteCoordinate] = useState(null);
+  const [isTracking, setIsTracking] = useState(true); // State to manage location updates
+  const mapRef = useRef(null);
   const [showWater, setShowWater] = useState(false);
 
   const fetchData = async() => {
@@ -57,6 +60,7 @@ const MapScreen = () => {
       console.error('Error fetching data:', error);
       setLoading(false);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
