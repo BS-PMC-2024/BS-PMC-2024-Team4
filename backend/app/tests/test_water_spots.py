@@ -39,6 +39,7 @@ def test_get_parks(client, mock_mongo):
     assert data[0]['_id'] == '1', f"Expected _id to be '1' but got {data[0]['_id']}"
     assert data[1]['_id'] == '2', f"Expected _id to be '2' but got {data[1]['_id']}"
 
+
 # Test fetching parks when there are no parks
 def test_get_parks_empty(client, mock_mongo):
     parks_collection = mock_mongo['parks']
