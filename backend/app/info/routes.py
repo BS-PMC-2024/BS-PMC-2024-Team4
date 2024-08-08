@@ -46,7 +46,6 @@ def getCases():
 
 @bp.route('getParks/', methods=['GET'])
 def getParks():
-
     parks = mongo.client.get_database("Map").get_collection("parks")   
     data = list(parks.find())
     for item in data:
@@ -71,7 +70,6 @@ def getVets():
         
 @bp.route('getWaterSpots/', methods=['GET'])
 def getWaterSpots():
-
     items = mongo.client.get_database("Map").get_collection("Water")   
     data = list(items.find())
     for item in data:
@@ -81,4 +79,15 @@ def getWaterSpots():
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
-        
+
+@bp.route('getBlockedAreas/', methods=['GET'])
+def getBlockedAreas():
+    items = mongo.client.get_database("Map").get_collection("road_blockings") 
+    data = list(items.find())
+    for item in data:
+        item['_id'] = str(item['_id'])
+    if data:
+        print('here 90')
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404

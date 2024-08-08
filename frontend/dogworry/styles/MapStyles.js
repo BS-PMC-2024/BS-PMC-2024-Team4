@@ -10,6 +10,7 @@ const MapStyles = StyleSheet.create({
     map: {
         width: '100%',
         height: '100%',
+        ...StyleSheet.absoluteFillObject,
     },
 
     buttonContainer: {
@@ -59,6 +60,26 @@ const MapStyles = StyleSheet.create({
         color: '#000',
         fontSize: 14,
     },
+    
+    icon: {
+        width: 30, // Width of the circular icon
+        height: 30, // Height of the circular icon
+        borderRadius: 15, // Half of the width/height to make it circular
+        resizeMode: 'cover', // Ensure image covers the circle
+    },
+    calloutContainer: {
+        width: 150, // Set your desired width
+        padding: 10,
+        backgroundColor: 'white',
+        borderRadius: 5,
+        borderColor: 'black',
+        borderWidth: 1,
+    },
+    calloutText: {
+        fontSize: 14,
+        color: 'black',
+    },
+
 });
  
 export default MapStyles;
