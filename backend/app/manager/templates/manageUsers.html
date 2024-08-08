@@ -51,6 +51,7 @@
                 method: 'DELETE'
                 })
                 .then(response => {
+                    console.log(response)
                     if (response.ok) {
                         document.getElementById(`user-row-${userId}`).remove();
                     } else {
