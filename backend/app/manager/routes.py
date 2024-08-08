@@ -7,10 +7,6 @@ from bson import json_util
 #import firebase_admin
 #from firebase_admin import auth
 
-<<<<<<< HEAD
-
-=======
->>>>>>> main
 @bp.route('/manageUsersPage', methods=['GET', 'POST'])
 def manageUsersPage():
     return render_template('manageUsers.html')
