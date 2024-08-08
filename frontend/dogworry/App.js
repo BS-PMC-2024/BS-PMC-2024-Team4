@@ -5,7 +5,7 @@ import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
@@ -47,37 +47,38 @@ const getHeaderOptions = (title) => ({
 
 // bottom tabs navigation
 const TabNavigator = () => (
-  <Tab.Navigator screenOptions={({ route }) => ({
+  <Tab.Navigator initialRouteName='Map' screenOptions={({ route }) => ({
     tabBarIcon: ({ focused, color, size }) => {
       let iconName;
-      if (route.name === 'Home') {
-        iconName = focused ? 'home' : 'home-outline';
-      } else if (route.name === 'Lost') {
+      if (route.name === 'Reports') {
+        iconName = focused ? 'report' : 'report-gmailerrorred';
+      } else if (route.name === 'Lost Dogs') {
         iconName = focused ? 'paw' : 'paw-outline';
-      } else if (route.name === 'Map') {
-        iconName = focused ? 'location' : 'location-outline';
       } else if (route.name === 'Food') {
         iconName = focused ? 'nutrition' : 'nutrition-outline';
       } else if (route.name === 'Info') {
         iconName = focused ? 'help' : 'help-outline';
-      }
-      else if (route.name === 'guestRegistration'){ // from here
-        iconName = focused ? 'reg' : 'help-outline';
+      } else if (route.name === 'Map'){ // from here
+        iconName = focused ? 'compass' : 'compass-outline';
       }
       
-      return <Ionicons name={iconName} size={size} color={color} />;
+      return route.name === 'Reports' ? 
+            <MaterialIcons name={iconName} size={size} color={color} /> 
+            : 
+            <Ionicons name={iconName} size={size} color={color} />;
       },
+
       tabBarActiveTintColor: '#F44336',
       tabBarInactiveTintColor: 'gray',
       tabBarStyle: {
         display: 'flex',
       },    
-    })}>  
-    <Tab.Screen name= "Home" component={HomeScreen} options={getHeaderOptions('Dog Worry')}/>
-    <Tab.Screen name= "Lost" component={DogDetails} options={getHeaderOptions('Dog Worry')}/>    
-    <Tab.Screen name= "Map"  component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>
-    <Tab.Screen name= "Food" component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
-    <Tab.Screen name= "Info" component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
+    })}>
+    <Tab.Screen name= "Reports"   component={Reports}    options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "Lost Dogs" component={DogDetails} options={getHeaderOptions('Dog Worry')}/> 
+    <Tab.Screen name= "Map"       component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>   
+    <Tab.Screen name= "Food"      component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
+    <Tab.Screen name= "Info"      component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
     
   </Tab.Navigator>
 )
@@ -238,16 +239,6 @@ const ProfileDrawer = () => {
     </Drawer.Navigator>
   )
 }
-
-// main screen
-const HomeScreen = ({ navigation }) => {
-  return(
-    <View style={styles.container}>
-      <Text>Home</Text>
-      <Button title="reports" onPress={() => {navigation.navigate("Reports")}}/>
-    </View>
-  )
-};
 
 // main navigation stack
 const MainNavigation = ({ navigation }) => {
