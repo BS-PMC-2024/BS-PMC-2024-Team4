@@ -72,3 +72,17 @@ def getVets():
         logging.error(f"Error fetching vets: {e}")
         return jsonify({"error": str(e)}), 500
         
+    
+@bp.route('getWaterSpots/', methods=['GET'])
+def getWaterSpots():
+
+    items = mongo.client.get_database("Map").get_collection("Water")   
+    data = list(items.find())
+    for item in data:
+        item['_id'] = str(item['_id'])
+
+    if data:
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404
+        

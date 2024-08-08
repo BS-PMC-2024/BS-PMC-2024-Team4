@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import axios from 'axios';
 import DogDetails from '../screens/lostDogs/DogDetails';
 
-// Mock axios
+
 jest.mock('axios');
 
 const mockDogs = [

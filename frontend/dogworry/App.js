@@ -188,7 +188,7 @@ const ProfileDrawer = () => {
 
       <Drawer.Screen  name = "Main" 
                       component={StackNavigation} 
-                      options={{headerShown: false, unmountOnBlur: true}}/>
+                      options={{headerShown: false}}/>
 
       <Drawer.Screen  name="Login" 
                       component={LoginScreen}

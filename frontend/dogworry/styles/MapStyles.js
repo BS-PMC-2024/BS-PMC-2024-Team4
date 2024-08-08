@@ -3,6 +3,8 @@ import { StyleSheet } from 'react-native';
 const MapStyles = StyleSheet.create({
     container: {
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
     map: {
@@ -14,8 +16,10 @@ const MapStyles = StyleSheet.create({
         position: 'absolute',
         top: 80, 
         width: '100%',
-        alignItems: 'center',
-        zIndex: 1, 
+        zIndex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+         
     },
 
     button: {
