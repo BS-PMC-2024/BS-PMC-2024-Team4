@@ -41,6 +41,10 @@ def create_app(config_class=Config):
 
     from app.lostdogs import ld as ld_bp
     app.register_blueprint(ld_bp, url_prefix='/lostDog')
+    
+    from app.atomation import ld as temperature
+    app.register_blueprint(temperature, url_prefix='/temperature')
+
 
     from app.map import bp as map_bp
     app.register_blueprint(map_bp, url_prefix='/map')
@@ -50,3 +54,4 @@ def create_app(config_class=Config):
         return '<h1>Testing the Flask Application Factory Pattern</h1>'
     
     return app
+

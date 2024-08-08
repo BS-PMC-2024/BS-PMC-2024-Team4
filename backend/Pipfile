@@ -12,6 +12,8 @@ mongomock = "*"
 pytest = "*"
 setuptools = "*"
 python-dotenv = "*"
+requests = "*"
+pytest-mock = "*"
 
 [dev-packages]
 

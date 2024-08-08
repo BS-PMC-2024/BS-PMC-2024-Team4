@@ -7,6 +7,7 @@ import MapStyles from '../styles/MapStyles';
 import api_url from '../config';
 import axios from 'axios';
 import { WalkRoute, GetRoutes } from '../components/Routes';
+import WaterMarker from '../components/WaterMarker';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -16,29 +17,55 @@ const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 const MapScreen = () => {
   const [loading, setLoading] = useState(false);
   const [parks, setParks] = useState(null);
+  const [waterSpots, setWaterSpots] = useState(null);
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
   const [showParks, setShowParks] = useState(false);
   const [routeCoordinate, setRouteCoordinate] = useState(null);
   const [isTracking, setIsTracking] = useState(true); // State to manage location updates
   const mapRef = useRef(null);
-  
+  const [showWater, setShowWater] = useState(false);
+
   const fetchData = async() => {
     setLoading(true);
-    axios.get(`${api_url}info/getParks/`)
-    .then(response => {
-      setParks(response.data);
+    try {
+      // Fetch parks data
+      const parksResponse = await axios.get(`${api_url}info/getParks/`);
+      const parksData = parksResponse.data;
+
+      // Fetch temperatures data
+      const temperaturesResponse = await axios.get(`${api_url}temperature/token`);
+      const temperaturesData = temperaturesResponse.data;
+
+      // Associate temperatures with parks
+      const parksWithTemperatures = parksData.map((park, index) => ({
+        ...park,
+        temperature: temperaturesData[index] || 'N/A' // Handle case if there are fewer temperatures than parks
+      }));
+  
+      setParks(parksWithTemperatures);
       setLoading(false);
-    })
-    .catch(error => {
-      console.error('error fetching locations data', error);
+      
+      axios.get(`${api_url}info/getWaterSpots/`)
+      .then(response => {
+        setWaterSpots(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('error fetching water data', error);
+        setLoading(false);
+      });
+
+    } catch (error) {
+      console.error('Error fetching data:', error);
       setLoading(false);
-    });
+    }
+    setLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true);
     fetchData();
+    setLoading(true);
     (async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -75,44 +102,52 @@ const MapScreen = () => {
       }
 
       })();
-    },[isTracking]);
+  },[]);
 
-    const handleTouch = () => {
-      setIsTracking(false);
-      setTimeout(() => {
-          setIsTracking(true);
-      }, 10000); // Re-enable tracking after 10 seconds
-    };
+  const handleTouch = () => {
+    setIsTracking(false);
+    setTimeout(() => {
+        setIsTracking(true);
+    }, 10000); // Re-enable tracking after 10 seconds
+  };
 
-    const toggleParks = () => {
-      setShowParks(prevState => !prevState);
-    };
+  const toggleParks = () => {
+    setShowParks(prevState => !prevState);
+  };
 
-    useEffect(() => {
-      if (routeCoordinate && mapRef.current) {
-        const middle = Math.floor(routeCoordinate.length/2)
-        const region = {
-          latitude: routeCoordinate[middle].latitude,
-          longitude: routeCoordinate[middle].longitude,
-          latitudeDelta: LATITUDE_DELTA,
-          longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
-        };
-        mapRef.current.animateToRegion(region, 500);
-      }
-    }, [routeCoordinate]);
+  const toggleWaterSpots = () => {
+    setShowWater(prevState => !prevState);
+  };
 
-  if (!location)
+  useEffect(() => {
+    if (routeCoordinate && mapRef.current) {
+      const middle = Math.floor(routeCoordinate.length/2)
+      const region = {
+        latitude: routeCoordinate[middle].latitude,
+        longitude: routeCoordinate[middle].longitude,
+        latitudeDelta: LATITUDE_DELTA,
+        longitudeDelta: LATITUDE_DELTA * ASPECT_RATIO,
+      };
+      mapRef.current.animateToRegion(region, 500);
+    }
+  }, [routeCoordinate]);
+
+  if (!location) {
     return (
       <View style={MapStyles.container}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
+  }
 
   return (
     <View style={MapStyles.container}>
       <View style={MapStyles.buttonContainer}>
         <TouchableOpacity style={MapStyles.button} onPress={toggleParks}>
           <Text style={MapStyles.buttonText}>Parks</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={MapStyles.button} onPress={toggleWaterSpots}>
+          <Text style={MapStyles.buttonText}>Water</Text>
         </TouchableOpacity>
       </View>
       
@@ -141,6 +176,18 @@ const MapScreen = () => {
         ))}
 
         {routeCoordinate && <WalkRoute coordinates={routeCoordinate}/> }
+        {showWater && waterSpots.map((item, index) => (
+          <WaterMarker item={item} key={index}/>
+        ))}
+        {location && (
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+            title="Your Location"
+          />
+        )} 
       </MapView>
       <GetRoutes currentCoordinates={[location.coords.latitude, location.coords.longitude]} setRoute={setRouteCoordinate}/>
     </View>
