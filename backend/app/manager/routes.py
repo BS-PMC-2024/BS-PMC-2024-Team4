@@ -19,10 +19,6 @@ def manageUsersPage():
 def getUsers():
     db = mongo.client.get_database("Users")
     users = db.get_collection("user-details")
-<<<<<<< HEAD
-=======
-
->>>>>>> main
     Allusers = list(users.find({}))
     for user in Allusers:
         user['_id'] = str(user['user_id'])  # Convert ObjectId to string
@@ -33,10 +29,7 @@ def getUsers():
 def deleteUser(user_id):
     db = mongo.client.get_database("Users")
     users = db.get_collection("user-details")
-<<<<<<< HEAD
-=======
     
->>>>>>> main
     result = users.delete_one({'user_id': user_id})
     if result.deleted_count > 0:
         return jsonify({'message': 'User deleted successfully'}), 200
