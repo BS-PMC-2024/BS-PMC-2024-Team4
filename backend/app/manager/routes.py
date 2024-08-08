@@ -7,15 +7,15 @@ from bson import json_util
 #import firebase_admin
 #from firebase_admin import auth
 
-db = mongo.client.get_database("Users")
-users = db.get_collection("user-details")
-
 @bp.route('/manageUsersPage', methods=['GET', 'POST'])
 def manageUsersPage():
     return render_template('manageUsers.html')
 
 @bp.route('/getUsers', methods=['GET'])
 def getUsers():
+    db = mongo.client.get_database("Users")
+    users = db.get_collection("user-details")
+
     Allusers = list(users.find({}))
     for user in Allusers:
         user['_id'] = str(user['_id'])  # Convert ObjectId to string
@@ -24,7 +24,10 @@ def getUsers():
 
 @bp.route('/deleteUser/<string:user_id>', methods=['DELETE'])
 def deleteUser(user_id):
-    result = users.delete_one({'_id': user_id})
+    db = mongo.client.get_database("Users")
+    users = db.get_collection("user-details")
+    
+    result = users.delete_one({'user_id': user_id})
     if result.deleted_count > 0:
         return jsonify({'message': 'User deleted successfully'}), 200
         '''

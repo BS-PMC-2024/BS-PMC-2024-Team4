@@ -12,19 +12,17 @@ const WaterMarker = ({ item }) => {
     return (
 
         <Marker coordinate={{
-            latitude: item.latitude,
-            longitude: item.longitude,
+            latitude: parseFloat(item.latitude),
+            longitude: parseFloat(item.longitude),
           }}
           onPress={handlePress}
           pinColor='blue'
           >
-            {labelVisible && (
-              <Callout tooltip>
-                <View style={MapStyles.callout}>
-                  <Text style={MapStyles.calloutName}>water spot</Text>
-                </View>
-              </Callout>
-            )}
+            <Callout tooltip>
+              <View style={MapStyles.callout}>
+                <Text style={MapStyles.calloutName}>water spot</Text>
+              </View>
+            </Callout>
           </Marker>
     );
 };

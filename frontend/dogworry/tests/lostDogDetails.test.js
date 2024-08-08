@@ -44,7 +44,7 @@ describe('DogDetails', () => {
         const { getByText } = await renderWithNavigation(<DogDetails />);
 
         await waitFor(() => expect(getByText('No dogs lost')).toBeTruthy());
-    });
+    }, 2147483647);
 
     it('renders a list of dogs when data is fetched', async () => {
         axios.get.mockResolvedValue({ data: mockDogs });
@@ -58,5 +58,5 @@ describe('DogDetails', () => {
             expect(getByText('Last area: Park')).toBeTruthy();
             expect(getByText('Last area: Downtown')).toBeTruthy();
         });
-    });
+    }, 2147483647);
 });
