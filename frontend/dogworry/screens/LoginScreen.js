@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View , TouchableOpacity } from 'react-native'
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import auth from '../fbauth';
 import api_url from '../config';
@@ -10,6 +10,7 @@ export default  function LoginForm({navigation}) {
     const [click,setClick] = useState(false);
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState(""); 
+    const [showTooltip, setShowTooltip] = useState(false);
     const handleLogin = async() => {
         const auth = getAuth();
         
@@ -35,6 +36,10 @@ export default  function LoginForm({navigation}) {
                 Alert.alert("Login Failed", errorMessage);
             });
     };
+
+    const toggleTooltip = () => {
+      setShowTooltip(prevState => !prevState); // Toggle the tooltip visibility
+    };
    
   return (
     <SafeAreaView style={styles.container}>
@@ -42,8 +47,27 @@ export default  function LoginForm({navigation}) {
         <View style={styles.inputView}>
             <TextInput style={styles.input} placeholder='EMAIL' value={email} onChangeText={setEmail} autoCorrect={false}
         autoCapitalize='none' />
-            <TextInput style={styles.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
-        autoCapitalize='none'/>
+            <View style={styles.passwordContainer}>
+                    <TextInput style={styles.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
+                            autoCapitalize='none'/>
+                    <TouchableOpacity
+                        onPress={toggleTooltip}
+                        style={styles.questionMarkContainer}
+                    >
+                        <Text style={styles.questionMark}>?</Text>
+                    </TouchableOpacity>
+                </View>
+                {showTooltip && (
+                    <View style={styles.tooltipContainer}>
+                        <View style={styles.tooltipBubble}>
+                            <Text style={styles.tooltipText}>
+                                Don`t remember your password? press Forgot Password`
+                            </Text>
+                        </View>
+                        <View style={styles.tooltipArrow} />
+                    </View>
+                )}
+            
         </View>
         <View style={styles.rememberView}>
             <View style={styles.switch}>
@@ -61,15 +85,7 @@ export default  function LoginForm({navigation}) {
             <Pressable style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>LOGIN</Text>
             </Pressable>
-            <Text style={styles.optionsText}>OR LOGIN WITH</Text>
-        </View>
-        
-        <View style={styles.mediaIcons}>
-        <Button
-      title="Google Sign-In"
-      />
-      
-                
+            <Text style={styles.optionsText}></Text>
         </View>
 
         <Text style={styles.footerText}>Don't Have Account?
@@ -114,6 +130,52 @@ const styles = StyleSheet.create({
     borderWidth : 1,
     borderRadius: 7,
     color:"#6c6e70"
+  },
+  questionMarkContainer: {
+    position: 'absolute',
+    right: 15,
+    top: 15,
+  },
+  questionMark: {
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: '#769FCD',
+  },
+  tooltipContainer: {
+      position: 'absolute',
+      bottom: 60,
+      left: 40,
+      right: 40,
+      alignItems: 'center',
+  },
+  tooltipBubble: {
+      backgroundColor: 'white',
+      padding: 10,
+      borderRadius: 5,
+      borderColor: 'gray',
+      borderWidth: 1,
+      elevation: 5,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 2 },
+      shadowOpacity: 0.2,
+      shadowRadius: 2,
+      width: '100%',
+  },
+  tooltipText: {
+      color: 'gray',
+      textAlign: 'center',
+  },
+  tooltipArrow: {
+      width: 0,
+      height: 0,
+      borderLeftWidth: 10,
+      borderRightWidth: 10,
+      borderBottomWidth: 10,
+      borderLeftColor: 'transparent',
+      borderRightColor: 'transparent',
+      borderBottomColor: 'white',
+      alignSelf: 'center',
+      marginTop: -1,
   },
   rememberView : {
     width : "100%",
