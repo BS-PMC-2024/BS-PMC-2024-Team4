@@ -134,6 +134,21 @@ itemText: {
   color: 'black',
   marginBottom: 2,
   width: '100%',
-}
+},
+
+  findVetButton: {
+    marginTop: 40,
+    elevation: 8,
+    backgroundColor: "red",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems:'center'
+},
+findVetButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+},
+
 });
 export default styles_info;
