@@ -23,15 +23,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MyDogs from './screens/user/MyDogs';
+import Svg from 'react-native-svg'
 
 // navigation of the app
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 const Drawer = createDrawerNavigator();
 
+const Title = ( {title} ) => {
+  return (
+    <View style={styles.headerTitleContainer}>
+      <Image source={require('./assets/logo.png')} style={styles.logo}/>
+      <Text style={styles.titleText}>{title}</Text>
+    </View>
+  )
+}
 // header style
 const getHeaderOptions = (title) => ({
-  headerTitle: title,
+  headerTitle: () => <Title title={title}/>,
   headerTitleAlign: 'center',
   headerTransparent: true,
 });

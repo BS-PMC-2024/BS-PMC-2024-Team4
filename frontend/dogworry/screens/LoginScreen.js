@@ -61,15 +61,7 @@ export default  function LoginForm({navigation}) {
             <Pressable style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>LOGIN</Text>
             </Pressable>
-            <Text style={styles.optionsText}>OR LOGIN WITH</Text>
-        </View>
-        
-        <View style={styles.mediaIcons}>
-        <Button
-      title="Google Sign-In"
-      />
-      
-                
+            <Text style={styles.optionsText}></Text>
         </View>
 
         <Text style={styles.footerText}>Don't Have Account?
