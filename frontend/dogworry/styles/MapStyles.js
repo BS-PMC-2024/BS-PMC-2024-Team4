@@ -5,6 +5,7 @@ const MapStyles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        transform: [{translateY: 10}]
     },
 
     map: {

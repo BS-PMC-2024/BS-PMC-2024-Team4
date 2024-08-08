@@ -40,12 +40,27 @@ const styles = StyleSheet.create({
       height: 250,
       marginBottom: 30, // Adds gap between the image and the next text element
     },
-
-
     titleContainer: {
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 30,
+    },
+    logo:{
+      width: 50,
+      height: 55
+    },
+    headerTitleContainer: {
+      transform: [{translateY: 10}],
+      flex: 1,
+      flexDirection: 'row',
+      alignItems: 'center',
+      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+      borderRadius: 100,
+      padding: 5,
+    },
+    titleText: {
+      fontSize: 20,
+      textShadowRadius: 2
     },
   });
   export default styles;
