@@ -62,9 +62,9 @@ const MapStyles = StyleSheet.create({
     },
     
     icon: {
-        width: 30, // Width of the circular icon
-        height: 30, // Height of the circular icon
-        borderRadius: 15, // Half of the width/height to make it circular
+        width: 20, // Width of the circular icon
+        height: 20, // Height of the circular icon
+        borderRadius: 10, // Half of the width/height to make it circular
         resizeMode: 'cover', // Ensure image covers the circle
     },
     calloutContainer: {
