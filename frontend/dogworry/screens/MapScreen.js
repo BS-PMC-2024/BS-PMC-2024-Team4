@@ -185,16 +185,6 @@ const MapScreen = () => {
 
         {blockedAreas && blockedAreas.map((area, index) => (
             <RoadBlockIcon item={area} key={index}/>
-        //   <Circle key={index} 
-        //     center={{ 
-        //       latitude: parseFloat(area.latitude),
-        //       longitude: parseFloat(area.longitude)
-        //     }}
-        //     radius={area.radius}
-        //     strokeColor={MapStyles.blockedCircle.strokeColor}
-        //     fillColor={MapStyles.blockedCircle.fillColor}
-        //     zIndex={MapStyles.blockedCircle.zIndex}
-        // />
         ))                             
         }
         {location && (

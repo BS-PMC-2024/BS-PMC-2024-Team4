@@ -12,8 +12,6 @@ const RoadBlockIcon = ({ item, index }) => {
                     latitude: parseFloat(item.latitude),
                     longitude: parseFloat(item.longitude)
                 }}
-                // Use an Image as the custom icon
-                icon={require('../Images/no_entry.jpg')} 
                 >
                 <Image
                     source={require('../Images/no_entry.jpg')} 
