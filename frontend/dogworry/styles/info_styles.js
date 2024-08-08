@@ -76,6 +76,19 @@ const styles_info = StyleSheet.create({
     flexGrow: 1,
   },
 
+  findVetButton: {
+    marginTop: 40,
+    elevation: 8,
+    backgroundColor: "red",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    alignItems:'center'
+},
+findVetButtonText: {
+    color: 'black',
+    fontWeight: 'bold',
+},
   foodIcon: {
     width: 150,
     height: 150,
@@ -122,6 +135,7 @@ itemText: {
   marginBottom: 2,
   width: '100%',
 },
+
   findVetButton: {
     marginTop: 40,
     elevation: 8,
@@ -135,5 +149,6 @@ findVetButtonText: {
     color: 'black',
     fontWeight: 'bold',
 },
+
 });
 export default styles_info;

@@ -5,13 +5,15 @@ import auth from '../../fbauth'
 import api_url from '../../config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 
-const RegisterScreen = ({ navigation }) => {
+const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
     const [confirmPassword, setConfirm] = useState('');
+    const navigation = useNavigation();
     
     const handleRegister = async () => {
       try {
@@ -23,10 +25,7 @@ const RegisterScreen = ({ navigation }) => {
           // Send UID to the backend
           await axios.post(`${api_url}/user/saveUserDetails`, {'user_id': uid, 'email': email});
           Alert.alert('Registered successfully!');
-          navigation.reset(({
-            index: 0,
-            routes: [{name: "Main"}]
-          }));
+          navigation.navigate("Main");
         }
         else
         {

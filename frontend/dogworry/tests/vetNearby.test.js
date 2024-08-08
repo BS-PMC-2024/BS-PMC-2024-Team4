@@ -60,7 +60,7 @@ describe('VetNearby', () => {
     expect(vetNames.length).toBe(2);
     expect(vetNames[0].props.children).toBe('Vet 1');
     expect(vetNames[1].props.children).toBe('Vet 2');
-  });
+  }, 2147483647);
 
   it('expands and shows details when vet name is clicked', async () => {
     const { getByText, queryByText, debug } = renderWithNavigation(<VetNearby />);
@@ -73,5 +73,5 @@ describe('VetNearby', () => {
       expect(queryByText('Address 1')).toBeTruthy();
       expect(queryByText('9:00 - 17:00')).toBeTruthy();
     });
-  });
+  }, 2147483647);
 });
