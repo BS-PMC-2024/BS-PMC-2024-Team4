@@ -2,24 +2,35 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import LoginForm from '../screens/LoginScreen';
 import { Alert } from 'react-native';
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 // Mock the dependencies
 jest.mock('@firebase/auth', () => ({
-    getAuth: jest.fn(),
-    signInWithEmailAndPassword: jest.fn(),
-  }));
+  getAuth: jest.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+  sendPasswordResetEmail: jest.fn().mockResolvedValue(),
+}));
 jest.mock('@react-native-async-storage/async-storage');
 jest.mock('../fbauth', () => ({}));
-jest.mock('axios')
+jest.mock('axios');
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(),
+}));
 
 describe('LoginForm', () => {
-  const mockNavigation = { navigate: jest.fn() };
+  let mockNavigation;
 
   beforeEach(() => {
+    mockNavigation = { 
+      navigate: jest.fn(), 
+      goBack: jest.fn() 
+    };
     jest.clearAllMocks();
+    getAuth.mockReturnValue({});
+    useNavigation.mockReturnValue(mockNavigation);
   });
 
   it('renders correctly', () => {
@@ -55,7 +66,7 @@ describe('LoginForm', () => {
     fireEvent.changeText(getByPlaceholderText('PASSWORD'), 'password123');
     fireEvent.press(getByText('LOGIN'));
 
-    axios.post.mockResolvedValueOnce({ data: {'avatar': 'avatar'}, status: 200 });
+    axios.post.mockResolvedValueOnce({ data: { 'avatar': 'avatar' }, status: 200 });
 
     await waitFor(() => {
       expect(signInWithEmailAndPassword).toHaveBeenCalledWith({}, 'test@example.com', 'password123');
@@ -82,14 +93,58 @@ describe('LoginForm', () => {
     });
   }, 2147483647);
 
-  
-  
-
-  it('shows forgot password alert', () => {
-    const { getByText } = render(<LoginForm navigation={mockNavigation} />);
+  it('opens reset password modal when "Forgot Password?" is pressed', () => {
+    const { getByText, getByPlaceholderText } = render(<LoginForm navigation={mockNavigation} />);
     
+    // Trigger the "Forgot Password?" press
     fireEvent.press(getByText('Forgot Password?'));
 
-    expect(Alert.alert).toHaveBeenCalledWith("Forget Password!");
+    // Check if the modal elements are displayed
+    expect(getByPlaceholderText('Enter your email')).toBeTruthy();
+    expect(getByText('Send Reset Email')).toBeTruthy();
+  });
+
+  it('sends a reset email when a valid email is entered', async () => {
+    const { getByText, getByPlaceholderText, queryByPlaceholderText } = render(<LoginForm navigation={mockNavigation} />);
+  
+    // Trigger the "Forgot Password?" press
+    fireEvent.press(getByText('Forgot Password?'));
+  
+    // Enter an email address
+    const emailInput = getByPlaceholderText('Enter your email');
+    fireEvent.changeText(emailInput, 'test@example.com');
+  
+    // Press the "Send Reset Email" button
+    fireEvent.press(getByText('Send Reset Email'));
+  
+    // Assert that sendPasswordResetEmail was called with the correct email
+    await waitFor(() => {
+      expect(sendPasswordResetEmail).toHaveBeenCalledWith(expect.anything(), 'test@example.com');
+    });
+  
+    // Check if the modal is closed by ensuring the modal input is no longer in the DOM
+    await waitFor(() => {
+      expect(queryByPlaceholderText('Enter your email')).toBeNull();
+    });
+  });
+
+  it('shows an error if email is not entered for password reset', async () => {
+    const { getByText, getByPlaceholderText, queryByText } = render(<LoginForm navigation={mockNavigation} />);
+
+    // Trigger the "Forgot Password?" press
+    fireEvent.press(getByText('Forgot Password?'));
+
+    // Do not enter any email address
+
+    // Press the "Send Reset Email" button
+    fireEvent.press(getByText('Send Reset Email'));
+
+    // Check if the Alert is shown (this depends on how you handle alerts)
+    await waitFor(() => {
+      expect(Alert.alert).toHaveBeenCalledWith("Reset Password", "Please enter your email address.");
+    });
   }, 2147483647);
+
 });
+
+

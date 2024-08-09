@@ -95,7 +95,7 @@ const TabNavigatorWithUser = () => (
 const StackNavigation = () => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Tabs' component={TabNavigatorWithUser} options={{headerShown: false }}/>
+      <Stack.Screen name='Back' component={TabNavigatorWithUser} options={{headerShown: false }}/>
       <Stack.Screen name='VetNearby' component={VetNearby} options={{ ...getHeaderOptions('Vet Nearby') }} />
     </Stack.Navigator>
   )
