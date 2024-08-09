@@ -7,6 +7,10 @@ import mongomock
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 
 def create_app(config_class=Config):
+    ####needs to check
+    #cred = credentials.Certificate('../../frontend/dogworry/fbauth/serviceAccountKey.json')
+    #firebase_admin.initialize_app(cred)
+
     app = Flask(__name__)
     if config_class == 'testing':
         app.config.from_object(TestingConfig)

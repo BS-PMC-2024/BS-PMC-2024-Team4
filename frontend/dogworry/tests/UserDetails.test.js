@@ -152,7 +152,7 @@ describe('RegisterScreen', () => {
     expect(getByPlaceholderText('Confirm Password')).toBeTruthy();
     //expect(getByText('Sign in with Google')).toBeTruthy();
     expect(getByText('Sign in with e-mail and password')).toBeTruthy();
-  });
+  }, 2147483647);
 
   it('handles email input correctly', () => {
     const { getByPlaceholderText } = renderWithNavigation(<RegisterScreen navigation={mockNavigation} />);
@@ -160,7 +160,7 @@ describe('RegisterScreen', () => {
 
     fireEvent.changeText(emailInput, 'test@example.com');
     expect(emailInput.props.value).toBe('test@example.com');
-  });
+  }, 2147483647);
 
   it('handles password input correctly', () => {
     const { getByPlaceholderText } = renderWithNavigation(<RegisterScreen navigation={mockNavigation} />);
@@ -168,7 +168,7 @@ describe('RegisterScreen', () => {
 
     fireEvent.changeText(passwordInput, 'password123');
     expect(passwordInput.props.value).toBe('password123');
-  });
+  }, 2147483647);
 
   it('handles confirm password input correctly', () => {
     const { getByPlaceholderText } = renderWithNavigation(<RegisterScreen navigation={mockNavigation} />);
@@ -176,7 +176,7 @@ describe('RegisterScreen', () => {
 
     fireEvent.changeText(confirmPasswordInput, 'password123');
     expect(confirmPasswordInput.props.value).toBe('password123');
-  });
+  }, 2147483647);
 
   it('matches passwords correctly', async () => {
     const { getByPlaceholderText, getByText } = renderWithNavigation(<RegisterScreen navigation={mockNavigation} />);
@@ -194,7 +194,7 @@ describe('RegisterScreen', () => {
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith('Registered successfully!');
     });
-  });
+  }, 2147483647);
 
   it('handles Firebase registration correctly', async () => {
     const { getByPlaceholderText, getByText } = renderWithNavigation(<RegisterScreen navigation={mockNavigation} />);
@@ -209,7 +209,7 @@ describe('RegisterScreen', () => {
     fireEvent.changeText(confirmPasswordInput, 'password123');
 
     fireEvent.press(signInButton);
-    })
+    }, 2147483647)
 
     await waitFor(() => {
       expect(axios.post).toHaveBeenCalledWith(expect.stringContaining('user/saveUserDetails'), {

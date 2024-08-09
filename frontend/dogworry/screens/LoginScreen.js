@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
-import { Modal,Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import { Modal,Alert, Button, Image, Pressable, SafeAreaView, styles_infoheet, Switch, Text, TextInput, View , TouchableOpacity } from 'react-native'
 import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from "firebase/auth";
 import auth from '../fbauth';
 import api_url from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import styles_info from '../styles/Login_styles';
+
 
 export default  function LoginForm({navigation}) {
     const [click,setClick] = useState(false);
@@ -12,6 +14,7 @@ export default  function LoginForm({navigation}) {
     const [password,setPassword]=  useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [resetEmail, setResetEmail] = useState(""); 
+    const [showTooltip, setShowTooltip] = useState(false);
     const handleLogin = async() => {
         const auth = getAuth();
         
@@ -55,48 +58,70 @@ export default  function LoginForm({navigation}) {
         });
     };
   
+
+    const toggleTooltip = () => {
+      setShowTooltip(prevState => !prevState); // Toggle the tooltip visibility
+    };
    
   return (
-    <SafeAreaView style={styles.container}>
-        <Text style={styles.title}>Welcome back!!</Text>
-        <View style={styles.inputView}>
-            <TextInput style={styles.input} placeholder='EMAIL' value={email} onChangeText={setEmail} autoCorrect={false}
+    <SafeAreaView style={styles_info.container}>
+        <Text style={styles_info.title}>Welcome back!!</Text>
+        <View style={styles_info.inputView}>
+            <TextInput style={styles_info.input} placeholder='EMAIL' value={email} onChangeText={setEmail} autoCorrect={false}
         autoCapitalize='none' keyboardType="email-address"  />
-            <TextInput style={styles.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
-        autoCapitalize='none'/>
+            <View style={styles_info.passwordContainer}>
+                    <TextInput style={styles_info.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
+                            autoCapitalize='none'/>
+                    <TouchableOpacity
+                        onPress={toggleTooltip}
+                        style={styles_info.questionMarkContainer}
+                    >
+                        <Text style={styles_info.questionMark}>?</Text>
+                    </TouchableOpacity>
+                </View>
+                {showTooltip && (
+                    <View style={styles_info.tooltipContainer}>
+                        <View style={styles_info.tooltipBubble}>
+                            <Text style={styles_info.tooltipText}>
+                                Don`t remember your password? press Forgot Password`
+                            </Text>
+                        </View>
+                        <View style={styles_info.tooltipArrow} />
+                    </View>
+                )}
+            
         </View>
-        <View style={styles.rememberView}>
-            <View style={styles.switch}>
+        <View style={styles_info.rememberView}>
+            <View style={styles_info.switch}>
                 <Switch  value={click} onValueChange={setClick} trackColor={{true : "green" , false : "gray"}} />
-                <Text style={styles.rememberText}>Remember me</Text>
+                <Text style={styles_info.rememberText}>Remember me</Text>
             </View>
             <View>
               <Pressable onPress={() => setModalVisible(true)}>
-                <Text style={styles.forgetText}>Forgot Password?</Text>
+                <Text style={styles_info.forgetText}>Forgot Password?</Text>
               </Pressable>
             </View>
         </View>
 
-        <View style={styles.buttonView}>
-            <Pressable style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>LOGIN</Text>
+        <View style={styles_info.buttonView}>
+            <Pressable style={styles_info.button} onPress={handleLogin}>
+                <Text style={styles_info.buttonText}>LOGIN</Text>
             </Pressable>
-            <Text style={styles.optionsText}>OR LOGIN WITH</Text>
-        </View>
-        
-        <View style={styles.mediaIcons}>
-        <Button
-      title="Google Sign-In"
-      />
-      
-                
+            <Text style={styles_info.optionsText}></Text>
         </View>
 
-        <Text style={styles.footerText}>Don't Have Account?
-          <Text style={styles.signup} onPress={() => {navigation.navigate("Register")}}>
+        <Text style={styles_info.footerText}>Don't Have Account?
+          <Text style={styles_info.signup} onPress={() => {navigation.navigate("Register")}}>
             Sign Up 
           </Text>
         </Text>
+        
+        
+        <Image
+        source={require('../Images/charli.png')} // replace with your image path
+        style={styles_info.image}
+      />
+        
         <Modal
         animationType="slide"
         transparent={true}
@@ -104,12 +129,12 @@ export default  function LoginForm({navigation}) {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}>
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Reset Password</Text>
-            <Text style={styles.modalTextd}>Enter your account Email to reset your passsword:</Text>
+        <View style={styles_info.centeredView}>
+          <View style={styles_info.modalView}>
+            <Text style={styles_info.modalText}>Reset Password</Text>
+            <Text style={styles_info.modalTextd}>Enter your account Email to reset your passsword:</Text>
             <TextInput
-              style={styles.modalInput}
+              style={styles_info.modalInput}
               placeholder="Enter your email"
               value={resetEmail}
               onChangeText={setResetEmail}
@@ -117,14 +142,14 @@ export default  function LoginForm({navigation}) {
               keyboardType="email-address"
             />
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles_info.button, styles_info.buttonClose]}
               onPress={handlePasswordReset}>
-              <Text style={styles.textStyle}>Send Reset Email</Text>
+              <Text style={styles_info.textStyle}>Send Reset Email</Text>
             </Pressable>
             <Pressable
-              style={[styles.button, styles.buttonClose]}
+              style={[styles_info.button, styles_info.buttonClose]}
               onPress={() => setModalVisible(!modalVisible)}>
-              <Text style={styles.textStyle}>Cancel</Text>
+              <Text style={styles_info.textStyle}>Cancel</Text>
             </Pressable>
           </View>
         </View>
@@ -135,153 +160,3 @@ export default  function LoginForm({navigation}) {
 }
 
 
-const styles = StyleSheet.create({
-  container : {
-    alignItems : "center",
-    paddingTop: 70,
-  },
-  image : {
-    height : 160,
-    width : 170
-  },
-  title : {
-    fontSize : 30,
-    fontWeight : "bold",
-    textTransform : "uppercase",
-    textAlign: "center",
-    paddingVertical : 40,
-    color : "#769FCD"
-  },
-  inputView : {
-    gap : 15,
-    width : "100%",
-    paddingHorizontal : 40,
-    marginBottom  :5
-  },
-  input : {
-    height : 50,
-    paddingHorizontal : 20,
-    borderColor : "#80858a",
-    borderWidth : 1,
-    borderRadius: 7,
-    color:"#6c6e70"
-  },
-  rememberView : {
-    width : "100%",
-    paddingHorizontal : 50,
-    justifyContent: "space-between",
-    alignItems : "center",
-    flexDirection : "row",
-    marginBottom : 8
-  },
-  switch :{
-    flexDirection : "row",
-    gap : 1,
-    justifyContent : "center",
-    alignItems : "center"
-    
-  },
-  rememberText : {
-    fontSize: 13
-  },
-  forgetText : {
-    fontSize : 15,
-    color : "#769FCD"
-  },
-  button : {
-    backgroundColor : "#769FCD",
-    height : 45,
-    borderColor : "gray",
-    borderWidth  : 1,
-    borderRadius : 5,
-    alignItems : "center",
-    justifyContent : "center"
-  },
-  buttonText : {
-    color : "white"  ,
-    fontSize: 18,
-    fontWeight : "bold"
-  }, 
-  buttonView :{
-    width :"100%",
-    paddingHorizontal : 50
-  },
-  optionsText : {
-    textAlign : "center",
-    paddingVertical : 10,
-    color : "gray",
-    fontSize : 13,
-    marginBottom : 6
-  },
-  mediaIcons : {
-    flexDirection : "row",
-    gap : 15,
-    alignItems: "center",
-    justifyContent : "center",
-    marginBottom : 23
-  },
-  icons : {
-    width : 40,
-    height: 40,
-  },
-  footerText : {
-    textAlign: "center",
-    color : "gray",
-  },
-  signup : {
-    color : "#769FCD",
-    fontSize : 13
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22
-  },
-  modalView: {
-    margin: 20,
-    backgroundColor: "white",
-    borderRadius: 20,
-    padding: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5
-  },
-  buttonClose: {
-    backgroundColor: "#769FCD",
-    marginTop: 10,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center"
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 22,
-    fontWeight: "bold"
-  },
-
-  modalTextd: {
-    marginBottom: 12,
-    textAlign: "center",
-    fontSize: 15
-  },
-  modalInput: {
-    height: 40,
-    width: 250,
-    borderColor: "#80858a",
-    borderWidth: 1,
-    borderRadius: 7,
-    paddingHorizontal: 10,
-    marginBottom: 15,
-    color: "#6c6e70"
-  },
-})

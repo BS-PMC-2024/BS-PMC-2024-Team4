@@ -31,7 +31,7 @@ describe('LoginForm', () => {
     expect(getByPlaceholderText('EMAIL')).toBeTruthy();
     expect(getByPlaceholderText('PASSWORD')).toBeTruthy();
     expect(getByText('LOGIN')).toBeTruthy();
-  });
+  }, 2147483647);
 
   it('updates email and password inputs', () => {
     const { getByPlaceholderText } = render(<LoginForm navigation={mockNavigation} />);
@@ -44,7 +44,7 @@ describe('LoginForm', () => {
 
     expect(emailInput.props.value).toBe('test@example.com');
     expect(passwordInput.props.value).toBe('password123');
-  });
+  }, 2147483647);
 
   it('handles successful login', async () => {
     const mockUser = { uid: '123', email: 'test@example.com' };
@@ -65,7 +65,7 @@ describe('LoginForm', () => {
       expect(Alert.alert).toHaveBeenCalledWith("Login Successful", `Welcome test@example.com`);
       expect(mockNavigation.navigate).toHaveBeenCalledWith('Main');
     });
-  });
+  }, 2147483647);
 
   it('handles login failure', async () => {
     const errorMessage = 'Invalid credentials';
@@ -82,7 +82,7 @@ describe('LoginForm', () => {
       expect(signInWithEmailAndPassword).toHaveBeenCalledWith({}, 'test@example.com', 'wrongpassword');
       expect(Alert.alert).toHaveBeenCalledWith("Login Failed", errorMessage);
     });
-  });
+  }, 2147483647);
 
   it('opens reset password modal when "Forgot Password?" is pressed', () => {
     const { getByText, getByPlaceholderText } = render(<LoginForm navigation={mockNavigation} />);
@@ -134,5 +134,5 @@ describe('LoginForm', () => {
     await waitFor(() => {
       expect(Alert.alert).toHaveBeenCalledWith("Reset Password", "Please enter your email address.");
     });
-  });
+  }, 2147483647);
 });

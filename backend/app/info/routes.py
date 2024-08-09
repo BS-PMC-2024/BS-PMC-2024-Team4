@@ -9,17 +9,15 @@ from pymongo import MongoClient
 
 @bp.route('getFood/', methods=['GET', 'POST'])
 def getFood():
-
-    food_collection = mongo.client.get_database("Info").get_collection("Food")
-    data = list(food_collection.find())
+    try:
+        food_collection = mongo.client.get_database("Info").get_collection("Food")
+        data = list(food_collection.find())
     
-    for item in data:
-        item['_id'] = str(item['_id'])
-    
-    if data:
+        for item in data:
+            item['_id'] = str(item['_id'])
         return jsonify(data)
-    else:
-        return jsonify({"error": "Unable to load data"}), 404
+    except Exception as e:
+        return jsonify({"error": "Unable to load data"}), 500
 
 
 @bp.route('getHealthCases/', methods=['GET'])
@@ -46,10 +44,8 @@ def getCases():
     else:
         return jsonify({"error": "Unable to load data"}), 404
 
-
 @bp.route('getParks/', methods=['GET'])
 def getParks():
-
     parks = mongo.client.get_database("Map").get_collection("parks")   
     data = list(parks.find())
     for item in data:
@@ -59,7 +55,7 @@ def getParks():
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
-    
+
 @bp.route('getVets/', methods=['GET'])
 def getVets():
     try:
@@ -72,10 +68,8 @@ def getVets():
         logging.error(f"Error fetching vets: {e}")
         return jsonify({"error": str(e)}), 500
         
-    
 @bp.route('getWaterSpots/', methods=['GET'])
 def getWaterSpots():
-
     items = mongo.client.get_database("Map").get_collection("Water")   
     data = list(items.find())
     for item in data:
@@ -85,4 +79,15 @@ def getWaterSpots():
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
-        
+
+@bp.route('getBlockedAreas/', methods=['GET'])
+def getBlockedAreas():
+    items = mongo.client.get_database("Map").get_collection("road_blockings") 
+    data = list(items.find())
+    for item in data:
+        item['_id'] = str(item['_id'])
+    if data:
+        print('here 90')
+        return jsonify(data)
+    else:
+        return jsonify({"error": "Unable to load data"}), 404

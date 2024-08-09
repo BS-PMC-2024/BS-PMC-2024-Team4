@@ -4,7 +4,6 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import * as Location from 'expo-location';
 import api_url from '../config';
-
 import styles_info from '../styles/vetNearby_styles';
 
 const VetNearby = () => {

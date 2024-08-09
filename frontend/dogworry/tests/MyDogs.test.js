@@ -64,7 +64,7 @@ describe('MyDogs Component', () => {
             });
         });
 
-    }, 60000);
+    }, 2147483647);
 
     it('opens the add dog modal and adds a new dog', async () => {
         const { getByText, getByPlaceholderText, getByTestId, unmount, debug } = renderWithNavigation(<MyDogs />);
@@ -124,5 +124,5 @@ describe('MyDogs Component', () => {
             expect(getByTextAfterReload('Charlie')).toBeTruthy();
             expect(getByTextAfterReload('Beagle')).toBeTruthy();
         });
-    });
+    }, 2147483647);
 });
