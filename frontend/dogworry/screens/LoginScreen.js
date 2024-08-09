@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import { Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { Modal,Alert, Button, Image, Pressable, SafeAreaView, StyleSheet, Switch, Text, TextInput, View } from 'react-native'
+import { getAuth, signInWithEmailAndPassword,sendPasswordResetEmail } from "firebase/auth";
 import auth from '../fbauth';
 import api_url from '../config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,7 +9,9 @@ import axios from 'axios';
 export default  function LoginForm({navigation}) {
     const [click,setClick] = useState(false);
     const [email,setEmail]=  useState("");
-    const [password,setPassword]=  useState(""); 
+    const [password,setPassword]=  useState("");
+    const [modalVisible, setModalVisible] = useState(false);
+    const [resetEmail, setResetEmail] = useState(""); 
     const handleLogin = async() => {
         const auth = getAuth();
         
@@ -35,13 +37,31 @@ export default  function LoginForm({navigation}) {
                 Alert.alert("Login Failed", errorMessage);
             });
     };
+
+    const handlePasswordReset = () => {
+      if (!resetEmail) {
+        Alert.alert("Reset Password", "Please enter your email address.");
+        return;
+      }
+  
+      sendPasswordResetEmail(auth, resetEmail)
+        .then(() => {
+          Alert.alert("Reset Password", "A password reset email has been sent to your email address.");
+          setModalVisible(false); // Close the modal after sending the email
+        })
+        .catch((error) => {
+          const errorMessage = error.message;
+          Alert.alert("Error", errorMessage);
+        });
+    };
+  
    
   return (
     <SafeAreaView style={styles.container}>
         <Text style={styles.title}>Welcome back!!</Text>
         <View style={styles.inputView}>
             <TextInput style={styles.input} placeholder='EMAIL' value={email} onChangeText={setEmail} autoCorrect={false}
-        autoCapitalize='none' />
+        autoCapitalize='none' keyboardType="email-address"  />
             <TextInput style={styles.input} placeholder='PASSWORD' secureTextEntry value={password} onChangeText={setPassword} autoCorrect={false}
         autoCapitalize='none'/>
         </View>
@@ -51,9 +71,9 @@ export default  function LoginForm({navigation}) {
                 <Text style={styles.rememberText}>Remember me</Text>
             </View>
             <View>
-                <Pressable onPress={() => Alert.alert("Forget Password!")}>
-                    <Text style={styles.forgetText}>Forgot Password?</Text>
-                </Pressable>
+              <Pressable onPress={() => setModalVisible(true)}>
+                <Text style={styles.forgetText}>Forgot Password?</Text>
+              </Pressable>
             </View>
         </View>
 
@@ -77,7 +97,38 @@ export default  function LoginForm({navigation}) {
             Sign Up 
           </Text>
         </Text>
-
+        <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}>
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Reset Password</Text>
+            <Text style={styles.modalTextd}>Enter your account Email to reset your passsword:</Text>
+            <TextInput
+              style={styles.modalInput}
+              placeholder="Enter your email"
+              value={resetEmail}
+              onChangeText={setResetEmail}
+              autoCapitalize="none"
+              keyboardType="email-address"
+            />
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={handlePasswordReset}>
+              <Text style={styles.textStyle}>Send Reset Email</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}>
+              <Text style={styles.textStyle}>Cancel</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
         
     </SafeAreaView>
   )
@@ -134,7 +185,7 @@ const styles = StyleSheet.create({
     fontSize: 13
   },
   forgetText : {
-    fontSize : 11,
+    fontSize : 15,
     color : "#769FCD"
   },
   button : {
@@ -180,5 +231,57 @@ const styles = StyleSheet.create({
   signup : {
     color : "#769FCD",
     fontSize : 13
-  }
+  },
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  buttonClose: {
+    backgroundColor: "#769FCD",
+    marginTop: 10,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center"
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "bold"
+  },
+
+  modalTextd: {
+    marginBottom: 12,
+    textAlign: "center",
+    fontSize: 15
+  },
+  modalInput: {
+    height: 40,
+    width: 250,
+    borderColor: "#80858a",
+    borderWidth: 1,
+    borderRadius: 7,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    color: "#6c6e70"
+  },
 })
