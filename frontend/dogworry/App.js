@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ActivityIndicator, Image, FlatList,Alert  } from 'react-native';
+import { Text, View, Image, Alert  } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,21 +10,18 @@ import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
 import VetNearby from './screens/VetNearbyScreen';
-import LostScreen from './screens/LostScreen';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
 import ReportLostDog from './screens/lostDogs/ReportLostDog';
 import Reports from './screens/reports/Reports';
 import styles from './styles';
-import {User, ProfileLabel, MyDogsLabel} from './components/User';
+import { User, ProfileLabel, MyDogsLabel } from './components/User';
 import UserDetails from './screens/user/UserDetails';
 import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import MyDogs from './screens/user/MyDogs';
-import Svg from 'react-native-svg'
-import axios from 'axios';
+
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -85,17 +82,20 @@ const TabNavigator = () => (
 )
 
 // Adding only 1 instance of the User component to every screen in Tab Navigator
-const TabNavigatorWithUser = () => (
+const TabNavigatorWithUser = ({ avatar, setAvatar }) => (
     <View style={{ flex: 1 }}>
-      <User />
+      <User avatar={avatar} setAvatar={setAvatar}/>
       <TabNavigator />
     </View>
 )
 
-const StackNavigation = () => {
+const StackNavigation = ({ avatar, setAvatar }) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Back' component={TabNavigatorWithUser} options={{headerShown: false }}/>
+      <Stack.Screen name='Back' options={{headerShown: false }}>
+        {props => <TabNavigatorWithUser {...props} avatar={avatar} setAvatar={setAvatar} />}
+      </Stack.Screen>
+
       <Stack.Screen name='VetNearby' component={VetNearby} options={{ ...getHeaderOptions('Vet Nearby') }} />
     </Stack.Navigator>
   )
@@ -214,17 +214,20 @@ const CustomProfileDrawer = (props) => {
 
 const ProfileDrawer = () => {
   const [userName, setUserName] = useState('');
+  const [avatar, setAvatar] = useState(null);
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
       drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} />} >
 
       <Drawer.Screen  name = "Main" 
-                      component={StackNavigation} 
-                      options={{headerShown: false}}/>
+                      options={{headerShown: false}}>
+                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar} />}
+      </Drawer.Screen>
 
       <Drawer.Screen  name="Login" 
-                      component={LoginScreen}
-                      options={{...getHeaderOptions("Login"), headerLeft:() => <BackButton/>, unmountOnBlur: true}} />
+                      options={{...getHeaderOptions("Login"), headerLeft:() => <BackButton/>, unmountOnBlur: true}} >
+                        {props => <LoginScreen {...props} setAvatar={setAvatar} setName={setUserName} />}
+      </Drawer.Screen>
 
       <Drawer.Screen  name ="Register" 
                       component={RegisterScreen} 
@@ -234,7 +237,7 @@ const ProfileDrawer = () => {
       <Drawer.Screen  name ="User Details" 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} >
-                        {props => <UserDetails {...props} setName={setUserName}/> }
+                        {props => <UserDetails {...props} setName={setUserName} setAvatar={setAvatar}/> }
       </Drawer.Screen>
 
       <Drawer.Screen  name ="My Dogs"

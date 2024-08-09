@@ -1,4 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height
 
 const styles = StyleSheet.create({
     container: {
@@ -50,7 +53,7 @@ const styles = StyleSheet.create({
       height: 55
     },
     headerTitleContainer: {
-      transform: [{translateY: 10}],
+      transform: [{translateY: (screen.height*ASPECT_RATIO*0.02)}],
       flex: 1,
       flexDirection: 'row',
       alignItems: 'center',

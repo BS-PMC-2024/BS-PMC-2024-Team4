@@ -1,4 +1,7 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height
 
 export const styles = StyleSheet.create({
     container: {
@@ -16,6 +19,7 @@ export const styles = StyleSheet.create({
         backgroundColor: '#f0f0f0', // Light grey background color
         padding: 20,
         marginTop: 70,
+        paddingTop: 40,
     },
     dogList: {
         width: "100%",

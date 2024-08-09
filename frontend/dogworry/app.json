@@ -5,7 +5,7 @@
     "slug": "dogworry",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./Images/dogs.jpg",
@@ -27,10 +27,17 @@
       },
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.dogworry.behappy",
-      "permissions": ["ACCESS_FINE_LOCATION"]
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6d2e787a-004d-453e-9e54-fa0220df0559"
+      }
     }
   },
   "plugins": [

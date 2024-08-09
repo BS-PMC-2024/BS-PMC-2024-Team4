@@ -10,29 +10,24 @@ import { set } from 'react-hook-form';
 
 const Drawer = createDrawerNavigator();
 
-export const User = () => {
+export const User = ( props ) => {
     const [show, setShow] = useState(false);
-    const [avatar, setAvatar] = useState(null);
-    const [userName, setUserName] = useState('');
+    const { avatar, setAvatar } = props
 
     const navigation = useNavigation();
 
     useEffect(() => {
         const fetchData = async () => {
             if (avatar === null) {
-              try{
-                const value = await AsyncStorage.getItem("avatar");
-                const uid = await AsyncStorage.getItem('userUid');
-               
-                //const data = resp.data;
-                //console.log("User first_name:", data.first_name);
-                if(value !== null) {
+              const value = await AsyncStorage.getItem('avatar');
+              try{              
+                if(avatar !== null) {
+                  setShow(true); 
+                }
+                else if(value !== undefined) {
                   setAvatar(value);
-                  //setUserName(storedUserName);
-                  //setUserName(firstName)
                   setShow(true);
-                  
-              }
+                }
             }
               catch(e){
                 console.log("Error loading avatars for users", e);

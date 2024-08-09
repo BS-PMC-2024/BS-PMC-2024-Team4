@@ -9,7 +9,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from '../../components/BackButton';
 
-const UserDetails = ( { setName } ) => {
+const UserDetails = ( { setName, setAvatar } ) => {
     const navigation = useNavigation();
     const [disableSave, setdisableSaveSave] = useState(false);
     const [data, setData] = useState(null);
@@ -59,6 +59,7 @@ const UserDetails = ( { setName } ) => {
         if (response.data.success) {
             try{
             await AsyncStorage.setItem("avatar", data.avatar);
+            setAvatar(data.avatar);
             if(data.first_name) {
                 setName(data.first_name);
                 await AsyncStorage.setItem("firstName", data.first_name);

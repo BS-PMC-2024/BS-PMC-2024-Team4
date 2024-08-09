@@ -1,11 +1,13 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
+
+const screen = Dimensions.get('window');
+const ASPECT_RATIO = screen.width / screen.height
 
 const MapStyles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        transform: [{translateY: 10}]
     },
 
     map: {
@@ -21,6 +23,7 @@ const MapStyles = StyleSheet.create({
         zIndex: 1,
         flexDirection: 'row',
         justifyContent: 'center',
+        transform: [{translateY: screen.height*ASPECT_RATIO*0.05}]
          
     },
 

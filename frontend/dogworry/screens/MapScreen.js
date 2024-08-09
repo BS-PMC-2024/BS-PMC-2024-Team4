@@ -186,16 +186,7 @@ const MapScreen = () => {
         {blockedAreas && blockedAreas.map((area, index) => (
             <RoadBlockIcon item={area} key={index}/>
         ))                             
-        }
-        {location && (
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="Your Location"
-          />
-        )}         
+        }   
       </MapView>
       <GetRoutes currentCoordinates={[location.coords.latitude, location.coords.longitude]} setRoute={setRouteCoordinate}/>
     </View>

@@ -8,7 +8,7 @@ import axios from 'axios';
 import styles_info from '../styles/Login_styles';
 
 
-export default  function LoginForm({navigation}) {
+export default  function LoginForm({ navigation, setAvatar, setName }) {
     const [click,setClick] = useState(false);
     const [email,setEmail]=  useState("");
     const [password,setPassword]=  useState("");
@@ -24,9 +24,11 @@ export default  function LoginForm({navigation}) {
                 const user = userCredential.user;
                 try {
                   await AsyncStorage.setItem('userUid', user.uid);
-                  const response = await axios.post(`${api_url}user/getUserDetails`, {'uid': user.uid})
+                  const response = await axios.post(`${api_url}user/getUserDetails`, {'uid': user.uid});
                   if(response.status === 200){
-                    await AsyncStorage.setItem("avatar", response.data['avatar']);
+                    setAvatar(response.data['avatar']);
+                    if(response.data['first_name'])
+                      setName(response.data['first_name'])
                   }
                   Alert.alert("Login Successful", `Welcome ${user.email}`);
                   navigation.navigate('Main'); 
