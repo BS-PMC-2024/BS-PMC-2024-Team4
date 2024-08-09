@@ -24,6 +24,7 @@ import BackButton from './components/BackButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MyDogs from './screens/user/MyDogs';
 import Svg from 'react-native-svg'
+import axios from 'axios';
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -105,13 +106,18 @@ const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
   const [uid, setUid] = useState("");
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {userName, setName} = props
   const retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('userUid');
+      const userNameAsync = await AsyncStorage.getItem('firstName');
+      
+
       if (value !== null) {
         setUid(value);
         setIsLoggedIn(true);
+        setName(userNameAsync);
       }
     } catch (error) {
       
@@ -159,6 +165,12 @@ const CustomProfileDrawer = (props) => {
     <DrawerContentScrollView {...props}>
       {isLoggedIn ? (
         <>
+          <View style={styles.container}>
+            <Image source={require('./assets/logo.png')} style={styles.logo}/>
+            <Text style={styles.text}>Hello {userName}</Text>
+          </View> 
+          
+
           <DrawerItem 
             label={() => <ProfileLabel />}
             onPress={() => props.navigation.navigate("User Details")}
@@ -172,7 +184,7 @@ const CustomProfileDrawer = (props) => {
             backBehavior={() => props.navigation.navigate("Main")} />
 
           <DrawerItem
-            label="Logout"
+            label="Logout" 
             onPress={logout}
             activeTintColor='#F44336' />
         </>
@@ -201,9 +213,10 @@ const CustomProfileDrawer = (props) => {
 
 
 const ProfileDrawer = () => {
+  const [userName, setUserName] = useState('');
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
-      drawerContent={props => <CustomProfileDrawer {...props} />} >
+      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} />} >
 
       <Drawer.Screen  name = "Main" 
                       component={StackNavigation} 
@@ -219,9 +232,10 @@ const ProfileDrawer = () => {
                       options={{...getHeaderOptions("Register"), headerLeft:() => <BackButton/>, unmountOnBlur: true}}/>
 
       <Drawer.Screen  name ="User Details" 
-                      component={UserDetails} 
                       backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} />
+                      options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} >
+                        {props => <UserDetails {...props} setName={setUserName}/> }
+      </Drawer.Screen>
 
       <Drawer.Screen  name ="My Dogs"
                       component={MyDogs} 

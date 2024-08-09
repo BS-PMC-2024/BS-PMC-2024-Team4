@@ -9,7 +9,7 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from '../../components/BackButton';
 
-const UserDetails = ( ) => {
+const UserDetails = ( { setName } ) => {
     const navigation = useNavigation();
     const [disableSave, setdisableSaveSave] = useState(false);
     const [data, setData] = useState(null);
@@ -18,6 +18,8 @@ const UserDetails = ( ) => {
     const { reset, handleSubmit, setValue, watch } = useForm({ defaultValues: data });
     const [isEditing, setIsEditing] = useState(false);
     const values = watch();
+    const [userName, setUserName] = useState('');
+
 
     if (Keyboard.isVisible() !== disableSave)
         setdisableSaveSave(Keyboard.isVisible());
@@ -26,10 +28,14 @@ const UserDetails = ( ) => {
         const userUid = await AsyncStorage.getItem('userUid');
         const resp = await axios.post(`${api_url}user/getUserDetails`, {'uid': userUid});
         const data = resp.data;
-        
+            
+        await AsyncStorage.setItem("firstName", data.first_name);
+
+                    
         if(resp.status === 200){
             setUID(userUid);
             setData(data);
+            setUserName(data.first_name);
             setLoading(false);
         }
         else
@@ -53,6 +59,10 @@ const UserDetails = ( ) => {
         if (response.data.success) {
             try{
             await AsyncStorage.setItem("avatar", data.avatar);
+            if(data.first_name) {
+                setName(data.first_name);
+                await AsyncStorage.setItem("firstName", data.first_name);
+            }
             Alert.alert("Personal Details", "Personal details saved successfully");
             setIsEditing(false);
             }

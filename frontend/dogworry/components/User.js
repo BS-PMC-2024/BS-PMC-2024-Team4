@@ -13,6 +13,7 @@ const Drawer = createDrawerNavigator();
 export const User = () => {
     const [show, setShow] = useState(false);
     const [avatar, setAvatar] = useState(null);
+    const [userName, setUserName] = useState('');
 
     const navigation = useNavigation();
 
@@ -22,9 +23,15 @@ export const User = () => {
               try{
                 const value = await AsyncStorage.getItem("avatar");
                 const uid = await AsyncStorage.getItem('userUid');
+               
+                //const data = resp.data;
+                //console.log("User first_name:", data.first_name);
                 if(value !== null) {
                   setAvatar(value);
+                  //setUserName(storedUserName);
+                  //setUserName(firstName)
                   setShow(true);
+                  
               }
             }
               catch(e){
@@ -44,6 +51,7 @@ export const User = () => {
     );
 
 };
+
     
 export const ProfileLabel = () => {
   return (
