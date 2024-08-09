@@ -221,7 +221,7 @@ const ProfileDrawer = () => {
       <Drawer.Screen  name ="User Details" 
                       component={UserDetails} 
                       backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} />
+                      options={{...getHeaderOptions("User Details"),headerLeft:() => <BackButton/>, unmountOnBlur: true}} />
 
       <Drawer.Screen  name ="My Dogs"
                       component={MyDogs} 

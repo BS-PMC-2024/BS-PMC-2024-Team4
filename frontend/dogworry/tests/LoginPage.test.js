@@ -5,6 +5,7 @@ import { Alert } from 'react-native';
 import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 // Mock the dependencies
 jest.mock('@firebase/auth', () => ({
@@ -15,13 +16,21 @@ jest.mock('@firebase/auth', () => ({
 jest.mock('@react-native-async-storage/async-storage');
 jest.mock('../fbauth', () => ({}));
 jest.mock('axios');
+jest.mock('@react-navigation/native', () => ({
+  useNavigation: jest.fn(),
+}));
 
 describe('LoginForm', () => {
-  const mockNavigation = { navigate: jest.fn() };
+  let mockNavigation;
 
   beforeEach(() => {
+    mockNavigation = { 
+      navigate: jest.fn(), 
+      goBack: jest.fn() 
+    };
     jest.clearAllMocks();
     getAuth.mockReturnValue({});
+    useNavigation.mockReturnValue(mockNavigation);
   });
 
   it('renders correctly', () => {
@@ -135,4 +144,7 @@ describe('LoginForm', () => {
       expect(Alert.alert).toHaveBeenCalledWith("Reset Password", "Please enter your email address.");
     });
   }, 2147483647);
+
 });
+
+
