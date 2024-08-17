@@ -21,6 +21,7 @@ import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
 import MyDogs from './screens/user/MyDogs';
+import BugReportScreen from './screens/BugReportScreen';
 
 
 // navigation of the app
@@ -56,7 +57,7 @@ const TabNavigator = () => (
         iconName = focused ? 'nutrition' : 'nutrition-outline';
       } else if (route.name === 'Info') {
         iconName = focused ? 'help' : 'help-outline';
-      } else if (route.name === 'Map'){ // from here
+      } else if (route.name === 'Map'){ 
         iconName = focused ? 'compass' : 'compass-outline';
       }
       
@@ -72,7 +73,7 @@ const TabNavigator = () => (
         display: 'flex',
       },    
     })}>
-    <Tab.Screen name= "Reports"   component={Reports}    options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name="Reports" component={ReportStack} options={getHeaderOptions('Dog Worry')} />
     <Tab.Screen name= "Lost Dogs" component={DogDetails} options={getHeaderOptions('Dog Worry')}/> 
     <Tab.Screen name= "Map"       component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>   
     <Tab.Screen name= "Food"      component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
@@ -100,7 +101,6 @@ const StackNavigation = ({ avatar, setAvatar }) => {
     </Stack.Navigator>
   )
 }
-
 
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
@@ -209,8 +209,16 @@ const CustomProfileDrawer = (props) => {
       )}
     </DrawerContentScrollView>
   );
-}
+};
 
+const ReportStack = () => (
+  <Stack.Navigator screenOptions={{
+    cardStyle: { backgroundColor: 'white' },
+    }}>
+    <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
+  </Stack.Navigator>
+);
 
 const ProfileDrawer = () => {
   const [userName, setUserName] = useState('');
@@ -244,10 +252,12 @@ const ProfileDrawer = () => {
                       component={MyDogs} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("My Dogs"), unmountOnBlur: true}}/>
+                      
       <Drawer.Screen  name ="ReportLostDog" 
                       component={ReportLostDog} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("ReportLostDog"), unmountOnBlur: true}}/>
+      
       <Drawer.Screen  name ="Reports" 
                       component={Reports} 
                       backBehavior={() => props.navigation.navigate("Main")}
