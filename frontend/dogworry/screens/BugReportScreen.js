@@ -33,33 +33,38 @@ const BugReportScreen = () => {
     }, []);
 
     const handleSubmit = async () => {
-    try {
-        setLoading(true);
-        const response = await axios.post(`${api_url}user/submitBugsReport`, {
-            user_id: uid,
-            screen: selectedValue,
-            description: description,
-        });
-        if (response.status === 200) {
+        if (!description.trim()) {
             Alert.alert(
-                "Report Submitted", // Custom title
-                "Thank you. Your report has been recorded in the system and will be evaluated in the coming days", // Custom message
-                [
-                  { text: "OK", onPress: () => {
-                      setLoading(false);
-                      navigation.goBack();
-                    }
-                  }
-                ]
-              );
-          } else {
-            Alert.alert("Error", "Failed to submit bug report");
-            setLoading(false);
-          }
-    }   catch (error) {
-        console.error('Error submitting bug report:', error);
-        alert('Failed to submit bug report');
-    }
+                "Empty Field",
+                "Description of the bug must be enterd",
+                [{ text: "ok" }]
+            );
+            return;
+        }
+        try {
+            setLoading(true);
+            const response = await axios.post(`${api_url}user/submitBugsReport`, {
+                user_id: uid,
+                screen: selectedValue,
+                description: description,
+            });
+            if (response.status === 200) {
+                Alert.alert(
+                    "Report Submitted", // Custom title
+                    "Thank you. Your report has been recorded in the system and will be evaluated in the coming days", // Custom message
+                    [{ text: "OK", onPress: () => {
+                        setLoading(false);
+                        navigation.goBack();
+                    }}]
+                );
+            } else {
+                Alert.alert("Error", "Failed to submit bug report");
+                setLoading(false);
+            }
+        }   catch (error) {
+            console.error('Error submitting bug report:', error);
+            alert('Failed to submit bug report');
+        }
   };
   if (loading)
     return (

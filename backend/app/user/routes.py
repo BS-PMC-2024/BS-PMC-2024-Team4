@@ -124,6 +124,9 @@ def updateDog():
 @bp.route('/submitBugsReport', methods=['POST'])
 def submitBugsReport():
     data = request.get_json()
+    if 'user_id' not in data: 
+         return jsonify({"error": "user_id is required"}), 400
+    
     user_id = data['user_id']
     screen = data.get('screen')
     description = data.get('description')
