@@ -69,8 +69,8 @@
             
             if (report.status === 'waiting') {
                 
-                buttonHTML = `<button onclick="updateStatus('${report._id}', 'Backend')">Backend</button>
-                            <button onclick="updateStatus('${report._id}', 'Frontend')">Frontend</button>`;
+                buttonHTML = `<button onclick="updateStatus('${report._id}', '${report.user_id}', 'Backend')">Backend</button>
+                            <button onclick="updateStatus('${report._id}', '${report.user_id}', 'Frontend')">Frontend</button>`;
                             statusClass = 'status-waiting';
                 statusStyle = 'color: red;'; 
             } else if (report.status === 'In Progress') {
@@ -93,8 +93,8 @@
 
 
 
-        function updateStatus(reportId, team) {
-            fetch(`/manager/update-status/${reportId}`, {
+        function updateStatus(reportId, userId, team) {
+            fetch(`/manager/update-status/${reportId}/${userId}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

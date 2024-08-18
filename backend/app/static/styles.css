@@ -1,0 +1,144 @@
+/* Reset some default styles */
+h1, button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+}
+
+/* Basic styling for the body */
+body {
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden; /* Prevent scrollbars if the image is larger than the viewport */
+    position: relative;
+}
+
+.background-image {
+    background-image: url('dogs.jpg');
+    background-repeat: no-repeat;
+    background-size: contain; /* Adjust based on image size */
+    background-position: right top; /* Align to the top-right corner */
+    width: 50%; /* Allow width to adjust to image content */
+    height: 100%; /* Full viewport height */
+    position: relative;
+    top: 0;
+    right: 0;
+    z-index: -1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.login-container {
+    position: relative;
+    z-index: 1; /* Ensure the login container is on top of the background image */
+    margin-left: auto;
+    margin-right: auto ;
+    width: 300px;
+    padding: 20px;
+    border-radius: 8px; 
+    box-shadow: 0 15px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: left;
+}
+
+.main-screen {
+    display: contents;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+/* Container for centering content */
+.container {
+    text-align: center;
+    padding: 20px;
+}
+
+.input-group {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    margin: 20px;
+}
+
+.input-group input {
+    border: none; 
+    border-bottom: 1px solid #333; 
+    font-size: 14px; 
+    width: 100%; 
+    box-sizing: border-box; 
+    outline: none; 
+    margin-left: 5px;
+}
+
+.input-group input:focus {
+    border-bottom-color: #1d1063; /* Change border color on focus */
+}
+
+/* Styling for headings */
+h1 {
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Button container to stack buttons vertically */
+.button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.button {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: 2px solid #e7e7e7;
+    border-radius: 30px;
+}
+.button:hover {background-color: #e7e7e7;}
+
+/* Common button styling */
+.btn {
+    font-size: 16px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    margin: 10px 0;
+    transition: background-color 0.3s;
+}
+
+/* Specific button styles */
+.btn-logout {
+    background-color: #ff4c4c;
+}
+
+.btn-manage-users {
+    background-color: #4caf50;
+}
+
+.btn-user-reports {
+    background-color: #2196f3;
+}
+
+/* Button hover effects */
+.btn:hover {
+    opacity: 0.9;
+}

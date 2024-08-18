@@ -49,10 +49,19 @@ def getReports():
         report['_id'] = str(report['_id'])
     return json_util.dumps(Allreports) , 200
     
-@bp.route('/update-status/<reportId>', methods=['POST'])
-def update_status(reportId):
+@bp.route('/update-status/<reportId>/<userId>', methods=['POST'])
+def update_status(reportId, userId):
     db = mongo.client.get_database("Reports")
     reports = db.get_collection("app_bugs_reports")
+
+    users = mongo.client.get_database("Users")
+    notify_db = users.get_collection("notifications")
+    notify_db.insert_one({
+        "user_id": userId,
+        "report_id": reportId, 
+        "status": "in progress",
+    })
+
     print(f"Updating status for report ID: {reportId}")  
     new_status = request.json['status']
     print(f"New status to set: {new_status}") 
@@ -61,6 +70,7 @@ def update_status(reportId):
         {'_id': ObjectId(reportId)},
         {'$set': {'status': new_status}}
     )
+
     if result.modified_count:
          return jsonify({'message': 'Status updated successfully'}), 200
         
