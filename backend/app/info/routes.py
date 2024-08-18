@@ -4,6 +4,7 @@ from app.extensions import mongo
 from bson import json_util
 import base64
 import json
+import random
 from pymongo import MongoClient
 
 
@@ -50,6 +51,15 @@ def getParks():
     data = list(parks.find())
     for item in data:
         item['_id'] = str(item['_id'])
+    
+    for item in data:  
+        rand = random.random()
+        if(rand < 0.5):
+            item['traffic'] = "Low"
+        elif(rand < 0.75):
+            item['traffic'] = "Medium"
+        else:
+            item['traffic'] = "High"
 
     if data:
         return jsonify(data)

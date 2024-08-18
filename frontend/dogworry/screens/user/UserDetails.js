@@ -28,8 +28,9 @@ const UserDetails = ( { setName, setAvatar } ) => {
         const userUid = await AsyncStorage.getItem('userUid');
         const resp = await axios.post(`${api_url}user/getUserDetails`, {'uid': userUid});
         const data = resp.data;
-            
-        await AsyncStorage.setItem("firstName", data.first_name);
+        
+        if(data.first_name)
+            await AsyncStorage.setItem("firstName", data.first_name);
 
                     
         if(resp.status === 200){

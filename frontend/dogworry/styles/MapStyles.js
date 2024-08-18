@@ -83,6 +83,11 @@ const MapStyles = StyleSheet.create({
         fontSize: 14,
         color: 'black',
     },
+    markerContainer: {
+        width: screen.width,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
 });
  
