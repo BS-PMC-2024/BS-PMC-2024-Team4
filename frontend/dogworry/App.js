@@ -12,7 +12,7 @@ import InfoScreen from './screens/InfoScreen';
 import VetNearby from './screens/VetNearbyScreen';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
-import ReportLostDog from './screens/lostDogs/ReportLostDog';
+import ReportLostDog from './screens/reports/ReportLostDog';
 import Reports from './screens/reports/Reports';
 import styles from './styles';
 import { User, ProfileLabel, MyDogsLabel } from './components/User';
@@ -21,6 +21,9 @@ import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
 import MyDogs from './screens/user/MyDogs';
+import BugReportScreen from './screens/reports/BugReport';
+import RoadsReport from './screens/reports/RoadsReport';
+import ProblematicDog from './screens/reports/ProblematicDog';
 
 
 // navigation of the app
@@ -56,7 +59,7 @@ const TabNavigator = () => (
         iconName = focused ? 'nutrition' : 'nutrition-outline';
       } else if (route.name === 'Info') {
         iconName = focused ? 'help' : 'help-outline';
-      } else if (route.name === 'Map'){ // from here
+      } else if (route.name === 'Map'){ 
         iconName = focused ? 'compass' : 'compass-outline';
       }
       
@@ -72,7 +75,7 @@ const TabNavigator = () => (
         display: 'flex',
       },    
     })}>
-    <Tab.Screen name= "Reports"   component={Reports}    options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name="Reports" component={ReportStack} options={getHeaderOptions('Dog Worry')} />
     <Tab.Screen name= "Lost Dogs" component={DogDetails} options={getHeaderOptions('Dog Worry')}/> 
     <Tab.Screen name= "Map"       component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>   
     <Tab.Screen name= "Food"      component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
@@ -100,7 +103,6 @@ const StackNavigation = ({ avatar, setAvatar }) => {
     </Stack.Navigator>
   )
 }
-
 
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
@@ -209,8 +211,20 @@ const CustomProfileDrawer = (props) => {
       )}
     </DrawerContentScrollView>
   );
-}
+};
 
+// Reports tab and all screens available inside it 
+const ReportStack = () => (
+  <Stack.Navigator screenOptions={{
+    cardStyle: { backgroundColor: 'white' },
+    }}>
+    <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="RoadReport" component={RoadsReport} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ProblematicDog" component={ProblematicDog} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ReportLostDog" component={ReportLostDog} options={{headerLeft: () => null,}}/>
+  </Stack.Navigator>
+);
 
 const ProfileDrawer = () => {
   const [userName, setUserName] = useState('');
@@ -244,14 +258,6 @@ const ProfileDrawer = () => {
                       component={MyDogs} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("My Dogs"), unmountOnBlur: true}}/>
-      <Drawer.Screen  name ="ReportLostDog" 
-                      component={ReportLostDog} 
-                      backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("ReportLostDog"), unmountOnBlur: true}}/>
-      <Drawer.Screen  name ="Reports" 
-                      component={Reports} 
-                      backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("Reports"), unmountOnBlur: true}}/>
 
     </Drawer.Navigator>
   )

@@ -87,7 +87,6 @@ def getBlockedAreas():
     for item in data:
         item['_id'] = str(item['_id'])
     if data:
-        print('here 90')
         return jsonify(data)
     else:
         return jsonify({"error": "Unable to load data"}), 404
