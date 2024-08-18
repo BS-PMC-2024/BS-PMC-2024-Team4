@@ -30,31 +30,18 @@ const FoodScreen = () => {
         });
     }, []);
 
-
-
     const handleSearch = (query) => {
         setSearchQuery(query);
         const formattedQuery = query.toLowerCase();
         const filteredData = filter(fullData, (item) => { 
-            return contains(item, formattedQuery);
+            return contains(item.name, formattedQuery);
         });
         setData(filteredData);
     };
 
     const contains = (name, query) => {
-        if (name.includes(query)) {
-            return true;
-        }
-        return false;
+        return name.toLowerCase().includes(query);
     };
-
-    if (loading) {
-        return (
-          <View style={styles.container}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        );
-    }
 
     return (
         <View style={styles_info.screenContainer}>

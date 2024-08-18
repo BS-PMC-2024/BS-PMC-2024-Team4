@@ -10,6 +10,7 @@ import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
 import VetNearby from './screens/VetNearbyScreen';
+import SendToVet from './screens/SendToVet';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
 import ReportLostDog from './screens/reports/ReportLostDog';
@@ -79,7 +80,7 @@ const TabNavigator = () => (
     <Tab.Screen name= "Lost Dogs" component={DogDetails} options={getHeaderOptions('Dog Worry')}/> 
     <Tab.Screen name= "Map"       component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>   
     <Tab.Screen name= "Food"      component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
-    <Tab.Screen name= "Info"      component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "Info"      component={InfoStack} options={getHeaderOptions('Dog Worry')}/>
     
   </Tab.Navigator>
 )
@@ -98,8 +99,6 @@ const StackNavigation = ({ avatar, setAvatar }) => {
       <Stack.Screen name='Back' options={{headerShown: false }}>
         {props => <TabNavigatorWithUser {...props} avatar={avatar} setAvatar={setAvatar} />}
       </Stack.Screen>
-
-      <Stack.Screen name='VetNearby' component={VetNearby} options={{ ...getHeaderOptions('Vet Nearby') }} />
     </Stack.Navigator>
   )
 }
@@ -225,6 +224,16 @@ const ReportStack = () => (
     <Stack.Screen name="ReportLostDog" component={ReportLostDog} options={{headerLeft: () => null,}}/>
   </Stack.Navigator>
 );
+
+const InfoStack = () => (
+  <Stack.Navigator screenOptions={{
+    cardStyle: { backgroundColor: 'white' },
+    }}>
+    <Stack.Screen name="InfoMain" component={InfoScreen} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name='VetNearby' component={VetNearby} options={{headerLeft: () => null,}} />
+    <Stack.Screen name='SendVet' component={SendToVet} options={{headerLeft: () => null,}} />
+  </Stack.Navigator>
+)
 
 const ProfileDrawer = () => {
   const [userName, setUserName] = useState('');

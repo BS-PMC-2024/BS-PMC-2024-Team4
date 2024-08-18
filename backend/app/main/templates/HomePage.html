@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Manager Dashboard</title>
     <link rel="stylesheet" href="styles.css"> 
 </head>
 <body>
-    <h4>
-        <div class="login-container">
-            <form action="logout" method="post">
-        just Logout. for now. <button type="submit">Logout! </button>
+    <div class="container">
+        <h1>Welcome to the Manager Dashboard</h1>
+        <div class="button-container">
+            <form action="logout" method="post" class="action-form">
+                <button type="submit" class="btn btn-logout">Logout</button>
             </form>
-            <form action="{{url_for('manager.manageUsersPage')}}" method="get" >
-                 <button type="submit">manage Users </button>
+            <form action="{{url_for('manager.manageUsersPage')}}" method="get" class="action-form">
+                <button type="submit" class="btn btn-manage-users">Manage Users</button>
             </form>
-        </form>
-        <form action="{{url_for('manager.UserReports')}}" method="get" >
-             <button type="submit">Users reports </button>
-        </form>
-    </h4>
+            <form action="{{url_for('manager.UserReports')}}" method="get" class="action-form">
+                <button type="submit" class="btn btn-user-reports">User Reports</button>
+            </form>
+        </div>
+    </div>
 </body>
 </html>
