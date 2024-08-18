@@ -12,7 +12,7 @@ import InfoScreen from './screens/InfoScreen';
 import VetNearby from './screens/VetNearbyScreen';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
-import ReportLostDog from './screens/lostDogs/ReportLostDog';
+import ReportLostDog from './screens/reports/ReportLostDog';
 import Reports from './screens/reports/Reports';
 import styles from './styles';
 import { User, ProfileLabel, MyDogsLabel } from './components/User';
@@ -23,6 +23,7 @@ import BackButton from './components/BackButton';
 import MyDogs from './screens/user/MyDogs';
 import BugReportScreen from './screens/reports/BugReport';
 import RoadsReport from './screens/reports/RoadsReport';
+import ProblematicDog from './screens/reports/ProblematicDog';
 
 
 // navigation of the app
@@ -212,6 +213,7 @@ const CustomProfileDrawer = (props) => {
   );
 };
 
+// Reports tab and all screens available inside it 
 const ReportStack = () => (
   <Stack.Navigator screenOptions={{
     cardStyle: { backgroundColor: 'white' },
@@ -219,6 +221,8 @@ const ReportStack = () => (
     <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="RoadReport" component={RoadsReport} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ProblematicDog" component={ProblematicDog} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ReportLostDog" component={ReportLostDog} options={{headerLeft: () => null,}}/>
   </Stack.Navigator>
 );
 
@@ -254,16 +258,6 @@ const ProfileDrawer = () => {
                       component={MyDogs} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("My Dogs"), unmountOnBlur: true}}/>
-                      
-      <Drawer.Screen  name ="ReportLostDog" 
-                      component={ReportLostDog} 
-                      backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("ReportLostDog"), unmountOnBlur: true}}/>
-      
-      <Drawer.Screen  name ="Reports" 
-                      component={Reports} 
-                      backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("Reports"), unmountOnBlur: true}}/>
 
     </Drawer.Navigator>
   )

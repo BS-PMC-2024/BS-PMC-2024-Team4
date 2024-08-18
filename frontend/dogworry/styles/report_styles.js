@@ -5,6 +5,14 @@ const ASPECT_RATIO = screen.width / screen.height
 
 const report_styles = StyleSheet.create({
     // report screen styles
+    loading_container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#fff',
+    },
+
     container: {
         flex: 1,
         justifyContent: 'flex-start',
@@ -158,9 +166,6 @@ const report_styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
-
-
-
 
     // roads report screen
     road_label: {

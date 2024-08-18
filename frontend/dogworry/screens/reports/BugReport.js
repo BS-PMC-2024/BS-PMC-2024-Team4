@@ -11,7 +11,6 @@ const BugReportScreen = () => {
     const [description, setDescription] = useState('');
     const navigation = useNavigation();
     const [selectedValue, setSelectedValue] = useState('info');
-    const [data, setData] = useState(null);
     const[uid, setUID] = useState(null);
     const [loading, setLoading] = useState(true);
 
@@ -65,13 +64,13 @@ const BugReportScreen = () => {
             console.error('Error submitting bug report:', error);
             alert('Failed to submit bug report');
         }
-  };
-  if (loading)
-    return (
-        <View style={report_styles.container}>
-            <ActivityIndicator size="large" testID="loading" />
-        </View>
-    );
+    };
+    // if (loading)
+    //     return (
+    //         <View style={report_styles.loading_container}>
+    //             <ActivityIndicator size="large" color="#0000ff" />
+    //         </View>
+    //     );
     
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>

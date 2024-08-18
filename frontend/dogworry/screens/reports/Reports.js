@@ -11,7 +11,6 @@ const Reports = () => {
     const navigation = useNavigation();
     const [loading, setLoading] = useState(false);
     const [blockedAreas, setBlockedAreas] = useState(null);
-    const [selectedValue, setSelectedValue] = useState("java");
     const fetchData = async() => {
         setLoading(true);
         try {
@@ -31,7 +30,6 @@ const Reports = () => {
         fetchData();
     }, []);
 
-
     const renderRoadBlockedItem = ({ item }) => (
         <View style={report_styles.reportItem}>
             <Image
@@ -45,6 +43,7 @@ const Reports = () => {
             </View>
         </View>
     );
+    
     return (
         <View style={report_styles.container}>
             <Text style={report_styles.screenTitle}>Report Us</Text>
@@ -52,8 +51,8 @@ const Reports = () => {
                 <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ReportLostDog')}>
                     <Text style={report_styles.buttonText}>Lost my dog</Text>    
                 </TouchableOpacity>
-                <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ProblamaticDog')}>
-                    <Text style={report_styles.buttonText}>Problamatic Dog</Text>    
+                <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ProblematicDog')}>
+                    <Text style={report_styles.buttonText}>Problematic Dog</Text>    
                 </TouchableOpacity>
                 <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('BugReport')}>
                     <Text style={report_styles.buttonText}>App bugs</Text>    
@@ -64,8 +63,8 @@ const Reports = () => {
             </View>
             <View style={report_styles.reportListContainer}>
                 {loading ? (
-                    <View style={report_styles.container}>
-                        <ActivityIndicator size="large" color="#0000ff"/>
+                    <View style={report_styles.loading_container}>
+                        <ActivityIndicator size="large" color="#0000ff" />
                     </View>
                 ) : (
                     <FlatList 
