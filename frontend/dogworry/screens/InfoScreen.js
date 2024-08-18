@@ -48,13 +48,21 @@ const InfoScreen = () => {
     
     const renderFooter = () => {
       return (
+        <View>
+          <TouchableOpacity
+            style={styles_info.findVetButton}
+            onPress={() => navigation.navigate('VetNearby')}
+            >
+            <Text style={styles_info.findVetButtonText}>Looking for a vet immediately? Click here!</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles_info.findVetButton}
+            onPress={() => navigation.navigate('SendVet')}
+            >
+            <Text style={styles_info.findVetButtonText}>Send a question to a vet</Text>
+          </TouchableOpacity>
+        </View>
         
-        <TouchableOpacity
-          style={styles_info.findVetButton}
-          onPress={() => navigation.navigate('VetNearby')}
-        >
-          <Text style={styles_info.findVetButtonText}>Looking for a vet immediately? Click here!</Text>
-        </TouchableOpacity>
       );
     };
 
