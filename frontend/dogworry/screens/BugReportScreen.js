@@ -1,29 +1,73 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback  } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, ActivityIndicator, Alert   } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import report_styles from '../styles/report_styles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import api_url from '../config';
 
 const BugReportScreen = () => {
-  const [screen, setScreen] = useState('info');
-  const [description, setDescription] = useState('');
-  const navigation = useNavigation();
-  const [selectedValue, setSelectedValue] = useState('info');
+    const [description, setDescription] = useState('');
+    const navigation = useNavigation();
+    const [selectedValue, setSelectedValue] = useState('info');
+    const [data, setData] = useState(null);
+    const[uid, setUID] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-  const handleSubmit = async () => {
+    const fetchData = async () => {
+        const userUid = await AsyncStorage.getItem('userUid');
+        const resp = await axios.post(`${api_url}user/getUserDetails`, {'uid': userUid});
+        const data = resp.data;
+        if(resp.status === 200){
+            setUID(userUid);
+            setLoading(false);
+        }
+        else
+        Alert.alert("User id", data.error)
+        setLoading(false);
+    }
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleSubmit = async () => {
     try {
-      // await axios.post('YOUR_BACKEND_URL_HERE/reportBug', {
-      //     screen,
-      //     description
-      // });
-      alert('Bug report submitted successfully');
-    } catch (error) {
-      console.error('Error submitting bug report:', error);
-      alert('Failed to submit bug report');
+        setLoading(true);
+        const response = await axios.post(`${api_url}user/submitBugsReport`, {
+            user_id: uid,
+            screen: selectedValue,
+            description: description,
+        });
+        if (response.status === 200) {
+            Alert.alert(
+                "Report Submitted", // Custom title
+                "Thank you. Your report has been recorded in the system and will be evaluated in the coming days", // Custom message
+                [
+                  { text: "OK", onPress: () => {
+                      setLoading(false);
+                      navigation.goBack();
+                    }
+                  }
+                ]
+              );
+          } else {
+            Alert.alert("Error", "Failed to submit bug report");
+            setLoading(false);
+          }
+    }   catch (error) {
+        console.error('Error submitting bug report:', error);
+        alert('Failed to submit bug report');
     }
   };
-
+  if (loading)
+    return (
+        <View style={report_styles.container}>
+            <ActivityIndicator size="large" testID="loading" />
+        </View>
+    );
+    
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={report_styles.bugsContainer}>
