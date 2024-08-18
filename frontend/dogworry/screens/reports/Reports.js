@@ -58,7 +58,7 @@ const Reports = () => {
                 <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('BugReport')}>
                     <Text style={report_styles.buttonText}>App bugs</Text>    
                 </TouchableOpacity>
-                <TouchableOpacity style={report_styles.reportButton}>
+                <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('RoadReport')}>
                     <Text style={report_styles.buttonText}>Road hazard</Text>    
                 </TouchableOpacity>
             </View>

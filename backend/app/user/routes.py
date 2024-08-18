@@ -134,3 +134,25 @@ def submitBugsReport():
     bugs_db = mongo.client.get_database("Reports").get_collection("app_bugs_reports")
     bugs_db.insert_one({"user_id": user_id, "screen": screen, "description": description, "status": "waiting" })
     return jsonify({"message": "Bug report submitted successfully"}), 200
+
+@bp.route('/submitRoadsReport', methods=['POST'])
+def submitRoadsReport():
+    data = request.get_json()
+    if 'user_id' not in data: 
+         return jsonify({"error": "user_id is required"}), 400
+    
+    user_id = data['user_id']
+    type = data.get('type')
+    status = "waiting"
+    description = data.get('description')
+    address = data.get('address')
+
+    roads_db = mongo.client.get_database("Reports").get_collection("roads_reports")
+    roads_db.insert_one({
+        "user_id": user_id,
+        "type": type, 
+        "status": status,
+        "description": description,
+        "address": address 
+    })
+    return jsonify({"message": "Bug report submitted successfully"}), 200

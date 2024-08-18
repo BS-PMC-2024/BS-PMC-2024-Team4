@@ -21,7 +21,8 @@ import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
 import MyDogs from './screens/user/MyDogs';
-import BugReportScreen from './screens/BugReportScreen';
+import BugReportScreen from './screens/reports/BugReport';
+import RoadsReport from './screens/reports/RoadsReport';
 
 
 // navigation of the app
@@ -217,6 +218,7 @@ const ReportStack = () => (
     }}>
     <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="RoadReport" component={RoadsReport} options={{headerLeft: () => null,}}/>
   </Stack.Navigator>
 );
 

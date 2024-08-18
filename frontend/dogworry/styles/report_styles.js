@@ -40,10 +40,10 @@ const report_styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.6,
         shadowRadius: 6,
-        elevation: 5, // Android shadow effect
+        elevation: 5, 
         margin: 10,
         justifyContent: 'center',
-        width: (screen.width / 2) - 30, // Adjusted width for 2 buttons per row
+        width: (screen.width / 2) - 30, 
     },
 
     buttonText: {
@@ -52,7 +52,7 @@ const report_styles = StyleSheet.create({
     },
 
     reportListContainer: {
-        flex: 1, // Make FlatList take up remaining space
+        flex: 1, 
         width: '100%',
         alignItems: 'center',
     },
@@ -74,10 +74,10 @@ const report_styles = StyleSheet.create({
     },
 
     icon: {
-        width: 20, // Width of the circular icon
-        height: 20, // Height of the circular icon
-        borderRadius: 10, // Half of the width/height to make it circular
-        resizeMode: 'cover', // Ensure image covers the circle
+        width: 20, 
+        height: 20, 
+        borderRadius: 10, 
+        resizeMode: 'cover', 
         position: 'absolute',
         top: 10,
         right: 10,
@@ -98,12 +98,6 @@ const report_styles = StyleSheet.create({
         marginTop: 5,
     },
 
-
-
-
-
-
-
     // bugs report screen
     bugsContainer: {
         flex: 1,
@@ -111,6 +105,7 @@ const report_styles = StyleSheet.create({
         alignItems: 'center',
         paddingTop: 60,
         backgroundColor: 'white',
+        width: '100%',
     },
 
     bugsScreenTitle: {
@@ -119,6 +114,7 @@ const report_styles = StyleSheet.create({
         textAlign:'center',
         width: '100%',
     },
+    
     reportContainer: {
         flex: 1,
         justifyContent: 'flex-start',
@@ -162,6 +158,41 @@ const report_styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+
+
+
+
+    // roads report screen
+    road_label: {
+        marginBottom: 10,
+        marginTop: 10,
+        fontSize: 16,
+    },
+
+    address_input: {
+        borderColor: 'gray',
+        borderWidth: 1,
+        padding: 10,
+        textAlignVertical: 'top',
+        marginBottom: 20,
+        width: '100%',
+    },
+
+    scrollContainer: {
+        flexGrow: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+    },
+
+    reportContainer_np: {
+        flex: 1,
+        justifyContent: 'flex-start',
+        alignItems: 'center',
+        backgroundColor: 'white',
+        width: '100%',
+    },
+    
 });
  
 export default report_styles;

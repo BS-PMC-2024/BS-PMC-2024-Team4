@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Keyboard, TouchableWithoutFeedback, ActivityIndicator, Alert   } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import report_styles from '../styles/report_styles';
+import report_styles from '../../styles/report_styles';
 import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import api_url from '../config';
+import api_url from '../../config';
 
 const BugReportScreen = () => {
     const [description, setDescription] = useState('');
@@ -50,7 +50,7 @@ const BugReportScreen = () => {
             });
             if (response.status === 200) {
                 Alert.alert(
-                    "Report Submitted", // Custom title
+                    "Report Submitted", 
                     "Thank you. Your report has been recorded in the system and will be evaluated in the coming days", // Custom message
                     [{ text: "OK", onPress: () => {
                         setLoading(false);
