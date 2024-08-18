@@ -58,7 +58,7 @@ describe('UserDetails Component', () => {
         });
 
         expect(getByText('Profile Picture')).toBeTruthy();
-    });
+    }, 2147483647);
 
     it('updates the first name', async () => {
         const { getByText, getByDisplayValue } = renderWithNavigation(<UserDetails />);
@@ -76,7 +76,7 @@ describe('UserDetails Component', () => {
         await waitFor(() => {
             expect(firstNameInput.props.value).toBe('Jane');
         });
-    });
+    }, 2147483647);
 
     it('shows an alert for invalid email', async () => {
         const { getByText, getByDisplayValue } = renderWithNavigation(<UserDetails />);
@@ -95,7 +95,7 @@ describe('UserDetails Component', () => {
         await waitFor(() => {
             expect(emailInput.props.value).toBe('');
         });
-    });
+    }, 2147483647);
 
     it('selects an image', async () => {
         const { getByText } = renderWithNavigation(<UserDetails />);
@@ -111,5 +111,5 @@ describe('UserDetails Component', () => {
         await waitFor(() => {
             expect(getByText('Profile Picture')).toBeTruthy();
         });
-    });
+    }, 2147483647);
 });

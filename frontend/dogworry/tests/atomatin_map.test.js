@@ -19,6 +19,7 @@ jest.mock('react-native-maps', () => {
       longitude: -122.4324,
       name: 'Park 1',
       address: '123 Park St',
+      traffic: 'Low',
       temperature: 25,
     };
   
@@ -26,9 +27,10 @@ jest.mock('react-native-maps', () => {
       const { getByText } = render(<ParkMarker park={mockPark} />);
   
       expect(getByText('dogs park')).toBeTruthy();
-      expect(getByText('Park 1')).toBeTruthy();
-      expect(getByText('123 Park St')).toBeTruthy();
-      expect(getByText('pavement  temperature: 25°C')).toBeTruthy();
+      expect(getByText('Park Name: Park 1')).toBeTruthy();
+      expect(getByText('Park Address: 123 Park St')).toBeTruthy();
+      expect(getByText('Pavement Temperature: 25°C')).toBeTruthy();
+      expect(getByText('Park Traffic: Low')).toBeTruthy();
     }, 2147483647);
   
     it('toggles label visibility on marker press', async () => {
