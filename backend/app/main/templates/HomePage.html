@@ -15,11 +15,29 @@
     <button class="tablinks" onclick="openTab(event, 'Logout')" type="submit">Logout</button>
     <button class="tablinks" onclick="openTab(event, 'ManageUsers')">Users</button>
     <button class="tablinks" onclick="openTab(event, 'BugsReports')">Bugs Reports</button>
+    <button class="tablinks" id="AuthoritiesReportButton" onclick="openTab(event, 'AuthoritiesReport')">Authorities Report</button>
 </div>
 
 <div id="Logout" class="tabcontent">
   <h3>Logout</h3>
   <p>Logout</p>
+</div>
+
+<div id="AuthoritiesReport" class="tabcontent">
+    <div id="AuthoritiesReportContent">
+        <h2>Send the authorities a report:</h2>
+        <div id="authoritiesForm" class="authoritiesForm">
+            <label for="title">Subject:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
+            <label for="title">Location:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
+            <label for="notificationMessage">Your report:</label>
+            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
+            <div class="container">
+                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
+                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
+            </div>
+    </div> 
 </div>
 
 <div id="ManageUsers" class="tabcontent">
@@ -59,6 +77,9 @@
         <tbody id="reportsTableBody"></tbody>
     </table>
 </div>
+
+
+
 </body>
 </html>
 
