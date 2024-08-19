@@ -4,21 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="/static/js/manageUsers.js" defer></script>
+    <script src="/static/js/userReports.js" defer></script>
 </head>
 <body>
-    <h4>
-        <div class="login-container">
-            <form action="logout" method="post">
-        just Logout. for now. <button type="submit">Logout! </button>
-            </form>
-            <form action="{{url_for('manager.manageUsersPage')}}" method="get" >
-                 <button type="submit">manage Users </button>
-            </form>
-        </form>
-        <form action="{{url_for('manager.UserReports')}}" method="get" >
-             <button type="submit">Users reports </button>
-        </form>
-    </h4>
+<div class="tab">
+    <button class="tabTitle" >Dog Worry</button>
+    <button class="tablinks" onclick="openTab(event, 'Logout')" type="submit">Logout</button>
+    <button class="tablinks" onclick="openTab(event, 'ManageUsers')">Users</button>
+    <button class="tablinks" onclick="openTab(event, 'BugsReports')">Bugs Reports</button>
+</div>
+
+<div id="Logout" class="tabcontent">
+  <h3>Logout</h3>
+  <p>Logout</p>
+</div>
+
+<div id="ManageUsers" class="tabcontent">
+    <div id="manageUsersContent">
+        <div class="container">
+            <h1>Manage Users</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <!--maybe add name after fixing mongodb-->
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- user rows will be added dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="BugsReports" class="tabcontent">
+    <div id="BugsReportsContent">
+        <div class="container">
+            <h1>Application reports:</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>description</th>
+                        <th>Status</th>
+                        <th>Manage</th>                
+                    </tr>
+            </thead>
+        <tbody id="reportsTableBody"></tbody>
+    </table>
+</div>
 </body>
 </html>
+

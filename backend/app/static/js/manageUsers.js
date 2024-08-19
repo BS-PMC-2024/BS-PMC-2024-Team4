@@ -1,47 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Users</title>
-    <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
+        function openTab(evt, tabName) {
+          var i, tabcontent, tablinks;
+          tabcontent = document.getElementsByClassName("tabcontent");
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+          }
+          tablinks = document.getElementsByClassName("tablinks");
+          for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+          }
+          document.getElementById(tabName).style.display = "block";
+          evt.currentTarget.className += " active";
         }
-        table, th, td {
-            border: 1px solid black;
-        }
-        th, td {
-            padding: 8px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .delete-button {
-            color: red;
-            cursor: pointer;
-        }
-    </style>
-</head>
-<body>
-    <h1>Manage Users</h1>
-    <table>
-        <thead>
-            <tr>
-                <!--maybe add name after fixing mongodb-->
-                <th>ID</th>
-                <th>Email</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody id="userTableBody">
-            <!-- user rows will be added dynamically -->
-        </tbody>
-    </table>
 
-    <script>
+        function loadManageUsersContent() {
+            const contentDiv = document.getElementById('manageUsersContent');
+            if (contentDiv.innerHTML === '') {
+                fetch('/manager/manageUsersPage')
+                .then(response => response.text())
+                .then(html => {
+                    contentDiv.innerHTML = html;
+                    fetchUsers(); 
+                })
+                .catch(error => {
+                    console.error('Error fetching the Manage Users content:', error);
+                });
+            }
+        }
+
         function deleteUser(userId) {
             //change the confirm into a popup window designed
             const confirmDelete = confirm('Are you sure you want to delete this user?');
@@ -93,7 +78,7 @@
         }
 
         // Fetch users when the page loads
-        window.onload = fetchUsers;
-    </script>
-</body>
-</html>
+        window.onload = function() {
+            fetchUsers();
+            fetchReports();
+        };

@@ -17,7 +17,7 @@ def login():
             return redirect(url_for('main.Main'))
         else:
             # Log unsuccessful login and flash a message
-            flash('Invalid credentials')
+            flash('Invalid mail or password')
             print("Failed login attempt with:", email, password)  
     return render_template('LoginPage.html')
 
