@@ -23,8 +23,14 @@ const BugReportScreen = () => {
             setLoading(false);
         }
         else
-        Alert.alert("User id", data.error)
-        setLoading(false);
+        Alert.alert(
+            "We can't find who you are", 
+            "Login or sign up to submit a report, so we would know how to contact you",
+            [{ text: "OK", onPress: () => {
+                setLoading(false);
+                navigation.goBack();
+            }}]
+        );
     }
 
     useEffect(() => {

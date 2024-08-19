@@ -76,9 +76,3 @@
                 console.error('Error fetching users:', error);
             });
         }
-
-        // Fetch users when the page loads
-        window.onload = function() {
-            fetchUsers();
-            fetchReports();
-        };

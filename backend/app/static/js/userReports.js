@@ -25,8 +25,8 @@ function populateReports(reports) {
         
         if (report.status === 'waiting') {
             
-            buttonHTML = `<button onclick="updateStatus('${report._id}', '${report.user_id}', 'Backend')">Backend</button>
-                        <button onclick="updateStatus('${report._id}', '${report.user_id}', 'Frontend')">Frontend</button>`;
+            buttonHTML = `<button class="button_table" onclick="updateStatus('${report._id}', '${report.user_id}', 'Backend')">Backend</button>
+                        <button class="button_table" onclick="updateStatus('${report._id}', '${report.user_id}', 'Frontend')">Frontend</button>`;
                         statusClass = 'status-waiting';
             statusStyle = 'color: red;'; 
         } else if (report.status === 'In Progress') {
