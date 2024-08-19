@@ -232,6 +232,7 @@ const InfoStack = () => (
     <Stack.Screen name="InfoMain" component={InfoScreen} options={{headerLeft: () => null,}}/>
     <Stack.Screen name='VetNearby' component={VetNearby} options={{headerLeft: () => null,}} />
     <Stack.Screen name='SendVet' component={SendToVet} options={{headerLeft: () => null,}} />
+    
   </Stack.Navigator>
 )
 

@@ -29,7 +29,7 @@ const report_styles = StyleSheet.create({
         textAlign:'center',
         width: '100%',
     },
-
+    
     buttonContainer: {
         width: '100%',
         flexDirection: 'row',
