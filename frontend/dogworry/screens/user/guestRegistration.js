@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+<<<<<<< Updated upstream
 import { View, TextInput, Button, StyleSheet, Text, Alert,Image , TouchableOpacity} from 'react-native';
 import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
 import auth from '../../fbauth'
@@ -6,18 +7,81 @@ import api_url from '../../config'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
+=======
+import { View, TextInput, Button, StyleSheet, Text, Alert } from 'react-native';
+import * as Google from 'expo-auth-session/providers/google';
+import { makeRedirectUri, useAuthRequest, ResponseType } from 'expo-auth-session';
+import * as WebBrowser from 'expo-web-browser';
+import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword } from 'firebase/auth';
+import auth from '../../fbauth'
+import api_url from '../../config'
+>>>>>>> Stashed changes
 
+WebBrowser.maybeCompleteAuthSession();
 
 const RegisterScreen = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+<<<<<<< Updated upstream
     const [confirmPassword, setConfirm] = useState('');
     const [showTooltip, setShowTooltip] = useState(false);
     const navigation = useNavigation();
+=======
+
+    const [request, response, promptAsync] = Google.useIdTokenAuthRequest({
+      clientId: '721153684567-lsnpf6236ju6tvain1omub6st8gpefcg.apps.googleusercontent.com',
+      redirectUri: makeRedirectUri({
+        native: 'dogworry://redirect',
+        useProxy: true,
+      }),
+      responseType: ResponseType.IdToken,
+    });
+
+    useEffect(() => {
+      if (response?.type === 'success') {
+        const { id_token } = response.params;
+  
+        const credential = GoogleAuthProvider.credential(id_token);
+        signInWithCredential(auth, credential)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            Alert.alert('Successfully signed in as:', user.displayName);
+          })
+          .catch((error) => {
+            console.error(error);
+            Alert.alert('Failed to sign in:', error.message);
+          });
+      }
+    }, [response]);
+    
+    const googleSignIn = async () => {
+       try {
+        console.log(response)
+        if (response?.type === 'success') {
+          const { id_token } = response.params;
+    
+          const credential = GoogleAuthProvider.credential(id_token);
+          signInWithCredential(auth, credential)
+            .then((userCredential) => {
+              const user = userCredential.user;
+              Alert.alert('Successfully signed in as:', user.displayName);
+            })
+            .catch((error) => {
+              console.error(error);
+              Alert.alert('Failed to sign in:', error.message);
+            });
+        }
+        } catch (error) {
+            console.error(error);
+            Alert.alert('Failed to sign in:', error.message);
+        }
+    };
+>>>>>>> Stashed changes
     
     const handleRegister = async () => {
       try {
+<<<<<<< Updated upstream
         if(confirmPassword === password)
         {
           const userCredential = await createUserWithEmailAndPassword(auth, email, password);
@@ -33,6 +97,13 @@ const RegisterScreen = () => {
           Alert.alert("Passwords do not match");
         }
         
+=======
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = await userCredential.user.uid;
+
+        // Send UID to the backend
+        await axios.post(`${api_url}user/saveUserDetails`, {'user_id': uid, 'email': email});
+>>>>>>> Stashed changes
       } catch (err) {
         Alert.alert(err.message);
       }
@@ -169,8 +240,12 @@ const styles = StyleSheet.create({
   },
 });
 
+<<<<<<< Updated upstream
 
 export default RegisterScreen;
 
 
 
+=======
+export default RegisterScreen;
+>>>>>>> Stashed changes
