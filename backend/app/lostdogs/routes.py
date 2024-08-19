@@ -13,10 +13,6 @@ def getAllDogs():
         dog_db = mongo.client.get_database("lostDogs").get_collection("lostdog")
         dogs = list(dog_db.find({}, {"_id": 0}))  # Retrieve all documents
         
-        for dog in dogs:
-            if 'avatar' in dog:
-                dog['avatar'] = base64.b64encode(dog['avatar']).decode('utf-8')
-        
         return json_util.dumps(dogs), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -45,11 +41,14 @@ def reportLostDog():
         if phone_exist != dog_exist or not phone_regex.match(data['owner_phone']):
              return {'success': False, 'error': 'Phone already taken'}
         
-
     new_report = {
-        'dog_name': dog_name,
-        'lost_area': lost_area,
+        'friendly': 'true',
+        'identifier':'friendly',
+        'lost_area' : lost_area,
+        "type" : 'lavrador',
         'owner_phone': owner_phone,
+        'avatar': "",
+        'dog_name':dog_name,
     }
 
     try:
