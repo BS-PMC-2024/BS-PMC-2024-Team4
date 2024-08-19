@@ -28,17 +28,17 @@
 <div id="AuthoritiesReport" class="tabcontent">
     <div id="AuthoritiesReportContent">
         <h2>Send the authorities a report:</h2>
-        <div id="authoritiesForm" class="authoritiesForm">
+        <form id="authoritiesForm" class="authoritiesForm" onsubmit="return handleFormSubmit(event);">
             <label for="title">Subject:</label>
-            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
+            <input type="text" id="notificationTitle" placeholder="Enter Subject..." required/>
             <label for="title">Location:</label>
-            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
+            <input type="text" id="notificationLocation" placeholder="Enter an address as accurate as possible..." required/>
             <label for="notificationMessage">Your report:</label>
-            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
+            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10" required></textarea>
             <div class="container">
-                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
-                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
+                <button type="submit" id="authorb" class="button">Send Report</button>
             </div>
+        </form>
     </div> 
 </div>
 
