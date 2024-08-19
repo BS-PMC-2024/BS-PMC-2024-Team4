@@ -43,6 +43,11 @@ const MyDogs = () => {
             setDogs(data);
             setLoading(false);
             setHasDogs(data.length > 0);
+            AsyncStorage.setItem("userDogs", JSON.stringify(data));
+        }
+        else if(resp.status === 204) {
+            setLoading(false);
+            setHasDogs(false);
         }
     };
 
@@ -73,16 +78,16 @@ const MyDogs = () => {
 
     return (
         <View style={styles.dogsContainer}>
-            <VirtualizedList
-                style={styles.dogList}
-                data={dogs}
-                initialNumToRender={3}
-                contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
-                renderItem={renderDogItem}
-                keyExtractor={(item, index) => index.toString()}
-                getItemCount={getItemCount}
-                getItem={getItem}
-            />
+            {hasDogs && (<VirtualizedList
+                                style={styles.dogList}
+                                data={dogs}
+                                initialNumToRender={3}
+                                contentContainerStyle={{justifyContent: 'center', alignItems: 'center'}}
+                                renderItem={renderDogItem}
+                                keyExtractor={(item, index) => index.toString()}
+                                getItemCount={getItemCount}
+                                getItem={getItem}
+                            />)}
             <AddDog hasDogs={hasDogs} onDogAdded={fetchData} userUid={uid} selectedDog={selectedDog} setSelectedDog={setSelectedDog} />
             <BackButton />
         </View>
@@ -194,9 +199,10 @@ const AddDog = (props) => {
                 :
                 (
                     <View>
-                        <Foundation name="no-dogs" size={24} color="black" />
+                        <Foundation name="no-dogs" size={50} color="black" />
                         <TouchableOpacity onPress={openModal}>
-                            <FontAwesome6 name="plus-square" size={24} color="black" />
+                            <Text>Add Dog</Text>
+                            <FontAwesome6 name="plus-square" size={50} color="black" />
                         </TouchableOpacity>
                     </View>
                 )

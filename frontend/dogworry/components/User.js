@@ -3,38 +3,41 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Modal } from 'react-na
 import { FontAwesome6, MaterialCommunityIcons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { useNavigation, DrawerActions } from '@react-navigation/native';
-import api_url from '../config';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { set } from 'react-hook-form';
 
 const Drawer = createDrawerNavigator();
 
-export const User = () => {
+export const User = ( props ) => {
     const [show, setShow] = useState(false);
-    const [avatar, setAvatar] = useState(null);
+    const { avatar, setAvatar } = props
 
     const navigation = useNavigation();
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (avatar === null) {
-              try{
-                const value = await AsyncStorage.getItem("avatar");
-                const uid = await AsyncStorage.getItem('userUid');
-                if(value !== null) {
-                  setAvatar(value);
+      const fetchAvatar = async () => {
+          try {
+              let storedAvatar = await AsyncStorage.getItem('avatar');
+              if (storedAvatar) {
+                  setAvatar(storedAvatar);
                   setShow(true);
+              } else {
+                  setShow(false);
               }
-            }
-              catch(e){
-                console.log("Error loading avatars for users", e);
-              }
-            }
-        };
-        fetchData();
-    }, [avatar]);
+          } catch (e) {
+              console.log("Error loading avatar", e);
+          }
+      };
 
+      fetchAvatar();
+  }, []);
+
+  useEffect(() => {
+      if (avatar) {
+          setShow(true);
+      } else {
+          setShow(false);
+      }
+  }, [avatar]);
 
     return (
         <TouchableOpacity style={styles.userContainer} onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -44,6 +47,7 @@ export const User = () => {
     );
 
 };
+
     
 export const ProfileLabel = () => {
   return (
@@ -61,10 +65,6 @@ export const MyDogsLabel = () => {
           <Text style={{paddingLeft: 10, fontSize: 20}}>My Dogs</Text>
       </View>
   )
-}
-
-export const ColorPicker = () => {
-  [color, setColor]
 }
 
 const styles = StyleSheet.create({

@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, ActivityIndicator, Button, Touchable, Dimensions, Platform, TouchableOpacity } from 'react-native';
-import MapView, { Marker, Polyline, UrlTile } from 'react-native-maps';
+import MapView, { Marker, Polyline, UrlTile, Circle  } from 'react-native-maps';
 import * as Location from 'expo-location';
 import ParkMarker from '../components/ParkMarker';
+import RoadBlockIcon from '../components/RoadBlockIcon';
 import MapStyles from '../styles/MapStyles';
 import api_url from '../config';
 import axios from 'axios';
 import { WalkRoute, GetRoutes } from '../components/Routes';
 import WaterMarker from '../components/WaterMarker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -25,18 +27,20 @@ const MapScreen = () => {
   const [isTracking, setIsTracking] = useState(true); // State to manage location updates
   const mapRef = useRef(null);
   const [showWater, setShowWater] = useState(false);
+  const [blockedAreas, setBlockedAreas] = useState(null);
 
   const fetchData = async() => {
     setLoading(true);
     try {
-      // Fetch parks data
-      const parksResponse = await axios.get(`${api_url}info/getParks/`);
+      const [parksResponse, temperaturesResponse, waterResponse, blockedResponse] = await Promise.all([
+        axios.get(`${api_url}info/getParks/`),
+        axios.get(`${api_url}temperature/token`),
+        axios.get(`${api_url}info/getWaterSpots/`),
+        axios.get(`${api_url}info/getBlockedAreas/`),
+      ]);
+
       const parksData = parksResponse.data;
-
-      // Fetch temperatures data
-      const temperaturesResponse = await axios.get(`${api_url}temperature/token`);
       const temperaturesData = temperaturesResponse.data;
-
       // Associate temperatures with parks
       const parksWithTemperatures = parksData.map((park, index) => ({
         ...park,
@@ -44,23 +48,15 @@ const MapScreen = () => {
       }));
   
       setParks(parksWithTemperatures);
-      setLoading(false);
-      
-      axios.get(`${api_url}info/getWaterSpots/`)
-      .then(response => {
-        setWaterSpots(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('error fetching water data', error);
-        setLoading(false);
-      });
+      setWaterSpots(waterResponse.data);
+      setBlockedAreas(blockedResponse.data);
 
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -112,12 +108,23 @@ const MapScreen = () => {
   };
 
   const toggleParks = () => {
+    if(!showParks)
+      fetchData();
     setShowParks(prevState => !prevState);
   };
 
   const toggleWaterSpots = () => {
+    if(!showWater)
+      fetchData();
     setShowWater(prevState => !prevState);
   };
+
+  // delete later 
+  const circleCenter = {
+    latitude: 31.255578, 
+    longitude: 34.790095
+  }
+  const circleRadius = 1000;
 
   useEffect(() => {
     if (routeCoordinate && mapRef.current) {
@@ -165,6 +172,7 @@ const MapScreen = () => {
         ref={mapRef}
         onTouchStart={handleTouch}
       >
+        
         <UrlTile
           urlTemplate="https://api.maptiler.com/maps/basic-v2/{z}/{x}/{y}.png?key=mmwdR1ETX0fPK2yovC5E"
           maximumZ={30}
@@ -179,15 +187,11 @@ const MapScreen = () => {
         {showWater && waterSpots.map((item, index) => (
           <WaterMarker item={item} key={index}/>
         ))}
-        {location && (
-          <Marker
-            coordinate={{
-              latitude: location.coords.latitude,
-              longitude: location.coords.longitude,
-            }}
-            title="Your Location"
-          />
-        )} 
+
+        {blockedAreas && blockedAreas.map((area, index) => (
+            <RoadBlockIcon item={area} key={index}/>
+        ))                             
+        }   
       </MapView>
       <GetRoutes currentCoordinates={[location.coords.latitude, location.coords.longitude]} setRoute={setRouteCoordinate}/>
     </View>

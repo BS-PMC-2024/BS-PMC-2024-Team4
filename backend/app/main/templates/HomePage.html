@@ -4,17 +4,150 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="/static/js/main.js" defer></script>
+    <script src="/static/js/manageUsers.js" defer></script>
+    <script src="/static/js/managePoints.js" defer></script>
+    <script src="/static/js/userReports.js" defer></script>
+    <script src="/static/js/notifications.js" defer></script>
 </head>
 <body>
-    <h4>
-        <div class="login-container">
-            <form action="logout" method="post">
-        just Logout. for now. <button type="submit">Logout! </button>
-            </form>
-            <form action="{{url_for('manager.manageUsersPage')}}" method="get" >
-                 <button type="submit">manage Users </button>
-                    </form>
-    </h4>
+<div class="tab">
+    <button class="tabTitle">Dog Worry</button>
+    <button class="tablinks" onclick="openTab(event, 'Logout')" type="submit">Logout</button>
+    <button class="tablinks" onclick="openTab(event, 'ManageUsers')">Users</button>
+    <button class="tablinks" onclick="openTab(event, 'BugsReports')">Bugs Reports</button>
+    <button class="tablinks" onclick="openTab(event, 'Notify')">Notifications Center</button>
+    <button class="tablinks" id="AuthoritiesReportButton" onclick="openTab(event, 'AuthoritiesReport')">Authorities Report</button>
+    <button class="tablinks" onclick="openTab(event, 'ManagePoints')">Manage Interest Points</button>
+</div>
+
+<div id="Logout" class="tabcontent">
+    <h3>Logout</h3>
+    <p>Logout</p>
+</div>
+
+<div id="ManageUsers" class="tabcontent">
+    <div id="manageUsersContent">
+        <div class="container">
+            <h1>Manage Users</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Email</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="userTableBody">
+                    <!-- user rows will be added dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="Notify" class="tabcontent">
+    <div id="NotifyContent">
+        <div class="container">
+            <h1>Notify Users</h1>
+            <h1>click on a report from the list and send all users a notification</h1>
+            <table id="approved_reports">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="notifyTableBody"></tbody>
+            </table>
+            <div id="notificationForm" class="notificationForm">
+                <label for="title">Enter the title for the push notification:</label>
+                <input type="text" id="notificationTitle" placeholder="example: Road Blocked" />
+                <label for="notificationMessage">Your message:</label>
+                <textarea id="notificationMessage" rows="4"></textarea>
+                <div class="container">
+                    <button type="button" class="button" onclick="handleNotifySubmit()">Send Notification</button>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="BugsReports" class="tabcontent">
+    <div id="BugsReportsContent">
+        <div class="container">
+            <h1>Application reports:</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Report ID</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Manage</th>
+                    </tr>
+                </thead>
+                <tbody id="reportsTableBody"></tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div id="ManagePoints" class="tabcontent">
+    <h1>Manage Points of Interest</h1>
+    <!-- Add form to manage points -->
+    <form id="pointForm">
+        <input type="hidden" id="pointId">
+
+        <div id="inputContainer">
+            <p>Interest Point Name:</p>
+            <input type="text" id="pointName" placeholder="Point Name" required>
+        </div>
+
+        <div id="inputContainer">
+            <p>Type:</p>
+            <select type="text" id="pointType" onchange="handleAddress(this.value)" required>
+                <option value="park">Dog Park</option>
+                <option value="water">Water Spot</option>
+            </select>
+
+            <p id="parkAddressLabel">Park Address:</p>
+            <input type="text" id="parkAddress" placeholder="Park Address" required>
+        </div>
+
+        <div id="inputContainer">
+            <p>Location:</p>
+            <input type="text" id="pointLocation" placeholder="Location" required readonly>
+            <button type="submit" class="pointButtons" id="submitPointButton">Add/Update Point</button>
+            <!-- Remove button, hidden by default -->
+            <button type="button" class="pointButtons" id="removePointButton" style="display: none;">Remove Point</button>
+        </div>
+    </form>
+    <div id="map"></div>
+</div>
+
+<div id="AuthoritiesReport" class="tabcontent">
+    <div id="AuthoritiesReportContent">
+        <h2>Send the authorities a report:</h2>
+        <div id="authoritiesForm" class="authoritiesForm">
+            <label for="title">Subject:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
+            <label for="title">Location:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
+            <label for="notificationMessage">Your report:</label>
+            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
+            <div class="container">
+                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
+                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
+            </div>
+    </div> 
+</div>
+
 </body>
 </html>

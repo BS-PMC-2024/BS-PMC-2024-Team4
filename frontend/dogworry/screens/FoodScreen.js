@@ -30,40 +30,27 @@ const FoodScreen = () => {
         });
     }, []);
 
-
-
     const handleSearch = (query) => {
         setSearchQuery(query);
         const formattedQuery = query.toLowerCase();
         const filteredData = filter(fullData, (item) => { 
-            return contains(item, formattedQuery);
+            return contains(item.name, formattedQuery);
         });
         setData(filteredData);
     };
 
     const contains = (name, query) => {
-        if (name.includes(query)) {
-            return true;
-        }
-        return false;
+        return name.toLowerCase().includes(query);
     };
-
-    if (loading) {
-        return (
-          <View style={styles.container}>
-            <ActivityIndicator size="large" color="#0000ff" />
-          </View>
-        );
-    }
 
     return (
         <View style={styles_info.screenContainer}>
-            <View style={styles_info.searchBox}>
+            {/* <View style={styles_info.searchBox}>
                 <TextInput style={styles_info.searchInput} placeholder='Search' clearButtonMode='always'
                     value={searchQuery}
                     onChangeText={(query) => handleSearch(query)}
                 />
-            </View>
+            </View> */}
             <FlatList data={data}
                 keyExtractor={item => item.name} renderItem={({ item }) => ( <FoodGridItem food={item}></FoodGridItem> )}
                 numColumns={3}

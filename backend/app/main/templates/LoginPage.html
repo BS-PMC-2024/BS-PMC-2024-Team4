@@ -4,34 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login</title>
-    <link rel="stylesheet" href="styles.css"> <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="/static/styles.css"> 
 </head>
-<body>
-    <div class="login-container">
-        <form action="/" method="post">
-            <h2>Admin Login</h2>
-
-            <!-- Flash message display -->
-            {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="flash-messages">
-                        {% for message in messages %}
-                            <p>{{ message }}</p>
-                        {% endfor %}
+<body class="bodyLogin">
+    <div class="main-screen">
+        <div class="login-container">
+            <form action="/" method="post">
+                <div class="container_basic">
+                    <h2>Dog Worry</h2>
+                    <h1>Admin Login</h1>
+                    <!-- Flash message display -->
+                    {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+                            <div class="flash-messages">
+                                {% for message in messages %}
+                                    <p>{{ message }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endwith %}
+    
+                    <div class="input-group">
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required>
                     </div>
-                {% endif %}
-            {% endwith %}
-
-            <div class="input-group">
-                <label for="email">Email:</label>
-                <input type="email" id="email" name="email" required>
-            </div>
-            <div class="input-group">
-                <label for="password">Password:</label>
-                <input type="password" id="password" name="password" required>
-            </div>
-            <button type="submit">Login </button>
-        </form>
+                    <div class="input-group">
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+                    </div>
+                    <button type="submit" class="button">Login </button>
+                </div>
+            </form>
+        </div>
+        <div class="background-image"></div>
     </div>
 </body>
 </html>
+
+
+
+
+
+

@@ -5,7 +5,7 @@
     "slug": "dogworry",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/logo.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./Images/dogs.jpg",
@@ -27,7 +27,9 @@
       },
       "softwareKeyboardLayoutMode": "pan",
       "package": "com.dogworry.behappy",
-      "permissions": ["ACCESS_FINE_LOCATION"]
+      "permissions": [
+        "ACCESS_FINE_LOCATION"
+      ]
     },
     "web": {
       "favicon": "./assets/favicon.png"

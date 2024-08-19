@@ -6,3 +6,4 @@ const MockedIcon = (props) => <Text>{props.name}</Text>;
 export const FontAwesome6 = MockedIcon;
 export const Foundation = MockedIcon;
 export const MaterialCommunityIcons = MockedIcon;
+export const AntDesign = MockedIcon;
