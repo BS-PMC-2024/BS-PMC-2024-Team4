@@ -11,6 +11,7 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
     const [dogs, setDogs] = useState([]);
     const [loading, setLoading] = useState(false);
     const [allDogsLiked, setAllDogsLiked] = useState(false);
+    const [hasDogs, setHasDogs] = useState(false);
 
     useEffect(() => {
         const fetchDogs = async () => {
@@ -19,6 +20,8 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
                 if (data) {
                     const dogsList = JSON.parse(data);
                     setDogs(dogsList);
+                    if(dogsList.length > 0)
+                        setHasDogs(true);
 
                     // Calculate whether all dogs have this point as a favorite
                     const allLiked = dogsList.every(dog => isFavorite(dog, pointID));
@@ -96,6 +99,7 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
     }
 
     return (
+        hasDogs &&
         <View style={FavoriteStyle.heartContainer}>
             <TouchableOpacity onPress={() => setOpenModal(true)}>
                 <AntDesign name={allDogsLiked ? "heart" : "hearto"}
@@ -109,6 +113,7 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
                 visible={openModal}
                 onRequestClose={handleClose}
             >
+                {openModal &&
                 <View style={FavoriteStyle.modalOverlay}>
                     <View style={FavoriteStyle.modalContent}>
                         <Text style={FavoriteStyle.modalTitle}>Add {parkName} to favorites</Text>
@@ -135,7 +140,7 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
                             <Text style={FavoriteStyle.cancelButtonText}>Close</Text>
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View>}
             </Modal>
         </View>
     );

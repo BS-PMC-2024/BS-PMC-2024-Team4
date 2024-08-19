@@ -145,6 +145,7 @@ const CustomProfileDrawer = (props) => {
               await AsyncStorage.removeItem('userUid');
               await AsyncStorage.removeItem('avatar');
               await AsyncStorage.removeItem('firstName');
+              await AsyncStorage.removeItem('userDogs');
               setAvatar(null);
               setName("");
               setIsLoggedIn(false);

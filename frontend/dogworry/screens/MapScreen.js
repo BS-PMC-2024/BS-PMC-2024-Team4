@@ -9,6 +9,7 @@ import api_url from '../config';
 import axios from 'axios';
 import { WalkRoute, GetRoutes } from '../components/Routes';
 import WaterMarker from '../components/WaterMarker';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -35,12 +36,11 @@ const MapScreen = () => {
         axios.get(`${api_url}info/getParks/`),
         axios.get(`${api_url}temperature/token`),
         axios.get(`${api_url}info/getWaterSpots/`),
-        axios.get(`${api_url}info/getBlockedAreas/`)
+        axios.get(`${api_url}info/getBlockedAreas/`),
       ]);
 
       const parksData = parksResponse.data;
       const temperaturesData = temperaturesResponse.data;
-
       // Associate temperatures with parks
       const parksWithTemperatures = parksData.map((park, index) => ({
         ...park,
@@ -50,6 +50,7 @@ const MapScreen = () => {
       setParks(parksWithTemperatures);
       setWaterSpots(waterResponse.data);
       setBlockedAreas(blockedResponse.data);
+
     } catch (error) {
       console.error('Error fetching data:', error);
       setLoading(false);
@@ -107,10 +108,14 @@ const MapScreen = () => {
   };
 
   const toggleParks = () => {
+    if(!showParks)
+      fetchData();
     setShowParks(prevState => !prevState);
   };
 
   const toggleWaterSpots = () => {
+    if(!showWater)
+      fetchData();
     setShowWater(prevState => !prevState);
   };
 

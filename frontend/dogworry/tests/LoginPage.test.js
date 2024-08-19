@@ -13,7 +13,10 @@ jest.mock('@firebase/auth', () => ({
   signInWithEmailAndPassword: jest.fn(),
   sendPasswordResetEmail: jest.fn().mockResolvedValue(),
 }));
-jest.mock('@react-native-async-storage/async-storage');
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  setItem: jest.fn().mockResolvedValue(Promise.resolve()), // Ensures it resolves successfully
+  getItem: jest.fn().mockResolvedValue(JSON.stringify([])), // Mock response for userDogs
+}));
 jest.mock('../fbauth', () => ({}));
 jest.mock('axios');
 jest.mock('@react-navigation/native', () => ({
@@ -67,7 +70,18 @@ describe('LoginForm', () => {
     getAuth.mockReturnValue({});
     signInWithEmailAndPassword.mockResolvedValue({ user: mockUser });
 
-    axios.post.mockResolvedValueOnce({ data: { avatar: 'avatar' }, status: 200 });
+    axios.post.mockResolvedValueOnce({
+      data: {
+        avatar: 'avatar',
+        first_name: 'John'
+      },
+      status: 200
+    }).mockResolvedValueOnce({
+      data: [],
+      status: 200
+    });
+    
+    AsyncStorage.setItem.mockResolvedValue(Promise.resolve());
 
     const { getByText, getByPlaceholderText } = render(
       <LoginForm navigation={mockNavigation} setAvatar={setAvatar} setName={setName} />

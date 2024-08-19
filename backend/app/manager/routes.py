@@ -89,7 +89,7 @@ def update_status(reportId, userId):
     else:
         return jsonify({'error': 'Update failed'}), 400
     
-    
+
 @bp.route('/SendNotification', methods=['POST'])
 def SendNotification():
     data = request.json
@@ -108,3 +108,108 @@ def SendNotification():
         "notificationMessage": notificationMessage
     })  
     return jsonify({'message': 'Notification sent successfully'}), 200
+
+
+
+# ------------ Point of Interest ---------------
+
+@bp.route('/listPointsOfInterest', methods=['GET'])
+def list_points_of_interest():
+    db = mongo.client.get_database("Map")
+    parks = db.get_collection("parks").find()  # Retrieve all documents from 'parks' collection
+    water_spots = db.get_collection("Water").find()  # Retrieve all documents from 'Water' collection
+    
+    points_of_interest = []
+
+    # Process parks
+    for park in parks:
+        point = {
+            "point_id": str(park['_id']),
+            "point_name": park.get("name", "Unnamed Park"),
+            "location": {
+                "lat": park['latitude'],
+                "lng": park['longitude']
+            },
+            "type": "park",
+            "park_address": park.get("address")
+        }
+        points_of_interest.append(point)
+
+    # Process water spots
+    for water in water_spots:
+        point = {
+            "point_id": str(water['_id']),
+            "point_name": water.get("name", "Unnamed Water Spot"),
+            "location": {
+                "lat": water['latitude'],
+                "lng": water['longitude']
+            },
+            "type": "water"
+        }
+        points_of_interest.append(point)
+
+    return jsonify({"points_of_interest": points_of_interest}), 200
+
+@bp.route('/addPointOfInterest', methods=['POST'])
+def add_point_of_interest():
+    db = mongo.client.get_database("Map")
+    data = request.json
+    
+    collection_name = "parks" if data['type'] == "park" else "Water"
+    collection = db.get_collection(collection_name)
+
+    new_point = {
+        "name": data.get("point_name", "Unnamed Point"),
+        "latitude": float(data['location']['lat']),
+        "longitude": float(data['location']['lng']), 
+    }
+
+    if(collection_name == "parks"):
+        new_point['address'] = data.get("park_address", "Unknown Address")
+
+    result = collection.insert_one(new_point)
+
+    if result.inserted_id:
+        return jsonify({"success": True, "point_id": str(result.inserted_id)}), 201
+    else:
+        return jsonify({"success": False, "error": "Failed to add point"}), 500
+
+@bp.route('/updatePointOfInterest/<point_id>', methods=['PUT'])
+def update_point_of_interest(point_id):
+    db = mongo.client.get_database("Map")
+    data = request.json
+    
+    collection_name = "parks" if data['type'] == "park" else "Water"
+    collection = db.get_collection(collection_name)
+
+    update_data = {
+        "name": data.get("point_name", "Unnamed Point"),
+        "latitude": float(data['location']['lat']),
+        "longitude": float(data['location']['lng'])
+    }
+
+    if(collection_name == "parks"):
+        update_data['address'] = data.get("park_address", "Unknown Address")
+
+    result = collection.update_one({"_id": ObjectId(point_id)}, {"$set": update_data})
+
+    if result.matched_count > 0:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Failed to update point"}), 404
+
+@bp.route('/deletePointOfInterest/<point_id>', methods=['DELETE'])
+def delete_point_of_interest(point_id):
+    db = mongo.client.get_database("Map")
+    point_type = request.args.get('type')
+    
+    # Determine the collection based on the point type
+    collection_name = "parks" if point_type == "park" else "Water"
+    collection = db.get_collection(collection_name)
+
+    result = collection.delete_one({"_id": ObjectId(point_id)})
+
+    if result.deleted_count > 0:
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Failed to delete point"}), 404
