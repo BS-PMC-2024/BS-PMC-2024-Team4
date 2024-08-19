@@ -30,23 +30,6 @@
     <p>Logout</p>
 </div>
 
-<div id="AuthoritiesReport" class="tabcontent">
-    <div id="AuthoritiesReportContent">
-        <h2>Send the authorities a report:</h2>
-        <div id="authoritiesForm" class="authoritiesForm">
-            <label for="title">Subject:</label>
-            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
-            <label for="title">Location:</label>
-            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
-            <label for="notificationMessage">Your report:</label>
-            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
-            <div class="container">
-                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
-                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
-            </div>
-    </div> 
-</div>
-
 <div id="ManageUsers" class="tabcontent">
     <div id="manageUsersContent">
         <div class="container">
@@ -113,8 +96,6 @@
             </table>
         </div>
 
-
-
     </div>
 </div>
 
@@ -149,6 +130,23 @@
         </div>
     </form>
     <div id="map"></div>
+</div>
+
+<div id="AuthoritiesReport" class="tabcontent">
+    <div id="AuthoritiesReportContent">
+        <h2>Send the authorities a report:</h2>
+        <div id="authoritiesForm" class="authoritiesForm">
+            <label for="title">Subject:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
+            <label for="title">Location:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
+            <label for="notificationMessage">Your report:</label>
+            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
+            <div class="container">
+                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
+                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
+            </div>
+    </div> 
 </div>
 
 </body>
