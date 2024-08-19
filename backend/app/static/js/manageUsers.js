@@ -10,6 +10,11 @@
           }
           document.getElementById(tabName).style.display = "block";
           evt.currentTarget.className += " active";
+
+          if (tabName === 'ManagePoints') {
+            initializeMap();
+            setTimeout(() => map.invalidateSize(), 100); // Adjust the map size if the tab was hidden
+        }
         }
 
         function loadManageUsersContent() {

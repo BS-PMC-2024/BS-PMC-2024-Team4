@@ -5,7 +5,7 @@ import MapStyles from '../styles/MapStyles';
 import DogParkSvg from '../assets/svgs/dog-park.svg';
 import AddFavoritePoint from './AddFavoritePoint';
 
-const ParkMarker = ({ park }) => {
+const ParkMarker = React.memo(({ park }) => {
     const [openModal, setOpenModal] = useState(false);
 
     const traffic = park.traffic;
@@ -34,6 +34,6 @@ const ParkMarker = ({ park }) => {
           </Callout>
         </Marker>
     );
-};
+});
 
 export default ParkMarker;
