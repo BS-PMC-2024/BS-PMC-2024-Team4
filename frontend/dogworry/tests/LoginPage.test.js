@@ -57,16 +57,25 @@ describe('LoginForm', () => {
 
   it('handles successful login', async () => {
     const mockUser = { uid: '123', email: 'test@example.com' };
+    const setAvatar = jest.fn();
+    const setName = jest.fn();
+
+    jest.spyOn(React, 'useState')
+      .mockImplementationOnce(() => ['', setAvatar]) // Mock setAvatar
+      .mockImplementationOnce(() => ['', setName]);  // Mock setName
+    
     getAuth.mockReturnValue({});
     signInWithEmailAndPassword.mockResolvedValue({ user: mockUser });
 
-    const { getByText, getByPlaceholderText } = render(<LoginForm navigation={mockNavigation} />);
+    axios.post.mockResolvedValueOnce({ data: { avatar: 'avatar' }, status: 200 });
+
+    const { getByText, getByPlaceholderText } = render(
+      <LoginForm navigation={mockNavigation} setAvatar={setAvatar} setName={setName} />
+    );
 
     fireEvent.changeText(getByPlaceholderText('EMAIL'), 'test@example.com');
     fireEvent.changeText(getByPlaceholderText('PASSWORD'), 'password123');
     fireEvent.press(getByText('LOGIN'));
-
-    axios.post.mockResolvedValueOnce({ data: { 'avatar': 'avatar' }, status: 200 });
 
     await waitFor(() => {
       expect(signInWithEmailAndPassword).toHaveBeenCalledWith({}, 'test@example.com', 'password123');
@@ -146,5 +155,3 @@ describe('LoginForm', () => {
   }, 2147483647);
 
 });
-
-

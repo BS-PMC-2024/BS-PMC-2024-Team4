@@ -43,7 +43,7 @@
 
     <script>
     function countWaitingStatusFromDOM() {
-        const statusCells = document.querySelectorAll('td[id^="status-"]'); // Select all td elements with ids starting with 'status-'
+        const statusCells = document.querySelectorAll('td[id^="status-"]'); 
         let count = 0;
         statusCells.forEach(cell => {
             if (cell.textContent === 'waiting') {
@@ -54,7 +54,6 @@
         return count;
     }
     
-    // adding users to table
     function populateReports(reports) {
        
         const tbody = document.getElementById('userTableBody');
@@ -91,8 +90,6 @@
         }
     }
 
-
-
         function updateStatus(reportId, team) {
             fetch(`/manager/update-status/${reportId}`, {
                 method: 'POST',
@@ -114,10 +111,8 @@
                 console.error('Error updating status:', error);
             });
         }
-
-        // Fetch users and put them in the table when the page loads
+      
         function fetchReports() {
-            console.log('aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa');
             fetch('/manager/getReports')
             .then(response => response.json())
             .then(Allreports => {
@@ -127,8 +122,6 @@
                 console.error('Error fetching users:', error);
             });
         }
-
-        // Fetch users when the page loads
         window.onload = fetchReports;
     </script>
 </body>
