@@ -13,7 +13,7 @@ const Reports = () => {
             />
             <Button
                 title="Report Problamatic Dog"
-                onPress={() => navigation.navigate('ProblamaticDog')}
+                onPress={() => navigation.navigate('ReportProblematicDog')}
             />
             {/* Add more buttons as needed */}
         </View>

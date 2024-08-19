@@ -15,6 +15,7 @@ import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
 import ReportLostDog from './screens/lostDogs/ReportLostDog';
 import Reports from './screens/reports/Reports';
+import ReportProblematicDog from './screens/reports/ProblamaticDog';
 import styles from './styles';
 import {User, ProfileLabel, MyDogsLabel} from './components/User';
 import UserDetails from './screens/user/UserDetails';
@@ -235,6 +236,11 @@ const ProfileDrawer = () => {
                       component={Reports} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("Reports"), unmountOnBlur: true}}/>
+      <Drawer.Screen  name ="ReportProblematicDog" 
+                component={ReportProblematicDog} 
+                backBehavior={() => props.navigation.navigate("Main")}
+                options={{...getHeaderOptions("Report Problematic Dog"), unmountOnBlur: true}}/>
+                      
 
     </Drawer.Navigator>
   )

@@ -119,4 +119,31 @@ def updateDog():
         return {'success': True}, 200
     except:
         return {'success': False}
-    
+
+
+@bp.route('/reportProblematicDog', methods=['POST'])
+def report_problematic_dog():
+    data = request.get_json()
+    dog_breed = data.get('dog_breed')
+    issue_description = data.get('issue_description')
+    dog_color = data.get('dog_color')
+
+    # Validation
+    if not dog_breed or not issue_description or not dog_color:
+        return jsonify({'success': False, 'error': 'All fields are required'}), 400
+
+    problematic_dogs_db = mongo.client.get_database("Reports").get_collection("ProblematicDog")
+
+    new_report = {
+        'dog_breed': dog_breed,
+        'issue_description': issue_description,
+        'dog_color': dog_color,
+        'latitude' : data['latitude'],
+        'longitude' : data['longitude']  
+    }
+    try:
+        problematic_dogs_db.insert_one(new_report)
+        return jsonify({'success': True, 'message': 'Problematic dog reported successfully'}), 200
+    except Exception as e:
+        print(f"Error saving problematic dog report: {e}")
+        return jsonify({'success': False, 'error': 'Failed to report problematic dog'}), 500
