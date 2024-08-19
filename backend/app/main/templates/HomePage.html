@@ -8,6 +8,7 @@
     <script src="/static/js/main.js" defer></script>
     <script src="/static/js/manageUsers.js" defer></script>
     <script src="/static/js/userReports.js" defer></script>
+    <script src="/static/js/notifications.js" defer></script>
 </head>
 <body>
 <div class="tab">
@@ -15,6 +16,7 @@
     <button class="tablinks" onclick="openTab(event, 'Logout')" type="submit">Logout</button>
     <button class="tablinks" onclick="openTab(event, 'ManageUsers')">Users</button>
     <button class="tablinks" onclick="openTab(event, 'BugsReports')">Bugs Reports</button>
+    <button class="tablinks" onclick="openTab(event, 'Notify')">Notifications Center</button>
 </div>
 
 <div id="Logout" class="tabcontent">
@@ -39,6 +41,35 @@
                     <!-- user rows will be added dynamically -->
                 </tbody>
             </table>
+        </div>
+    </div>
+</div>
+
+<div id="Notify" class="tabcontent">
+    <div id="NotifyContent">
+        <div class="container">
+            <h1>Notify Users</h1>
+            <h1>click on a report from the list and send all users a notification</h1>
+            <table id="approved_reports">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Address</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody id="notifyTableBody"></tbody>
+            </table>
+            <div id="notificationForm" class="notificationForm">
+                <label for="title">Enter the title for the push notification:</label>
+                <input type="text" id="notificationTitle" placeholder="example: Road Blocked" />
+                <label for="notificationMessage">Your message:</label>
+                <textarea id="notificationMessage" rows="4"></textarea>
+                <div class="container">
+                    <button type="button" class="button" onclick="handleNotifySubmit()">Send Notification</button>
+                </div>
+                
+            </div>
         </div>
     </div>
 </div>

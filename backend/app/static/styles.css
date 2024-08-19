@@ -56,9 +56,17 @@ h1, button, body {
 }
 
 
+.container_basic {
+    text-align: center;
+    padding: 20px;
+}
+
 .container {
     text-align: center;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .input-group {
@@ -157,15 +165,55 @@ th, td {
     border-bottom: 1px solid #ddd;
 }
 
-tr:hover {background-color: #e7e7e7;}
+label {
+    padding: 8px;
+    text-align: left;
+    border-collapse: collapse;
+    font-weight: 700;
+    font-family: Arial, sans-serif;
+    margin-top: 10px;
+}
+
+tr:hover, .selected {
+    background-color: #e7e7e7;
+}
 
 .delete-button {
     color: red;
     cursor: pointer;
 }
 
+.notificationForm {
+    border-radius: 10px;
+    margin: 50px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 70%;
+    padding: 30px;
+    box-shadow: 5px 15px 30px rgba(0.4, 0.4, 0.4, 0.4);
+}
 
+.notificationForm input {
+    border: none; 
+    border-bottom: 1px solid #333; 
+    font-size: 14px;  
+    box-sizing: border-box; 
+    outline: none; 
+    margin-left: 5px;
+}
 
+.notificationForm textarea {
+    border: none; 
+    border: 1px solid #333; 
+    font-size: 14px;  
+    box-sizing: border-box; 
+    outline: none; 
+    margin-left: 5px;
+    width: 100%; /* Adjust as needed */
+    resize: none; /* Prevent resizing if desired */
+    padding: 5px;
+}
 
 
 
