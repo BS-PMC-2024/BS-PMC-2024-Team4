@@ -43,6 +43,7 @@ const MyDogs = () => {
             setDogs(data);
             setLoading(false);
             setHasDogs(data.length > 0);
+            AsyncStorage.setItem("userDogs", JSON.stringify(data));
         }
         else if(resp.status === 204) {
             setLoading(false);
