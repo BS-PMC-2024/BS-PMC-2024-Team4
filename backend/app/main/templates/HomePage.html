@@ -21,12 +21,30 @@
     <button class="tablinks" onclick="openTab(event, 'ManageUsers')">Users</button>
     <button class="tablinks" onclick="openTab(event, 'BugsReports')">Bugs Reports</button>
     <button class="tablinks" onclick="openTab(event, 'Notify')">Notifications Center</button>
-    <button class="tablinks" onclick="openTab(event, 'ManagePoints')">Manage Points</button>
+    <button class="tablinks" id="AuthoritiesReportButton" onclick="openTab(event, 'AuthoritiesReport')">Authorities Report</button>
+    <button class="tablinks" onclick="openTab(event, 'ManagePoints')">Manage Interest Points</button>
 </div>
 
 <div id="Logout" class="tabcontent">
     <h3>Logout</h3>
     <p>Logout</p>
+</div>
+
+<div id="AuthoritiesReport" class="tabcontent">
+    <div id="AuthoritiesReportContent">
+        <h2>Send the authorities a report:</h2>
+        <div id="authoritiesForm" class="authoritiesForm">
+            <label for="title">Subject:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter Subject..."/>
+            <label for="title">Location:</label>
+            <input type="text" id="notificationTitle" placeholder="Enter an address as accurate as possible..."/>
+            <label for="notificationMessage">Your report:</label>
+            <textarea id="notificationMessage" placeholder="Enter your description..." rows="10"></textarea>
+            <div class="container">
+                <button type="button" id="authorb" class="button" onclick="alert('Your report has been submitted successfully!'); 
+                                     document.getElementById('AuthoritiesReport').style.display='none';">Send Report</button>
+            </div>
+    </div> 
 </div>
 
 <div id="ManageUsers" class="tabcontent">
@@ -94,6 +112,9 @@
                 <tbody id="reportsTableBody"></tbody>
             </table>
         </div>
+
+
+
     </div>
 </div>
 
@@ -129,74 +150,6 @@
     </form>
     <div id="map"></div>
 </div>
-
-<style>
-    #map {
-        height: 100%;  /* Full height to fit the parent */
-        width: 100%;  /* Full width to fit the parent */
-        filter: drop-shadow(0 0 0.15rem black);
-    }
-    #ManagePoints {
-        height: calc(100vh - 110px); /* Adjust this to fit your layout */
-        width: 100%;
-        padding: 20px; /* Optional padding */
-        box-sizing: border-box;
-    }
-    #pointForm {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-evenly;
-        align-items: center;
-        width: 100%;
-    }
-    #pointLocation {
-        width: 15vw;
-    }
-    #inputContainer {
-        display: flex;
-        flex-direction: row;
-        height: 4vh;
-        align-items: center;
-        gap: 0.5vw;
-        font-family: sans-serif;
-    }
-    #pointType {
-        width: 8vw;
-    }
-    #pointName {
-        width: 10vw;
-    }
-    .pointButtons {
-        background-color: #ffffff;
-        border: 0;
-        border-radius: .5rem;
-        box-sizing: border-box;
-        color: #111827;
-        font-family: "Inter var",ui-sans-serif,system-ui,-apple-system,system-ui,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-        font-size: .875rem;
-        font-weight: 600;
-        line-height: 1.25rem;
-        padding: .25rem 0.5rem;
-        text-align: center;
-        text-decoration: none #D1D5DB solid;
-        text-decoration-thickness: auto;
-        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-        cursor: pointer;
-        user-select: none;
-        -webkit-user-select: none;
-        touch-action: manipulation;
-    }
-    .pointButtons:hover {
-        background-color: rgb(201, 225, 249);
-    }
-    .pointButtons:focus {
-    outline: 2px solid transparent;
-    outline-offset: 2px;
-    }
-    .pointButtons:focus-visible {
-    box-shadow: none;
-    }
-</style>
 
 </body>
 </html>
