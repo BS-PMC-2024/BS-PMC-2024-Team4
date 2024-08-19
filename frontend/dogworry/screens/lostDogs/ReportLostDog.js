@@ -1,6 +1,6 @@
 // ReportLostDog.js
-import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet } from 'react-native';
+import React, { useEffect, useState, useCallback, useRef } from 'react';
+import { View, Text, TextInput, Button, StyleSheet ,Alert} from 'react-native';
 import axios from 'axios';
 import api_url from '../../config';
 import { useNavigation } from '@react-navigation/native';
@@ -10,17 +10,21 @@ const ReportLostDog = () => {
     const [lostArea, setLostArea] = useState('');
     const [ownerPhone, setOwnerPhone] = useState('');
     const navigation = useNavigation();
-
     const handleReport = async () => {
         try {
-            const response = await axios.post(`${api_url}lostDog/report`, {
-                dog_name: dogName,
-                lost_area: lostArea,
-                owner_phone: ownerPhone,
+            const response = await axios.post(`${api_url}lostDog/reportLostDog`, {
+                'dog_name': dogName,
+                'lost_area': lostArea,
+                'owner_phone': ownerPhone,
             });
-            if (response.status === 200) {
-                Alert.alert('Success', 'Lost dog reported successfully');
-                navigation.goBack(); // Go back to the previous screen
+            if (response.data.success) { //response.status === 200
+                Alert.alert('Success', response.data.message);
+                //Alert.alert('Success', 'Lost dog reported successfully');
+                navigation.navigate("Main");
+                //navigation.goBack(); // Go back to the previous screen - does problems
+            }else
+            {
+                Alert.alert('Error', response.data.error);
             }
         } catch (error) {
             console.error('Error reporting lost dog:', error);
@@ -67,6 +71,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#2d3436',
         marginBottom: 8,
+        marginTop: 80,
     },
     input: {
         height: 40,
