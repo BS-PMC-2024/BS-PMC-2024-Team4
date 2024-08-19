@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ActivityIndicator, Image, FlatList,Alert  } from 'react-native';
+import { Text, View, Image, Alert  } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { NavigationContainer, DrawerActions } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -10,21 +10,23 @@ import MapScreen from './screens/MapScreen';
 import FoodScreen from './screens/FoodScreen';
 import InfoScreen from './screens/InfoScreen';
 import VetNearby from './screens/VetNearbyScreen';
-import LostScreen from './screens/LostScreen';
+import SendToVet from './screens/SendToVet';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
-import ReportLostDog from './screens/lostDogs/ReportLostDog';
+import ReportLostDog from './screens/reports/ReportLostDog';
 import Reports from './screens/reports/Reports';
 import ReportProblematicDog from './screens/reports/ProblamaticDog';
 import styles from './styles';
-import {User, ProfileLabel, MyDogsLabel} from './components/User';
+import { User, ProfileLabel, MyDogsLabel } from './components/User';
 import UserDetails from './screens/user/UserDetails';
 import LoginScreen from './screens/LoginScreen';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BackButton from './components/BackButton';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import MyDogs from './screens/user/MyDogs';
-import Svg from 'react-native-svg'
+import BugReportScreen from './screens/reports/BugReport';
+import RoadsReport from './screens/reports/RoadsReport';
+import ProblematicDog from './screens/reports/ProblematicDog';
+
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -59,7 +61,7 @@ const TabNavigator = () => (
         iconName = focused ? 'nutrition' : 'nutrition-outline';
       } else if (route.name === 'Info') {
         iconName = focused ? 'help' : 'help-outline';
-      } else if (route.name === 'Map'){ // from here
+      } else if (route.name === 'Map'){ 
         iconName = focused ? 'compass' : 'compass-outline';
       }
       
@@ -75,44 +77,51 @@ const TabNavigator = () => (
         display: 'flex',
       },    
     })}>
-    <Tab.Screen name= "Reports"   component={Reports}    options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name="Reports" component={ReportStack} options={getHeaderOptions('Dog Worry')} />
     <Tab.Screen name= "Lost Dogs" component={DogDetails} options={getHeaderOptions('Dog Worry')}/> 
     <Tab.Screen name= "Map"       component={MapScreen}  options={getHeaderOptions('Dog Worry')}/>   
     <Tab.Screen name= "Food"      component={FoodScreen} options={getHeaderOptions('Dog Worry')}/> 
-    <Tab.Screen name= "Info"      component={InfoScreen} options={getHeaderOptions('Dog Worry')}/>
+    <Tab.Screen name= "Info"      component={InfoStack} options={getHeaderOptions('Dog Worry')}/>
     
   </Tab.Navigator>
 )
 
 // Adding only 1 instance of the User component to every screen in Tab Navigator
-const TabNavigatorWithUser = () => (
+const TabNavigatorWithUser = ({ avatar, setAvatar }) => (
     <View style={{ flex: 1 }}>
-      <User />
+      <User avatar={avatar} setAvatar={setAvatar}/>
       <TabNavigator />
     </View>
 )
 
-const StackNavigation = () => {
+const StackNavigation = ({ avatar, setAvatar }) => {
   return (
     <Stack.Navigator>
-      <Stack.Screen name='Tabs' component={TabNavigatorWithUser} options={{headerShown: false }}/>
-      <Stack.Screen name='VetNearby' component={VetNearby} options={{ ...getHeaderOptions('Vet Nearby') }} />
+      <Stack.Screen name='Back' options={{headerShown: false }}>
+        {props => <TabNavigatorWithUser {...props} avatar={avatar} setAvatar={setAvatar} />}
+      </Stack.Screen>
     </Stack.Navigator>
   )
 }
-
 
 const CustomProfileDrawer = (props) => {
   const {routeNames, index} = props.state;
   const focused = routeNames[index];
   const [uid, setUid] = useState("");
-  const [isLoggedIn,setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const {userName, setName, setAvatar} = props
   const retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('userUid');
+      const userNameAsync = await AsyncStorage.getItem('firstName');
+
       if (value !== null) {
         setUid(value);
         setIsLoggedIn(true);
+        if(userNameAsync)
+          setName(userNameAsync);
+        else
+          setName("User");
       }
     } catch (error) {
       
@@ -136,6 +145,10 @@ const CustomProfileDrawer = (props) => {
             try {
               await AsyncStorage.removeItem('userUid');
               await AsyncStorage.removeItem('avatar');
+              await AsyncStorage.removeItem('firstName');
+              await AsyncStorage.removeItem('userDogs');
+              setAvatar(null);
+              setName("");
               setIsLoggedIn(false);
               props.navigation.reset(({
                 index: 0,
@@ -160,6 +173,12 @@ const CustomProfileDrawer = (props) => {
     <DrawerContentScrollView {...props}>
       {isLoggedIn ? (
         <>
+          <View style={styles.container}>
+            <Image source={require('./assets/logo.png')} style={styles.logo}/>
+            <Text style={styles.text}>Hello {userName}</Text>
+          </View> 
+          
+
           <DrawerItem 
             label={() => <ProfileLabel />}
             onPress={() => props.navigation.navigate("User Details")}
@@ -173,7 +192,7 @@ const CustomProfileDrawer = (props) => {
             backBehavior={() => props.navigation.navigate("Main")} />
 
           <DrawerItem
-            label="Logout"
+            label="Logout" 
             onPress={logout}
             activeTintColor='#F44336' />
         </>
@@ -198,21 +217,48 @@ const CustomProfileDrawer = (props) => {
       )}
     </DrawerContentScrollView>
   );
-}
+};
 
+// Reports tab and all screens available inside it 
+const ReportStack = () => (
+  <Stack.Navigator screenOptions={{
+    cardStyle: { backgroundColor: 'white' },
+    }}>
+    <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="RoadReport" component={RoadsReport} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ProblematicDog" component={ProblematicDog} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ReportLostDog" component={ReportLostDog} options={{headerLeft: () => null,}}/>
+  </Stack.Navigator>
+);
+
+const InfoStack = () => (
+  <Stack.Navigator screenOptions={{
+    cardStyle: { backgroundColor: 'white' },
+    }}>
+    <Stack.Screen name="InfoMain" component={InfoScreen} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name='VetNearby' component={VetNearby} options={{headerLeft: () => null,}} />
+    <Stack.Screen name='SendVet' component={SendToVet} options={{headerLeft: () => null,}} />
+    
+  </Stack.Navigator>
+)
 
 const ProfileDrawer = () => {
+  const [userName, setUserName] = useState('');
+  const [avatar, setAvatar] = useState(null);
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
-      drawerContent={props => <CustomProfileDrawer {...props} />} >
+      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} setAvatar={setAvatar} />} >
 
       <Drawer.Screen  name = "Main" 
-                      component={StackNavigation} 
-                      options={{headerShown: false}}/>
+                      options={{headerShown: false}}>
+                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar}  />}
+      </Drawer.Screen>
 
       <Drawer.Screen  name="Login" 
-                      component={LoginScreen}
-                      options={{...getHeaderOptions("Login"), headerLeft:() => <BackButton/>, unmountOnBlur: true}} />
+                      options={{...getHeaderOptions("Login"), headerLeft:() => <BackButton/>, unmountOnBlur: true}} >
+                        {props => <LoginScreen {...props} setAvatar={setAvatar} setName={setUserName} />}
+      </Drawer.Screen>
 
       <Drawer.Screen  name ="Register" 
                       component={RegisterScreen} 
@@ -220,9 +266,10 @@ const ProfileDrawer = () => {
                       options={{...getHeaderOptions("Register"), headerLeft:() => <BackButton/>, unmountOnBlur: true}}/>
 
       <Drawer.Screen  name ="User Details" 
-                      component={UserDetails} 
                       backBehavior={() => props.navigation.navigate("Main")}
-                      options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} />
+                      options={{...getHeaderOptions("User Details"), unmountOnBlur: true}} >
+                        {props => <UserDetails {...props} setName={setUserName} setAvatar={setAvatar}/> }
+      </Drawer.Screen>
 
       <Drawer.Screen  name ="My Dogs"
                       component={MyDogs} 
@@ -236,11 +283,6 @@ const ProfileDrawer = () => {
                       component={Reports} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("Reports"), unmountOnBlur: true}}/>
-      <Drawer.Screen  name ="ReportProblematicDog" 
-                component={ReportProblematicDog} 
-                backBehavior={() => props.navigation.navigate("Main")}
-                options={{...getHeaderOptions("Report Problematic Dog"), unmountOnBlur: true}}/>
-                      
 
     </Drawer.Navigator>
   )
