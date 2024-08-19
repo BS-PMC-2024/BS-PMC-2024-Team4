@@ -2,7 +2,7 @@ from flask import jsonify, request ,render_template
 from app.manager import bp 
 from app.extensions import mongo
 from bson import json_util
-from bson.objectid import ObjectId
+from bson.objectid import ObjectId, InvalidId
 
 
 ##for deleteUser
@@ -48,7 +48,19 @@ def getReports():
     for report in Allreports:
         report['_id'] = str(report['_id'])
     return json_util.dumps(Allreports) , 200
-    
+
+@bp.route('/getApprovedReports', methods=['GET'])
+def getApprovedReports():
+    db = mongo.client.get_database("Reports")
+    reports = db.get_collection("roads_reports")
+
+    query = {'status': 'In Progress'}
+    approved_reports = list(reports.find(query))
+    for report in approved_reports:
+        report['_id'] = str(report['_id'])
+    return json_util.dumps(approved_reports) , 200
+ 
+
 @bp.route('/update-status/<reportId>/<userId>', methods=['POST'])
 def update_status(reportId, userId):
     db = mongo.client.get_database("Reports")
@@ -78,3 +90,21 @@ def update_status(reportId, userId):
         return jsonify({'error': 'Update failed'}), 400
     
     
+@bp.route('/SendNotification', methods=['POST'])
+def SendNotification():
+    data = request.json
+    reportAddress = data.get('address')
+    notificationTitle = data.get('title')
+    notificationMessage = data.get('message')
+
+    if not reportAddress or not notificationTitle or not notificationMessage:
+        return jsonify({'error': 'Missing required data'}), 400
+
+    notify_db = mongo.client.get_database("Users").get_collection("notifications")
+    notify_db.insert_one({
+        "user_id": 0,
+        "address": reportAddress,
+        "notificationTitle": notificationTitle,
+        "notificationMessage": notificationMessage
+    })  
+    return jsonify({'message': 'Notification sent successfully'}), 200

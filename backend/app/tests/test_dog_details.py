@@ -121,3 +121,114 @@ def test_update_dog(client, mock_mongo):
     assert data[0]['dog_breed'] == 'Labrador', f"Expected dog_breed to be 'Labrador' but got {data[0]['dog_breed']}"
     assert data[0]['dog_age'] == '4', f"Expected dog_age to be '4' but got {data[0]['dog_age']}"
 
+### Test `add_favorite_point`
+def test_add_favorite_point_success(client, mock_mongo):
+    user_collection = mock_mongo['user-dogs']
+    user_collection.insert_one({
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'favorite_points': []
+    })
+
+    response = client.post('/user/addFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
+    data = json.loads(response.data)
+    assert data['success'] is True, "Expected success to be True but got False"
+
+    # Check if the point was added
+    updated_dog = user_collection.find_one({'user_id': 'test1', 'dog_name': 'Buddy'})
+    assert 'point1' in updated_dog['favorite_points'], "Expected 'point1' to be in favorite_points but it was not found"
+
+
+def test_add_favorite_point_dog_not_found(client, mock_mongo):
+    response = client.post('/user/addFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'NonExistentDog',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 404, f"Expected status code 404 but got {response.status_code}"
+    data = json.loads(response.data)
+    assert 'error' in data, "Expected 'error' key in response data but it was not found"
+    assert data['error'] == 'Dog not found', f"Expected error message 'Dog not found' but got {data['error']}"
+
+
+def test_add_favorite_point_already_exists(client, mock_mongo):
+    user_collection = mock_mongo['user-dogs']
+    user_collection.insert_one({
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'favorite_points': ['point1']
+    })
+
+    response = client.post('/user/addFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 500, f"Expected status code 500 but got {response.status_code}"
+
+    updated_dog = user_collection.find_one({'user_id': 'test1', 'dog_name': 'Buddy'})
+    assert updated_dog['favorite_points'].count('point1') == 1, "Expected 'point1' to appear only once in favorite_points"
+
+
+### Test `remove_favorite_point`
+def test_remove_favorite_point_success(client, mock_mongo):
+    user_collection = mock_mongo['user-dogs']
+    user_collection.insert_one({
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'favorite_points': ['point1']
+    })
+
+    response = client.post('/user/removeFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 200, f"Expected status code 200 but got {response.status_code}"
+    data = json.loads(response.data)
+    assert data['success'] is True, "Expected success to be True but got False"
+
+    updated_dog = user_collection.find_one({'user_id': 'test1', 'dog_name': 'Buddy'})
+    assert 'point1' not in updated_dog['favorite_points'], "Expected 'point1' to be removed from favorite_points but it was found"
+
+
+def test_remove_favorite_point_dog_not_found(client, mock_mongo):
+    response = client.post('/user/removeFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'NonExistentDog',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 404, f"Expected status code 404 but got {response.status_code}"
+    data = json.loads(response.data)
+    assert 'error' in data, "Expected 'error' key in response data but it was not found"
+    assert data['error'] == 'Dog not found', f"Expected error message 'Dog not found' but got {data['error']}"
+
+
+def test_remove_favorite_point_not_in_list(client, mock_mongo):
+    user_collection = mock_mongo['user-dogs']
+    user_collection.insert_one({
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'favorite_points': ['point2']
+    })
+
+    response = client.post('/user/removeFavoritePoint', json={
+        'user_id': 'test1',
+        'dog_name': 'Buddy',
+        'pointID': 'point1'
+    })
+
+    assert response.status_code == 400, f"Expected status code 400 but got {response.status_code}"
+    data = json.loads(response.data)
+    assert 'error' in data, "Expected 'error' key in response data but it was not found"
+    assert data['error'] == 'Point of interest not found in favorites', f"Expected error message 'Point of interest not found in favorites' but got {data['error']}"
