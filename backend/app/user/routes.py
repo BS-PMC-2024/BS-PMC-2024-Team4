@@ -119,7 +119,60 @@ def updateDog():
         return {'success': True}, 200
     except:
         return {'success': False}
+
+@bp.route('/addFavoritePoint', methods=['POST'])
+def addFavoritePoint():
+    data = request.get_json()
+    user_id = data['user_id']
+    dog_name = data['dog_name']
+    pointID = data['pointID']
+
+    user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
     
+    # Find the specific dog
+    dog = user_dogs_db.find_one({"user_id": user_id, "dog_name": dog_name})
+    
+    if dog:
+        # Add the pointID to the dog's favorite_points list
+        update_result = user_dogs_db.update_one(
+            {"user_id": user_id, "dog_name": dog_name},
+            {"$addToSet": {"favorite_points": pointID}} # Use $addToSet to prevent duplicates
+        )
+        if update_result.modified_count > 0:
+            return jsonify({"success": True}), 200
+        else:
+            return jsonify({"error": "Failed to add the point to favorites"}), 500
+    else:
+        return jsonify({"error": "Dog not found"}), 404
+    
+@bp.route('/removeFavoritePoint', methods=['POST'])
+def remove_favorite_point():
+    data = request.get_json()
+    user_id = data['user_id']
+    dog_name = data['dog_name']
+    point_id = data['pointID']
+
+    user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
+
+    # Find the specific dog entry for the user
+    dog = user_dogs_db.find_one({"user_id": user_id, "dog_name": dog_name})
+    
+    if not dog:
+        return jsonify({"success": False, "error": "Dog not found"}), 404
+
+    # Check if the dog has the point as a favorite
+    if 'favorite_points' in dog and point_id in dog['favorite_points']:
+        # Remove the point from the list
+        user_dogs_db.update_one(
+            {"user_id": user_id, "dog_name": dog_name},
+            {"$pull": {"favorite_points": point_id}}
+        )
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Point of interest not found in favorites"}), 400
+    
+    
+
 
 @bp.route('/submitBugsReport', methods=['POST'])
 def submitBugsReport():

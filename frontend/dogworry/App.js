@@ -108,17 +108,19 @@ const CustomProfileDrawer = (props) => {
   const focused = routeNames[index];
   const [uid, setUid] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const {userName, setName} = props
+  const {userName, setName, setAvatar} = props
   const retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('userUid');
       const userNameAsync = await AsyncStorage.getItem('firstName');
-      
 
       if (value !== null) {
         setUid(value);
         setIsLoggedIn(true);
-        setName(userNameAsync);
+        if(userNameAsync)
+          setName(userNameAsync);
+        else
+          setName("User");
       }
     } catch (error) {
       
@@ -142,6 +144,9 @@ const CustomProfileDrawer = (props) => {
             try {
               await AsyncStorage.removeItem('userUid');
               await AsyncStorage.removeItem('avatar');
+              await AsyncStorage.removeItem('firstName');
+              setAvatar(null);
+              setName("");
               setIsLoggedIn(false);
               props.navigation.reset(({
                 index: 0,
@@ -232,6 +237,7 @@ const InfoStack = () => (
     <Stack.Screen name="InfoMain" component={InfoScreen} options={{headerLeft: () => null,}}/>
     <Stack.Screen name='VetNearby' component={VetNearby} options={{headerLeft: () => null,}} />
     <Stack.Screen name='SendVet' component={SendToVet} options={{headerLeft: () => null,}} />
+    
   </Stack.Navigator>
 )
 
@@ -240,11 +246,11 @@ const ProfileDrawer = () => {
   const [avatar, setAvatar] = useState(null);
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
-      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} />} >
+      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} setAvatar={setAvatar} />} >
 
       <Drawer.Screen  name = "Main" 
                       options={{headerShown: false}}>
-                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar} />}
+                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar}  />}
       </Drawer.Screen>
 
       <Drawer.Screen  name="Login" 
