@@ -41,7 +41,7 @@ const BugReportScreen = () => {
         if (!description.trim()) {
             Alert.alert(
                 "Empty Field",
-                "Description of the bug must be enterd",
+                "Description of the bug must be entered",
                 [{ text: "ok" }]
             );
             return;
@@ -70,14 +70,7 @@ const BugReportScreen = () => {
             console.error('Error submitting bug report:', error);
             alert('Failed to submit bug report');
         }
-    };
-    // if (loading)
-    //     return (
-    //         <View style={report_styles.loading_container}>
-    //             <ActivityIndicator size="large" color="#0000ff" />
-    //         </View>
-    //     );
-    
+    }; 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={report_styles.bugsContainer}>
@@ -105,6 +98,7 @@ const BugReportScreen = () => {
                         numberOfLines={4}
                         value={description}
                         onChangeText={setDescription}
+                        accessibilityLabel="Enter bug description"
                     />
                 </View>
                 <View style={report_styles.bugsButtonContainer}>
