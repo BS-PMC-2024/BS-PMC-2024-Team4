@@ -72,8 +72,10 @@ const UserDetails = ({ setName, setAvatar }) => {
 
         if (response.data.success) {
             try {
-                await AsyncStorage.setItem("avatar", data.avatar);
-                setAvatar(data.avatar);
+                if(data.avatar){
+                    await AsyncStorage.setItem("avatar", data.avatar);
+                    setAvatar(data.avatar);
+                }
                 if (data.first_name) {
                     setName(data.first_name);
                     await AsyncStorage.setItem("firstName", data.first_name);

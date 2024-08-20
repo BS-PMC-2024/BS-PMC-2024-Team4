@@ -39,22 +39,33 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
         if (loading) return; // Prevent further clicks while a request is in progress
 
         setLoading(true);
-
+    
+        const newDogLiked = !isFavorite(dog, pointID);
+    
+        const updatedDogs = dogs.map(d => {
+            if (d.dog_name === dog.dog_name) {
+                const updatedFavorites = newDogLiked
+                    ? [...(d.favorite_points || []), pointID]
+                    : d.favorite_points.filter(id => id !== pointID);
+                return { ...d, favorite_points: updatedFavorites };
+            }
+            return d;
+        });
+        setDogs(updatedDogs);
         try {
             let response;
-
-            if (isFavorite(dog, pointID)) {
+            if (!newDogLiked) {
                 // Remove favorite point
                 response = await axios.post(`${api_url}user/removeFavoritePoint`, {
                     user_id: dog.user_id,
                     dog_name: dog.dog_name,
                     pointID: pointID,
                 });
-
+    
                 if (response.data.success) {
                     Alert.alert("Success", `${parkName} removed from ${dog.dog_name}'s favorites.`);
                 } else {
-                    Alert.alert("Error", response.data.error || "Failed to remove point of interest.");
+                    throw new Error(response.data.error || "Failed to remove point of interest.");
                 }
             } else {
                 // Add favorite point
@@ -63,27 +74,30 @@ const AddFavoritePoint = ({ pointID, openModal, setOpenModal, parkName }) => {
                     dog_name: dog.dog_name,
                     pointID: pointID,
                 });
-
+    
                 if (response.data.success) {
                     Alert.alert("Success", `${parkName} added to ${dog.dog_name}'s favorites.`);
                 } else {
-                    Alert.alert("Error", response.data.error || "Failed to add point of interest.");
+                    throw new Error(response.data.error || "Failed to add point of interest.");
                 }
             }
-
-            const newDogData = await axios.post(`${api_url}user/getUserDogs`, {
-                uid: dog.user_id
-            });
-
-            if (newDogData.status === 200) {
-                await AsyncStorage.setItem("userDogs", JSON.stringify(newDogData.data));
-                setDogs(newDogData.data);
-
-                const allLiked = newDogData.data.every(d => isFavorite(d, pointID));
+    
+            // // Fetch updated dog data after the successful operation
+            // const newDogData = await axios.post(`${api_url}user/getUserDogs`, {
+            //     uid: dog.user_id
+            // });
+    
+            if (true) {
+                await AsyncStorage.setItem("userDogs", JSON.stringify(updatedDogs));
+                setDogs(updatedDogs);
+    
+                const allLiked = updatedDogs.every(d => isFavorite(d, pointID));
                 setAllDogsLiked(allLiked);
             }
-
+    
         } catch (error) {
+            // Revert the UI changes if there was an error
+            setDogs(dogs); // Reset the dog list to its previous state
             Alert.alert("Error", "An error occurred while updating the favorite point.");
         } finally {
             setLoading(false); // Allow further clicks once the request is finished

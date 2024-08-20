@@ -72,7 +72,7 @@ describe('AddFavoritePoint Component', () => {
 
         // Re-fetch heartIcons after the state change
         const updatedHeartIcons = getAllByTestId('heart-icon');
-        expect(updatedHeartIcons[1].children[0].props.name).toBe('hearto');
+        expect(updatedHeartIcons[1].children[0].props.name).toBe('heart');
     }, 2147483647);
 
     it('displays error alert when request fails', async () => {
@@ -124,7 +124,7 @@ describe('AddFavoritePoint Component', () => {
         });
 
         await waitFor(() => {
-            expect(heartIcons[1].children[0].props.name).toBe('hearto');
+            expect(heartIcons[1].children[0].props.name).toBe('heart');
         });
     }, 2147483647);
 });
