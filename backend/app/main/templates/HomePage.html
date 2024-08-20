@@ -13,6 +13,7 @@
     <script src="/static/js/managePoints.js" defer></script>
     <script src="/static/js/userReports.js" defer></script>
     <script src="/static/js/notifications.js" defer></script>
+    <script src ="/static/js/updateLostDogsPage.js" defer></script>
 </head>
 <body>
 <div class="tab">
@@ -23,6 +24,7 @@
     <button class="tablinks" onclick="openTab(event, 'Notify')">Notifications Center</button>
     <button class="tablinks" id="AuthoritiesReportButton" onclick="openTab(event, 'AuthoritiesReport')">Authorities Report</button>
     <button class="tablinks" onclick="openTab(event, 'ManagePoints')">Manage Interest Points</button>
+    <button class ="tablinks" onclick="openTab(event, 'updateLostDogPage')">Lost Dog page</button>
 </div>
 
 <div id="Logout" class="tabcontent">
@@ -130,6 +132,27 @@
         </div>
     </form>
     <div id="map"></div>
+</div>
+
+<div id="updateLostDogPage" class="tabcontent">
+    <div id="lostDog">
+    <div class="container"> 
+        <h1>Manage Lost Dogs</h1>
+        <table id="lostDogsTable">
+            <thead>
+                <tr>
+                    <th>Dog Name</th>
+                    <th>Lost Area</th>
+                    <th>Owner Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="lostDogbody">
+                  
+            </tbody>
+        </table>
+    </div>
+</div>    
 </div>
 
 <div id="AuthoritiesReport" class="tabcontent">

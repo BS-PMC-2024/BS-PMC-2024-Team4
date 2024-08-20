@@ -3,4 +3,5 @@ window.onload = function() {
     fetchUsers();
     fetchReports();
     fetchApprovedReports();
+    loadLostDogReports();
 };

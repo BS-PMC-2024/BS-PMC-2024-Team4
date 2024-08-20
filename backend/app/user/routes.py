@@ -62,7 +62,6 @@ def saveUserDetails():
 
 
 
-
 @bp.route('/getUserDogs', methods=['GET', 'POST'])
 def getUserDogs():
     user_id = request.get_json()['uid']
