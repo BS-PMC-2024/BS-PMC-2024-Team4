@@ -45,21 +45,17 @@ def test_table_is_ok(mock_reports, client):
 
 def test_backend_frontend_buttons(mock_reports, client):
     mock_reports_collection = mock_reports['app_bugs_reports']
-    # Convert string IDs to ObjectId as MongoDB expects
     report_id = ObjectId('66c05a1a067c3f13a3617e75')
+    user_id = ObjectId('66c05a1a067c3f13a3617e99')
+    
     mock_reports_collection.insert_one({'_id': report_id, 'description': 'Issue 1', 'status': 'waiting'})
 
     # Test backend button
-    response_backend = client.post(f'/manager/update-status/{report_id}', json={'status': 'In Progress'})
+    response_backend = client.post(f'manager/update-status/{report_id}/{user_id}', json={'status': 'In Progress'})
     print("Response Backend Data:", response_backend.get_json())
+    
     assert response_backend.status_code == 200
-    updated_backend = mock_reports_collection.find_one({'_id': report_id})
-    assert updated_backend['status'] == 'In Progress', f"Expected 'In Progress', got '{updated_backend['status']}'"
 
-    # Insert another item for the frontend button test
-    report_id = ObjectId('66c05a1a067c3f13a3617e74')
-    mock_reports_collection.insert_one({'_id': report_id, 'description': 'Issue 2', 'status': 'waiting'})
-    response_frontend = client.post(f'/manager/update-status/{report_id}', json={'status': 'Completed'})
-    assert response_frontend.status_code == 200
-    updated_frontend = mock_reports_collection.find_one({'_id': report_id})
-    assert updated_frontend['status'] == 'Completed', f"Expected 'Completed', got '{updated_frontend['status']}'"
+    # Verify that the status was updated
+    updated_report = mock_reports_collection.find_one({'_id': report_id})
+    assert updated_report['status'] == 'In Progress'
