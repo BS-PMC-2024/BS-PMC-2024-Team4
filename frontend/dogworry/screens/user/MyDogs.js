@@ -43,6 +43,7 @@ const MyDogs = () => {
             setDogs(data);
             setLoading(false);
             setHasDogs(data.length > 0);
+            AsyncStorage.setItem("userDogs", JSON.stringify(data));
         }
         else if(resp.status === 204) {
             setLoading(false);
@@ -163,7 +164,10 @@ const AddDog = (props) => {
                 data['dog_image'] = imageNum;
         }
         data['user_id'] = userUid;
-
+        if(values.dog_name === undefined || values.dog_name === "") {
+            Alert.alert("Doggy Details", "Please enter your dog's name");
+            return;
+        }
         let response;
         if (selectedDog) {
             // Update existing dog
@@ -197,10 +201,11 @@ const AddDog = (props) => {
             )
                 :
                 (
-                    <View>
-                        <Foundation name="no-dogs" size={50} color="black" />
-                        <TouchableOpacity onPress={openModal}>
-                            <Text>Add Dog</Text>
+                    <View style={{ alignItems: 'center' }}>
+                        <Text style={{fontSize: 25}}>You have no dogs</Text>
+                        <Image source={require("../../Images/no-dogs.png")} style={styles.noDogs}/>
+                        <TouchableOpacity style={{ alignItems: 'center' }} onPress={openModal}>
+                            <Text>Add Your First Dog</Text>
                             <FontAwesome6 name="plus-square" size={50} color="black" />
                         </TouchableOpacity>
                     </View>
@@ -224,7 +229,7 @@ const AddDog = (props) => {
                     </TouchableOpacity>
 
                     <View style={styles.inputContainer}>
-                        <Text> Doggy Name </Text>
+                        <Text> Doggy Name *</Text>
                         <TextInput
                             placeholder='Doggy Name'
                             style={styles.input}

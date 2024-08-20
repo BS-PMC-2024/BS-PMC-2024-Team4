@@ -51,7 +51,7 @@ const Reports = () => {
                 <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ReportLostDog')}>
                     <Text style={report_styles.buttonText}>Lost my dog</Text>    
                 </TouchableOpacity>
-                <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ProblematicDog')}>
+                <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('ReportProblematicDog')}>
                     <Text style={report_styles.buttonText}>Problematic Dog</Text>    
                 </TouchableOpacity>
                 <TouchableOpacity style={report_styles.reportButton} onPress={() => navigation.navigate('BugReport')}>

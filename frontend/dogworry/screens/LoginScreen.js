@@ -24,14 +24,24 @@ export default  function LoginForm({ navigation, setAvatar, setName }) {
                 const user = userCredential.user;
                 try {
                   await AsyncStorage.setItem('userUid', user.uid);
-                  const response = await axios.post(`${api_url}user/getUserDetails`, {'uid': user.uid});
+                  let response = await axios.post(`${api_url}user/getUserDetails`, {'uid': user.uid});
                   if(response.status === 200){
-                    setAvatar(response.data['avatar']);
+                    if(response.data['avatar']){
+                      await AsyncStorage.setItem('avatar', response.data['avatar']);
+                      setAvatar(response.data['avatar']);
+                    }
                     if(response.data['first_name'])
-                      setName(response.data['first_name'])
+                      await AsyncStorage.setItem("firstName", response.data['first_name']);
                   }
+
+                  response = await axios.post(`${api_url}user/getUserDogs`, {'uid': user.uid})
+                  if(response.status === 200) {
+                      const firstData = response.data;
+                      await AsyncStorage.setItem('userDogs', JSON.stringify(firstData));
+                  }
+
                   Alert.alert("Login Successful", `Welcome ${user.email}`);
-                  navigation.navigate('Main'); 
+                  navigation.navigate("Main");
                 } catch (error) {
                   Alert.alert("Storage Error", "Failed to save UID to local storage.");
                 }

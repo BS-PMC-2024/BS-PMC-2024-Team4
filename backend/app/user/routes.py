@@ -8,6 +8,11 @@ import base64
 email_regex = re.compile("[\\w\\-\\.]+@([\\w\\-]+\\.)[\\w]+")
 phone_regex = re.compile("^[0-9]+$")
 
+
+################
+# User Details #
+################
+
 @bp.route('/getUserDetails', methods=['POST', 'GET'])
 def getUserDetails():
     user_id = request.get_json()['uid']
@@ -38,7 +43,7 @@ def saveUserDetails():
         user = user_db.find_one({'email': data['email'], 'user_id': user_id})
 
         if exist != user or not email_regex.match(data['email']):
-            return {'success': False, 'error': 'Email already taken, please choose a different email'}
+            return {'success': False, 'error': 'Email already taken, please choose a different email' if exist != user else 'Please enter a valid email'}
     
     exist = user_db.find_one(data)
 
@@ -60,8 +65,14 @@ def saveUserDetails():
 
         return {'success': True} if result.acknowledged else {'success': False, 'error': 'There was a problem saving your details'}
 
+####################
+# End User Details #
+####################
 
 
+#################
+#!! User Dogs !!#
+#################
 
 @bp.route('/getUserDogs', methods=['GET', 'POST'])
 def getUserDogs():
@@ -119,7 +130,111 @@ def updateDog():
         return {'success': True}, 200
     except:
         return {'success': False}
+
+#####################
+#!! End User Dogs !!#
+#####################
+
+
+##################
+#!! Report Dog !!#
+##################
+
+@bp.route('/reportProblematicDog', methods=['POST'])
+def report_problematic_dog():
+    data = request.get_json()
+    dog_breed = data.get('dog_breed')
+    issue_description = data.get('issue_description')
+    dog_color = data.get('dog_color')
+
+    # Validation
+    if not dog_breed or not issue_description or not dog_color:
+        return jsonify({'success': False, 'error': 'All fields are required'}), 400
+
+    problematic_dogs_db = mongo.client.get_database("Reports").get_collection("ProblematicDog")
+
+    new_report = {
+        'dog_breed': dog_breed,
+        'issue_description': issue_description,
+        'dog_color': dog_color,
+        'latitude' : data['latitude'],
+        'longitude' : data['longitude']  
+    }
+    try:
+        problematic_dogs_db.insert_one(new_report)
+        return jsonify({'success': True, 'message': 'Problematic dog reported successfully'}), 200
+    except Exception as e:
+        print(f"Error saving problematic dog report: {e}")
+        return jsonify({'success': False, 'error': 'Failed to report problematic dog'}), 500
+
+######################
+#!! End Report Dog !!#
+######################
+
+
+###################
+# Favorite Points #
+###################
+
+@bp.route('/addFavoritePoint', methods=['POST'])
+def addFavoritePoint():
+    data = request.get_json()
+    user_id = data['user_id']
+    dog_name = data['dog_name']
+    pointID = data['pointID']
+
+    user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
     
+    # Find the specific dog
+    dog = user_dogs_db.find_one({"user_id": user_id, "dog_name": dog_name})
+    
+    if dog:
+        # Add the pointID to the dog's favorite_points list
+        update_result = user_dogs_db.update_one(
+            {"user_id": user_id, "dog_name": dog_name},
+            {"$addToSet": {"favorite_points": pointID}} # Use $addToSet to prevent duplicates
+        )
+        if update_result.modified_count > 0:
+            return jsonify({"success": True}), 200
+        else:
+            return jsonify({"error": "Failed to add the point to favorites"}), 500
+    else:
+        return jsonify({"error": "Dog not found"}), 404
+    
+@bp.route('/removeFavoritePoint', methods=['POST'])
+def remove_favorite_point():
+    data = request.get_json()
+    user_id = data['user_id']
+    dog_name = data['dog_name']
+    point_id = data['pointID']
+
+    user_dogs_db = mongo.client.get_database("Dogs").get_collection("user-dogs")
+
+    # Find the specific dog entry for the user
+    dog = user_dogs_db.find_one({"user_id": user_id, "dog_name": dog_name})
+    
+    if not dog:
+        return jsonify({"success": False, "error": "Dog not found"}), 404
+
+    # Check if the dog has the point as a favorite
+    if 'favorite_points' in dog and point_id in dog['favorite_points']:
+        # Remove the point from the list
+        user_dogs_db.update_one(
+            {"user_id": user_id, "dog_name": dog_name},
+            {"$pull": {"favorite_points": point_id}}
+        )
+        return jsonify({"success": True}), 200
+    else:
+        return jsonify({"success": False, "error": "Point of interest not found in favorites"}), 400
+
+#######################
+# End Favorite Points #
+#######################
+    
+
+################
+# User Reports #
+################
 
 @bp.route('/submitBugsReport', methods=['POST'])
 def submitBugsReport():
@@ -157,3 +272,7 @@ def submitRoadsReport():
         "address": address 
     })
     return jsonify({"message": "Bug report submitted successfully"}), 200
+
+####################
+# End User Reports #
+####################

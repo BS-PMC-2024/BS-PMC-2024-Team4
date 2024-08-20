@@ -31,11 +31,7 @@ const DogDetails = () => {
     const renderItem = ({ item }) => (
         <View style={styles.card}>
         <Text style={styles.name}>{item.dog_name}</Text>
-        {item.avatar ? (
-            <Image source={require('../../Images/dogs.jpg')} style={styles.avatar} resizeMode='contain'/>
-            ) : (
-                <Image source={{ uri: item.avatar }} style={styles.avatar} resizeMode='contain' />
-            )}
+        <Image source={require('../../Images/dogs.jpg')} style={styles.avatar} resizeMode='contain'/>
         <Text style={styles.lastSeen}>{`identifier: ${item.friendly ? 'Friendly and tamed' : 'Not friendly'}`}</Text>
         <Text style={styles.lastSeen}>{`Last area: ${item.lost_area}`}</Text>
         <Text style={styles.lastSeen}>{`Owner Phone: ${item.owner_phone}`}</Text>

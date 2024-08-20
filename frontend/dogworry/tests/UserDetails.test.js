@@ -6,6 +6,12 @@ import UserDetails from '../screens/user/UserDetails'; // Adjust the path accord
 import axios from 'axios';
 
 // Mock axios for API calls
+jest.mock('@firebase/auth', () => ({
+    getAuth: jest.fn(),
+    updateEmail: jest.fn().mockResolvedValue(),
+  }));
+jest.mock('@react-native-async-storage/async-storage');
+jest.mock('../fbauth', () => ({}));
 jest.mock('axios');
 jest.mock('../components/ImagePicker', () => {
     return jest.fn(() => Promise.resolve({

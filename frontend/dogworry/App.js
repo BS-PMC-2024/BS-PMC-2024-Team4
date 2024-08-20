@@ -14,6 +14,7 @@ import SendToVet from './screens/SendToVet';
 import RegisterScreen from './screens/user/guestRegistration';
 import DogDetails from './screens/lostDogs/DogDetails';
 import ReportLostDog from './screens/reports/ReportLostDog';
+import ReportProblematicDog from './screens/reports/ProblamaticDog';
 import Reports from './screens/reports/Reports';
 import styles from './styles';
 import { User, ProfileLabel, MyDogsLabel } from './components/User';
@@ -24,8 +25,7 @@ import BackButton from './components/BackButton';
 import MyDogs from './screens/user/MyDogs';
 import BugReportScreen from './screens/reports/BugReport';
 import RoadsReport from './screens/reports/RoadsReport';
-import ProblematicDog from './screens/reports/ProblematicDog';
-
+//import ProblematicDog from './screens/reports/ProblematicDog';
 
 // navigation of the app
 const Stack = createStackNavigator();
@@ -108,17 +108,19 @@ const CustomProfileDrawer = (props) => {
   const focused = routeNames[index];
   const [uid, setUid] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const {userName, setName} = props
+  const {userName, setName, setAvatar} = props
   const retrieveData = async () => {
     try {
       const value = await AsyncStorage.getItem('userUid');
       const userNameAsync = await AsyncStorage.getItem('firstName');
-      
 
       if (value !== null) {
         setUid(value);
         setIsLoggedIn(true);
-        setName(userNameAsync);
+        if(userNameAsync)
+          setName(userNameAsync);
+        else
+          setName("User");
       }
     } catch (error) {
       
@@ -142,6 +144,10 @@ const CustomProfileDrawer = (props) => {
             try {
               await AsyncStorage.removeItem('userUid');
               await AsyncStorage.removeItem('avatar');
+              await AsyncStorage.removeItem('firstName');
+              await AsyncStorage.removeItem('userDogs');
+              setAvatar(null);
+              setName("");
               setIsLoggedIn(false);
               props.navigation.reset(({
                 index: 0,
@@ -220,7 +226,7 @@ const ReportStack = () => (
     <Stack.Screen name="ReportsMain" component={Reports} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="BugReport" component={BugReportScreen} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="RoadReport" component={RoadsReport} options={{headerLeft: () => null,}}/>
-    <Stack.Screen name="ProblematicDog" component={ProblematicDog} options={{headerLeft: () => null,}}/>
+    <Stack.Screen name="ReportProblematicDog" component={ReportProblematicDog} options={{headerLeft: () => null,}}/>
     <Stack.Screen name="ReportLostDog" component={ReportLostDog} options={{headerLeft: () => null,}}/>
   </Stack.Navigator>
 );
@@ -241,11 +247,11 @@ const ProfileDrawer = () => {
   const [avatar, setAvatar] = useState(null);
   return (
     <Drawer.Navigator initialRouteName='Main' backBehavior='Main'
-      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} />} >
+      drawerContent={props => <CustomProfileDrawer {...props} userName={userName} setName={setUserName} setAvatar={setAvatar} />} >
 
       <Drawer.Screen  name = "Main" 
                       options={{headerShown: false}}>
-                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar} />}
+                        {props => <StackNavigation {...props} avatar={avatar} setAvatar={setAvatar}  />}
       </Drawer.Screen>
 
       <Drawer.Screen  name="Login" 
@@ -268,6 +274,11 @@ const ProfileDrawer = () => {
                       component={MyDogs} 
                       backBehavior={() => props.navigation.navigate("Main")}
                       options={{...getHeaderOptions("My Dogs"), unmountOnBlur: true}}/>
+
+      <Drawer.Screen  name ="ReportProblematicDog" 
+                component={ReportProblematicDog} 
+                backBehavior={() => props.navigation.navigate("Main")}
+                options={{...getHeaderOptions("Report Problematic Dog"), unmountOnBlur: true}}/>
 
     </Drawer.Navigator>
   )

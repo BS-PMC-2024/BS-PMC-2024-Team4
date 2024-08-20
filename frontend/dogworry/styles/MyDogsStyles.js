@@ -121,6 +121,10 @@ export const styles = StyleSheet.create({
         borderRadius: 8,
         color: 'black',
         paddingRight: 30, // to ensure the text is never behind the icon
+      },
+      noDogs: {
+        width: screen.width * 0.4,
+        height: screen.height * 0.3,
       }
 });
 

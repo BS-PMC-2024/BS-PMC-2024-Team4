@@ -45,12 +45,12 @@ const FoodScreen = () => {
 
     return (
         <View style={styles_info.screenContainer}>
-            <View style={styles_info.searchBox}>
+            {/* <View style={styles_info.searchBox}>
                 <TextInput style={styles_info.searchInput} placeholder='Search' clearButtonMode='always'
                     value={searchQuery}
                     onChangeText={(query) => handleSearch(query)}
                 />
-            </View>
+            </View> */}
             <FlatList data={data}
                 keyExtractor={item => item.name} renderItem={({ item }) => ( <FoodGridItem food={item}></FoodGridItem> )}
                 numColumns={3}

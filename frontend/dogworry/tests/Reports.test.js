@@ -2,7 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import Reports from '../screens/reports/Reports'; // Adjust the path according to your project structure
+import Reports from '../screens/reports/Reports'; 
 import axios from 'axios';
 
 jest.mock('axios');
@@ -65,20 +65,6 @@ describe('Reports Component', () => {
 
     it('navigates to the correct screens when buttons are pressed', async () => {
         const { getByText } = renderWithNavigation(<Reports />);
-
-        // await waitFor(() => {
-        //     expect(getByText('Lost my dog')).toBeTruthy();
-        // });
-
-        // fireEvent.press(getByText('Lost my dog'));
-        // await waitFor(() => {
-        //     expect(mockNavigate).toHaveBeenCalledWith('ReportLostDog');
-        // });
-
-        // fireEvent.press(getByText('Problamatic Dog'));
-        // await waitFor(() => {
-        //     expect(mockNavigate).toHaveBeenCalledWith('ProblamaticDog');
-        // });
 
         fireEvent.press(getByText('App bugs'));
         await waitFor(() => {

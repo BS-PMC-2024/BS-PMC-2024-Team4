@@ -15,6 +15,7 @@ python-dotenv = "*"
 requests = "*"
 pytest-mock = "*"
 flask-pymongo = "*"
+selenium = "*"
 
 [dev-packages]
 

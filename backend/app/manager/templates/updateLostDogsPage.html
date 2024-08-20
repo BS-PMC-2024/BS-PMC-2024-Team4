@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Lost Dogs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #fff;
+        }
+        .btn-move {
+            background-color: #4CAF50; /* Green */
+        }
+        .btn-delete {
+            background-color: #f44336; /* Red */
+        }
+        .btn:hover {
+            opacity: 0.8;
+        }
+    </style>
+</head>
+<body>
+    <h1>Manage Lost Dogs</h1>
+    <table id="lostDogsTable">
+        <thead>
+            <tr>
+                <th>Dog Name</th>
+                <th>Lost Area</th>
+                <th>Owner Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Data will be populated here -->
+        </tbody>
+    </table>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            fetch('/manager/getLostDogReports')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#lostDogsTable tbody');
+                    data.reports.forEach(report => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${report.dog_name}</td>
+                            <td>${report.lost_area}</td>
+                            <td>${report.owner_phone}</td>
+                            <td class="actions">
+                                <button class="btn btn-move" onclick="moveReport('${report._id}')">Move to Permanent</button>
+                                <button class="btn btn-delete" onclick="deleteReport('${report._id}')">Delete Report</button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                });
+        });
+
+        function moveReport(reportId) {
+            fetch(`/manager/moveReport/${reportId}`, {
+                method: 'POST'
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(result.message);
+                if (result.success) {
+                    location.reload();
+                }
+            });
+        }
+
+        function deleteReport(reportId) {
+            fetch(`/manager/deleteReport/${reportId}`, {
+                method: 'DELETE'
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert(result.message);
+                if (result.success) {
+                    location.reload();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
