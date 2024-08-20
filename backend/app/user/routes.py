@@ -8,6 +8,11 @@ import base64
 email_regex = re.compile("[\\w\\-\\.]+@([\\w\\-]+\\.)[\\w]+")
 phone_regex = re.compile("^[0-9]+$")
 
+
+################
+# User Details #
+################
+
 @bp.route('/getUserDetails', methods=['POST', 'GET'])
 def getUserDetails():
     user_id = request.get_json()['uid']
@@ -38,7 +43,7 @@ def saveUserDetails():
         user = user_db.find_one({'email': data['email'], 'user_id': user_id})
 
         if exist != user or not email_regex.match(data['email']):
-            return {'success': False, 'error': 'Email already taken, please choose a different email'}
+            return {'success': False, 'error': 'Email already taken, please choose a different email' if exist != user else 'Please enter a valid email'}
     
     exist = user_db.find_one(data)
 
@@ -60,7 +65,14 @@ def saveUserDetails():
 
         return {'success': True} if result.acknowledged else {'success': False, 'error': 'There was a problem saving your details'}
 
+####################
+# End User Details #
+####################
 
+
+#################
+#!! User Dogs !!#
+#################
 
 @bp.route('/getUserDogs', methods=['GET', 'POST'])
 def getUserDogs():
@@ -119,6 +131,14 @@ def updateDog():
     except:
         return {'success': False}
 
+#####################
+#!! End User Dogs !!#
+#####################
+
+
+##################
+#!! Report Dog !!#
+##################
 
 @bp.route('/reportProblematicDog', methods=['POST'])
 def report_problematic_dog():
@@ -146,6 +166,15 @@ def report_problematic_dog():
     except Exception as e:
         print(f"Error saving problematic dog report: {e}")
         return jsonify({'success': False, 'error': 'Failed to report problematic dog'}), 500
+
+######################
+#!! End Report Dog !!#
+######################
+
+
+###################
+# Favorite Points #
+###################
 
 @bp.route('/addFavoritePoint', methods=['POST'])
 def addFavoritePoint():
@@ -197,9 +226,15 @@ def remove_favorite_point():
         return jsonify({"success": True}), 200
     else:
         return jsonify({"success": False, "error": "Point of interest not found in favorites"}), 400
-    
+
+#######################
+# End Favorite Points #
+#######################
     
 
+################
+# User Reports #
+################
 
 @bp.route('/submitBugsReport', methods=['POST'])
 def submitBugsReport():
@@ -237,3 +272,7 @@ def submitRoadsReport():
         "address": address 
     })
     return jsonify({"message": "Bug report submitted successfully"}), 200
+
+####################
+# End User Reports #
+####################

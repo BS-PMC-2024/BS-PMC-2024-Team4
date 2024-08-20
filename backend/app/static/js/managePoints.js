@@ -91,6 +91,7 @@ async function loadPoints() {
 
 function editPoint(point, marker) {
     // Populate the form with point details
+    handleAddress(point.type);
     document.getElementById('pointId').value = point.point_id; // Store point ID for updating
     document.getElementById('pointName').value = point.point_name;
     document.getElementById('pointType').value = point.type;
@@ -104,7 +105,6 @@ function editPoint(point, marker) {
     // Set edit mode to true
     editMode = true;
 
-    handleAddress(point.type);
     if(point.type == 'park') {
         console.log(point.park_address)
         document.getElementById('parkAddress').value = point.park_address;
@@ -197,20 +197,22 @@ function resetForm() {
 function handleAddress(val) {
     const addressInput = document.getElementById('parkAddress');
     const addressLabel = document.getElementById('parkAddressLabel');
+    const pointName = document.getElementById('pointName');
     
     if(val == "park") {
         addressInput.setAttribute('required', 'true');
         addressInput.hidden = false;
         addressLabel.hidden = false;
-        document.getElementById('pointName').setAttribute('required', 'true');
+        pointName.setAttribute('required', 'true');
+        pointName.value = null;
     }
     else {
         addressInput.value = "";
         addressInput.removeAttribute('required')
         addressInput.hidden = true;
         addressLabel.hidden = true;
-        document.getElementById('pointName').removeAttribute('required');
-        document.getElementById('pointName').value = "Unnamed Water Spot";
+        pointName.removeAttribute('required');
+        pointName.value = "Unnamed Water Spot";
     }
 
 }
