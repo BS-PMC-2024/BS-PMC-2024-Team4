@@ -25,10 +25,6 @@ def mock_reports():
     db = mock_client['Reports']
     mongo.set_client(mock_client)  
     return db
-
-def test_page_builds_properly(client):
-    response = client.get('/manager/UserReports')
-    assert response.status_code == 200
     
 
 def test_table_is_ok(mock_reports, client):

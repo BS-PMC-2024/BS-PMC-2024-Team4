@@ -36,10 +36,6 @@ def deleteUser(user_id):
 
 # -----------user reports-------------------
 
-@bp.route('/UserReports', methods=['GET', 'POST'])
-def UserReports():
-    return render_template('UserReports.html')
-
 @bp.route('/getReports', methods=['GET'])
 def getReports():
     db = mongo.client.get_database("Reports")
