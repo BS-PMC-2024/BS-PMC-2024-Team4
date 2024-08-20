@@ -103,12 +103,10 @@ def getBlockedAreas():
     
 @bp.route('/sendMessageToVet', methods=['POST'])
 def sendMessageToVet():
-    print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
     data = request.get_json()
     if 'user_id' not in data: 
          return jsonify({"error": "user_id is required"}), 400
-    
-    print("ssssssssssssssssssss")
+
     user_id = data['user_id']
     subject = data.get('subject')
     message = data.get('message')

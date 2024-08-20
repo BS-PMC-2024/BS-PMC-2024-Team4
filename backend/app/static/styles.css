@@ -55,7 +55,6 @@ h1, button, body {
     position: relative;
 }
 
-
 .container_basic {
     text-align: center;
     padding: 20px;
@@ -303,26 +302,6 @@ h2{
 
 
 
-<<<<<<< HEAD
-.button {
-    background-color: white;
-    border: none;
-    color: black;
-    padding: 8px 16px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    transition-duration: 0.4s;
-    cursor: pointer;
-    border: 2px solid #e7e7e7;
-    border-radius: 30px;
-}
-.button:hover {
-    background-color: #e7e7e7;
-}
-=======
 #map {
     height: 100%;  /* Full height to fit the parent */
     width: 100%;  /* Full width to fit the parent */
@@ -389,10 +368,8 @@ outline-offset: 2px;
 box-shadow: none;
 }
 
-
 body {
     font-family: Arial, sans-serif;
-    margin: 20px;
     background-color: #f4f4f4;
 }
 /*#table {
@@ -428,4 +405,3 @@ th {
 .btn:hover {
     opacity: 0.8;
 }
->>>>>>> 710cc7489418f425bd98bf2ff0d7dc92cccf1ca1

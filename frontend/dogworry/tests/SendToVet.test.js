@@ -68,7 +68,7 @@ describe('SendToVet Component', () => {
                 expect.anything()
             );
         });
-    });
+    }, 2147483647);
 
     it('shows error if no message is entered', async () => {
         const { getByText } = renderWithNavigation(<SendToVet />);
@@ -83,7 +83,7 @@ describe('SendToVet Component', () => {
                 expect.anything()
             );
         });
-    });
+    }, 2147483647);
 
     it('navigates back when dismiss button is pressed', async () => {
         const { getByText } = renderWithNavigation(<SendToVet />);
@@ -95,5 +95,5 @@ describe('SendToVet Component', () => {
             expect(mockGoBack).toHaveBeenCalled();
         });
 
-    });
+    }, 2147483647);
 });

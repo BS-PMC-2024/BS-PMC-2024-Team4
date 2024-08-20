@@ -1,7 +1,7 @@
 document.addEventListener("DOMContentLoaded", function() {
     function populateOvercrowdingReport(data) {
         const tbody = document.getElementById('overcrowdingReportTableBody');
-        tbody.innerHTML = ''; // Clear previous content
+        tbody.innerHTML = ''; 
 
         data.forEach(park => {
             const row = document.createElement('tr');
