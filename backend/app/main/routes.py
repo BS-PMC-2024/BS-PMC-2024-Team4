@@ -21,6 +21,7 @@ def login():
             print("Failed login attempt with:", email, password)  
     return render_template('LoginPage.html')
 
+
 @bp.route('/Main')
 def Main():
     # flash('You have been logged out.')
