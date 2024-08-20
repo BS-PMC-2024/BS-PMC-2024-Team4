@@ -23,7 +23,6 @@ function openTab(evt, tabName) {
         .then(data => {
             const tableBody = document.querySelector('#lostDogsTable tbody');
             tableBody.innerHTML = ''; // Clear existing rows
-
             data.reports.forEach(report => {
                 const row = document.createElement('tr');
                 row.innerHTML = `

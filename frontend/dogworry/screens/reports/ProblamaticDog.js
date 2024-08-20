@@ -13,7 +13,7 @@ const ReportProblematicDog = () => {
     const [color, setColor] = useState('');
     let [location , setLocation] = useState('');
     const navigation = useNavigation();
-   
+    
     const handleReport = async () => {
         location = await Location.getCurrentPositionAsync({});
         setLocation(setLocation({
