@@ -210,3 +210,25 @@ tr:hover {background-color: #e7e7e7;}
 .btn:hover {
     opacity: 0.9;
 }
+
+
+
+
+.button {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 8px 16px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border: 2px solid #e7e7e7;
+    border-radius: 30px;
+}
+.button:hover {
+    background-color: #e7e7e7;
+}

@@ -2,7 +2,6 @@ from app.main import bp
 from flask import render_template, request, redirect, url_for, flash
 from app.extensions import mongo
 
-
 db = mongo.client.get_database("Users")
 users = db.get_collection("admins")
 
@@ -26,3 +25,4 @@ def Main():
     # flash('You have been logged out.')
     # return redirect(url_for('main.login'))  
     return render_template('HomePage.html')
+

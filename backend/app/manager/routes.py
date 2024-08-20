@@ -3,6 +3,9 @@ from app.manager import bp
 from app.extensions import mongo
 from bson import json_util
 from bson.objectid import ObjectId
+import json
+from bson import json_util
+import random
 
 
 ##for deleteUser
@@ -77,4 +80,63 @@ def update_status(reportId, userId):
     else:
         return jsonify({'error': 'Update failed'}), 400
     
+
+    #-----------------TemperatureReport--------------
+
+
     
+@bp.route('/Temperature', methods=['GET'])
+def TemperatureReport(): 
+    return render_template('TemperatureReport.html')
+    
+@bp.route('/TemperatureReport', methods=['GET'])
+def TemperatureData():
+    with open('token.json', 'r') as f:
+        data = json.load(f)
+    readings_data = data.get('data', {}).get('readings_data', [])
+    readings_data = readings_data[:27]
+    db = mongo.client.get_database("Map")
+    parks = db.get_collection("parks")
+    projection = {"latitude": 1, "longitude": 1, "_id": 0}
+
+    park_locations = list(parks.find({}, projection))
+    i = 0
+    extracted_data = []
+    for reading in readings_data:
+        if(i == 27):
+            i = 0
+        temp_data = {
+            'Temperature': reading.get('Temperature'),
+            'sample_time_utc': reading.get('sample_time_utc'),
+            'Location': {
+                    'lat': park_locations[i].get('latitude'),
+                    'lng': park_locations[i].get('longitude')
+                }
+        }
+        i += 1
+        extracted_data.append(temp_data)
+    return json_util.dumps({'readings_data': extracted_data}) , 200
+
+@bp.route('/overcrowdingReport', methods=['GET'])
+def OvercrowdingDogParks():
+    db = mongo.client.get_database("Map")
+    parks = db.get_collection("parks")
+    projection = {"latitude": 1, "longitude": 1, "_id": 0}
+
+    park_locations = list(parks.find({}, projection))
+    Overcrowding = ["high", "medium", "low"]
+    extracted_data = []
+    for park in park_locations:
+        temp_data = {
+            'Location': {
+                    'lat': park.get('latitude'),
+                    'lng': park.get('longitude')
+                },
+            'Overcrowding': random.choice(Overcrowding) 
+            
+        }
+        extracted_data.append(temp_data)
+    return json_util.dumps({'readings_data': extracted_data}) , 200
+  
+
+

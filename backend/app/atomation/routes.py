@@ -106,8 +106,8 @@ def dataTime():
 def fetch_data():
 
     request_body = {"filters": {
-                    "start_date": "2024-07-30T06:56:47.000Z",
-                    "end_date": "2024-07-31T20:56:47.000Z",
+                    "start_date": "2024-08-18T06:56:47.000Z",
+                    "end_date": "2024-08-19T14:00:47.000Z",
                     "mac": [
                     "D2:34:24:34:68:70"
                     ],
