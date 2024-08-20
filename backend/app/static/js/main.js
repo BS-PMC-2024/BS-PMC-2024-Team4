@@ -2,6 +2,8 @@
 window.onload = function() {
     fetchUsers();
     fetchReports();
+    loadLostDogReports();
     fetchTemperatureData();
     fetchOvercrowdingData();
+    
 };
